@@ -1,3 +1,9 @@
+.AppleDB/
+.AppleDesktop/
+.AppleDouble/
+.DS_Store
+.TemporaryItems/
+
 */system/logs/log-*.php
 */system/cache/*
 */system/cache/!index.html
