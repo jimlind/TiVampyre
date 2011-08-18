@@ -1,4 +1,8 @@
-TiVampyre
+TiVampyre: Your TiVo Vampire
 
 Designed as a PHP front-end to a TiVo Ripping Service.
-Lots of Dependencies, everything is well documented. 
+Lots of Dependencies, everything is as well documented as it needs to be.
+Built/Tested for a server running Debian Squeeze and a Series 3 TiVo.
+
+See the 'docs' folder for licenses and installation instructions.
+Built on the CodeIgniter framework, so it is included.
