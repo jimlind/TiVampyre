@@ -1,11 +1,13 @@
 body
 {
-    background-color:#ECD8F2;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
+    background:#721214 url(../images/tile.png);
+    margin:0;
+    padding:0;
     user-select: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
 }
 h1, h2 {
     font-family: 'Droid Serif', Georgia, Times, serif;
@@ -63,16 +65,33 @@ li {
     vertical-align:-2px;
 }
 
+#content {
+    background-color:#ffffff;
+    box-shadow: 0 0 40px 5px #222;
+        X-moz-box-shadow: 0 0 25px 15px #222;
+        X-webkit-box-shadow: 0 0 25px 15px #222;
+    margin:0 auto;
+    width:500px; 
+}
 #show_list{
-    margin:0 0 0 40px;
+    margin:0;
+    padding:30px;
 }
 #show_list ul{
-    margin:0 0 0 10px;
+    margin:0;
+    padding:0 0 10px 0;
 }
-
 .show_title{
-    font-size:22px;
+    background:#721214;
+    border-radius:4px;
+        -moz-border-radius:4px;
+        -webkit-border-radius:4px;
+    color:#fff;
+    display:block;
+    font-size:20px;
     font-weight:bold;
+    padding:6px 10px 6px 10px;
+    width:100%;
 }
 
 .show {
