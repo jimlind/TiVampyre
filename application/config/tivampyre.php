@@ -26,3 +26,18 @@ $config['tivampyre']['working_directory'] = '/disk2/tivo/';
 |
 */
 $config['tivampyre']['comskip_path'] = '/opt/comskip/';
+
+/*
+|--------------------------------------------------------------------------
+| Media Access Key
+|--------------------------------------------------------------------------
+|
+| This is the magic ID that tells your TiVo that the person trying to
+| interact with it is actually a person with physical access to the device.
+|
+| Find it via:
+| TiVo Central -> Messages and Set Up -> Account and System Information
+|
+*/
+$config['tivampyre']['mak'] = '7678113199';
+
