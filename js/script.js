@@ -7,7 +7,7 @@ $(document).ready(function(){
     $(".show").click(function(){
         $p = $(this).position();
         $("#selector").position($p);
-        $("#selector").css({'display':'block', 'left':$p.left-10, 'top':$p.top});
+        $("#selector").css({'display':'block', 'left':$p.left+50, 'top':$p.top-50});
         $("#show_id").val($(this).attr('showId'));
         $("#selector h1").html($(this).attr('showTitle'));
         $("#selector h2").html($(this).children('.episodeTitle').html());
@@ -36,6 +36,7 @@ $(document).ready(function(){
         if($cr){ $url+="crop&"; }
         $.post($url);
         $("#selector").css('display', 'none');
+        $("#show_"+$v).find('img').attr("src", "images/icons/clock.png");
     });
     
 });
