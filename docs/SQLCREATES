@@ -49,6 +49,8 @@ INSERT INTO `icons` VALUES (3, 'downloading', 'drive-download.png');
 INSERT INTO `icons` VALUES (4, 'downloaded',  'drive-medium.png');
 INSERT INTO `icons` VALUES (5, 'encoding',    'film-cast.png');
 INSERT INTO `icons` VALUES (6, 'complete',    'clipboard-task.png');
+INSERT INTO `icons` VALUES (7, 'error 1',     'exclamation-red-frame.png');
+INSERT INTO `icons` VALUES (8, 'error 2',     'exclamation-red-frame.png');
 
 CREATE TABLE `config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
