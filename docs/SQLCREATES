@@ -12,7 +12,7 @@ CREATE TABLE `shows` (
   `url` text NOT NULL,
   `final_name` varchar(250) NOT NULL,
   PRIMARY KEY (`id`)
-)
+);
 
 CREATE TABLE `availability` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE `availability` (
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `show_id` (`show_id`)
-)
+);
 
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,7 +33,7 @@ CREATE TABLE `jobs` (
   `crop` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `show_id` (`show_id`)
-)
+);
 
 CREATE TABLE `icons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -41,7 +41,14 @@ CREATE TABLE `icons` (
   `icon` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `status` (`status`)
-)
+);
+
+INSERT INTO `icons` VALUES (1, 'default',     'television--plus.png');
+INSERT INTO `icons` VALUES (2, 'waiting',     'clock.png');
+INSERT INTO `icons` VALUES (3, 'downloading', 'drive-download.png');
+INSERT INTO `icons` VALUES (4, 'downloaded',  'drive-medium.png');
+INSERT INTO `icons` VALUES (5, 'encoding',    'film-cast.png');
+INSERT INTO `icons` VALUES (6, 'complete',    'clipboard-task.png');
 
 CREATE TABLE `config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -49,4 +56,4 @@ CREATE TABLE `config` (
   `value` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-)
+);
