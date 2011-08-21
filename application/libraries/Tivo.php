@@ -2,6 +2,15 @@
 
 class Tivo {
     public $ip = false;
+    private $mak = false;
+    
+    // Load CodeIgniter for everybody
+    public function __construct()
+    {
+	$ci =& get_instance();
+	$vConfig = $ci->config->item('tivampyre');
+	$this->mak = $vConfig['mak'];
+    }
     
     // Find the TiVo and return the IP
     public function locate()
@@ -20,15 +29,13 @@ class Tivo {
     // Retrieve a chunk of the Now Playing XML list
     public function getXml($anchor = 0)
     {
-        if ($this->ip == false) return false;
-        $vConfig = $this->config->item('tivampyre');
-	
+        if ($this->ip == false) return false;	
 	$url = "https://".$this->ip.":443/".
                    "TiVoConnect?Command=QueryContainer&".
                    "Container=%2FNowPlaying".
                    "&Recurse=Yes".
                    "&AnchorOffset=$anchor";
-	$fetchScript = "curl -s '$url' -k --digest -u tivo:" . $vConfig['mak'];
+	$fetchScript = "curl -s '$url' -k --digest -u tivo:" . $this->mak;
         $output = shell_exec($fetchScript);
         if($output == null) return false;
         $xml = simplexml_load_string($output);
@@ -38,9 +45,7 @@ class Tivo {
     // Download a specific file from the TiVo
     public function downloadFile($url, $path)
     {
-	$vConfig = $this->config->item('tivampyre');
-	$mak = $vConfig['mak'];
-	
+	$mak = $this->mak;
 	$c  = "curl '$url' "; //source
 	$c .= "--digest -k "; //tivo needs these??
 	$c .= "-u tivo:$mak "; //username and password
@@ -53,9 +58,7 @@ class Tivo {
     
     public function decodeFile($input, $output)
     {
-	$vConfig = $this->config->item('tivampyre');
-	$mak = $vConfig['mak'];
-	
+	$mak = $this->mak;
 	$d  = "tivodecode $input ";
 	$d .= "-m $mak ";
 	$d .= "-o $output ";
