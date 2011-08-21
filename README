@@ -3,6 +3,117 @@ TiVampyre: Your TiVo Vampire
 Designed as a PHP front-end to a TiVo Ripping Service.
 Lots of Dependencies, everything is as well documented as it needs to be.
 Built/Tested for a server running Debian Squeeze and a Series 3 TiVo.
+Built/Tested for Chrome/Safari based browsers.
 
-See the 'docs' folder for licenses and installation instructions.
+See the 'docs' folder for licenses and other goodies.
 Built on the CodeIgniter framework, so it is included.
+
+------ Installation Directions ------
+
+** LAMP STACK**
+First things first, you'll need a proper LAMP stack.  After your SQL server
+is installed grab the SQLCREATES file from docs and create/import as desired
+
+> sudo aptitude install apache2
+> sudo a2enmod rewrite
+> sudo aptitude install mysql-server
+> sudo aptitude install php5
+> sudo aptitude install php5-mysql
+> sudo /etc/init.d/apache2 restart
+
+** SYSTEM TOOLS **
+You'll need some additional tools to help find and download from your TiVo.
+
+> sudo aptitude install avahi-utils
+> sudo aptitude install curl
+
+** TIVODECODE **
+You'll need to decode the files from the TiVo to something useful.  You might
+be able to find a binary of this, but I prefer to build from source.  It's easy.
+Download the source then follow the commands.
+
+> sudo aptitude install gcc
+> sudo aptitude install make
+> cd ~
+> wget http://downloads.sourceforge.net/project/tivodecode/tivodecode/0.2pre4/tivodecode-0.2pre4.tar.gz
+> tar -xzvf tivodecode-0.2pre4.tar.gz
+> cd tivodecode-0.2pre4/
+> sudo ./configure
+> sudo make
+> sudo make install
+
+** MULTIMEDIA TOOLS **
+You'll need the utilities to read and encode the video files.  The files
+available in the standard debian repository are hampered by copyright and other
+restrictions, but you can still get the goodies.
+Visit: //www.debian-multimedia.org/ then edit your /etc/apt/sources.list file
+appropriatly.  Now update your sources and install.
+
+> sudo aptitude update
+> sudo aptitude install debian-multimedia-keyring
+> sudo aptitude update
+> sudo aptitude install mplayer
+> sudo aptitude install mencoder
+
+** WINE AND COMSKIP **
+You'll need the Comskip utility (and thusly Wine) to detect and skip
+commercials in your files.  Comskip isn't perfect, but it works well.  Download
+the entire zip file and extract to an easy to remember location.  Most people
+will say stash it in /usr/local/bin/comskip/ but I prefer to keep it in
+the /opt/comskip/ directory.
+
+http://www.kaashoek.com/files/comskip80_042.zip
+(ComSkip is still actively maintained, look for newer versions)
+You may need to install unzip to decompress the files (see below).
+
+> sudo apt-get install unzip
+
+ComSkip is a Windows Utility so it won't work natively in Linux.  Wine happens
+to run this command line tool quite well.
+
+> sudo apt-get install wine
+
+** ATOMICPARSLEY **
+AtomicParsley is used to write back the file metadata back to the mp4.  Nice
+if you are going to be using iTunes to organize things.
+
+> sudo apt-get install atomicparsley
+
+** LIGHTTPD **
+You'll need to get the videos off your server as well.  My favorite way is to
+stream the mp4s via the H264 Steaming Mod in lighttpd.  Two HTTP daemons on the
+same box isn't for the faint of heart, but it is fun.
+
+Adapted from:
+http://h264.code-shop.com/trac/wiki/Mod-H264-Streaming-Lighttpd-Version2
+
+Basically, you'll stop apache (lighttpd wants port 80 too), then get lighttpd
+from apt, then download some files, then rebuild lighttpd with the mod, then
+edit some of the settings, and start apache again.
+
+> sudo /etc/init.d/apache2 stop
+> sudo apt-get install lighttpd
+> sudo apt-get install libglib2.0-dev
+> cd ~
+> wget http://h264.code-shop.com/download/lighttpd-1.5.0_mod_h264_streaming-2.2.9.tar.gz
+> tar -xzvf lighttpd-1.5.0_mod_h264_streaming-2.2.9.tar.gz
+> cd lighttpd-1.5.0/
+> sudo ./configure
+> sudo make
+> sudo make install
+
+Edit /etc/lighttpd/lighttpd.conf
+|  server.modules = ( 
+|    ...,
+|    "mod_h264_streaming"
+|  )
+|  h264-streaming.extensions = (".mp4")
+|  server.port = 82
+|  server.document-root = "/disk2/tivo"
+|  #include_shell "/usr/share/lighttpd/use-ipv6.pl"
+
+Edit /etc/init.d/lighttpd
+|  DAEMON=/usr/local/sbin/lighttpd
+
+> sudo killall -9 lighttpd
+> sudo /etc/init.d/lighttpd start
