@@ -76,7 +76,19 @@ class Job extends CI_Controller {
 		$this->jobs->updateJob($job_id, 'error 2');
 		die;
 	    } elseif ($job->keep == 0) {
+		// delete the mpeg file
 		unlink($mpegFile);
+		
+		// delete pass logs
+		$ci =& get_instance();
+		$vConfig = $ci->config->item('tivampyre');
+		$dir = $vConfig['working_directory'];
+		try {
+		    unlink($dir . "pass.log.mbtree");
+		    unlink($dir . "pass.log");
+		} catch(Exception $e) {
+		    //do nothing
+		}
 	    }
 
 	    // rename file
