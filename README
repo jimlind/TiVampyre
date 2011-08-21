@@ -10,6 +10,7 @@ Built on the CodeIgniter framework, so it is included.
 
 ------ Installation Directions ------
 
+
 ** LAMP STACK**
 First things first, you'll need a proper LAMP stack.  After your SQL server
 is installed grab the SQLCREATES file from docs and create/import as desired
@@ -21,11 +22,13 @@ is installed grab the SQLCREATES file from docs and create/import as desired
 > sudo aptitude install php5-mysql
 > sudo /etc/init.d/apache2 restart
 
+
 ** SYSTEM TOOLS **
 You'll need some additional tools to help find and download from your TiVo.
 
 > sudo aptitude install avahi-utils
 > sudo aptitude install curl
+
 
 ** TIVODECODE **
 You'll need to decode the files from the TiVo to something useful.  You might
@@ -42,6 +45,7 @@ Download the source then follow the commands.
 > sudo make
 > sudo make install
 
+
 ** MULTIMEDIA TOOLS **
 You'll need the utilities to read and encode the video files.  The files
 available in the standard debian repository are hampered by copyright and other
@@ -54,6 +58,7 @@ appropriatly.  Now update your sources and install.
 > sudo aptitude update
 > sudo aptitude install mplayer
 > sudo aptitude install mencoder
+
 
 ** WINE AND COMSKIP **
 You'll need the Comskip utility (and thusly Wine) to detect and skip
@@ -72,6 +77,8 @@ ComSkip is a Windows Utility so it won't work natively in Linux.  Wine happens
 to run this command line tool quite well.
 
 > sudo apt-get install wine
+> sudo apt-get remove libnss-mdns
+
 
 ** ATOMICPARSLEY **
 AtomicParsley is used to write back the file metadata back to the mp4.  Nice
