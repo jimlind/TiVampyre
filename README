@@ -129,3 +129,4 @@ Edit /etc/init.d/lighttpd
 
 > sudo killall -9 lighttpd
 > sudo /etc/init.d/lighttpd start
+> sudo /etc/init.d/apache2 start
