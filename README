@@ -79,6 +79,18 @@ if you are going to be using iTunes to organize things.
 
 > sudo apt-get install atomicparsley
 
+** CRON JOBS ***
+Give CRON access to all the bins
+Every 15 minutes it should check the TiVo to update the shows it knows exist.
+Every 5 minutes it should attempt to take the next step in video processing.
+
+> crontab -e
+
+|  PATH=/usr/local/bin:/usr/bin:/bin
+|  */5 * * * * php /var/www/index.php job run >/dev/null 2>&1
+|  */15 * * * * php /var/www/index.php update >/dev/null 2>&1
+
+
 ** LIGHTTPD **
 You'll need to get the videos off your server as well.  My favorite way is to
 stream the mp4s via the H264 Steaming Mod in lighttpd.  Two HTTP daemons on the
