@@ -18,7 +18,7 @@ class Job extends CI_Controller {
         return false;
     }
     
-    // index.php?/job/queue/2/?keep&chop&full
+    // index.php?/job/queue/2/?keep&chop&full&crop
     public function queue($input)
     {
 	$data = array();
