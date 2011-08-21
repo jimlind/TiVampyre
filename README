@@ -66,12 +66,12 @@ commercials in your files.  Comskip isn't perfect, but it works well.  Download
 the entire zip file and extract to an easy to remember location.  Most people
 will say stash it in /usr/local/bin/comskip/ but I prefer to keep it in
 the /opt/comskip/ directory.
-
-http://www.kaashoek.com/files/comskip80_042.zip
 (ComSkip is still actively maintained, look for newer versions)
-You may need to install unzip to decompress the files (see below).
 
 > sudo apt-get install unzip
+> wget http://www.kaashoek.com/files/comskip80_042.zip
+> unzip comskip80_042.zip -d comskip
+> sudo cp -r comskip /opt/
 
 ComSkip is a Windows Utility so it won't work natively in Linux.  Wine happens
 to run this command line tool quite well.
