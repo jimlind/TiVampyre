@@ -8,12 +8,20 @@ class Update extends CI_Controller {
         $this->load->library('xmlProcessor');
         $this->tivo->locate();
         
+        $this->load->model('configure');
         $this->load->model('shows');
         $this->load->model('availability');
     }
     
     public function index()
-    {        
+    {
+        $ip = $this->tivo->ip;
+        if (strlen($ip) >= 7) {
+            $this->configure->write(array('key'=>'ip', 'value'=>$ip));
+        } else {
+            $this->tivo->ip = $this->configure->read('ip');
+        }
+        
         $anchor = 0;
         $timestamp = date('Y-m-d H:i:s');
         while(true) {
