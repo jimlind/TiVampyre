@@ -134,7 +134,7 @@ class Video {
         if ($commercials) {
             $m .= "-edl $commercials ";
         }
-	log_message('debug', $p);
+	log_message('debug', $m);
         shell_exec($m);
 	
         return file_exists($output);
