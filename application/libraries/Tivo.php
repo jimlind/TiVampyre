@@ -46,7 +46,7 @@ class Tivo {
     public function downloadFile($url, $path)
     {
 	$mak = $this->mak;
-	$c  = "curl '$url' "; //source
+	$c  = "curl \"$url\" "; //source
 	$c .= "--digest -k "; //tivo needs these??
 	$c .= "-u tivo:$mak "; //username and password
 	$c .= "-c /tmp/cookies.txt "; //storing cookies is necessary, we just don't want them.
