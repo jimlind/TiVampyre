@@ -68,19 +68,4 @@ class File extends CI_Model
         $m .= "--overWrite ";
         shell_exec($m);
     }
-    
-    public function readChunkedFile($filename) {
-        $chunk = 1024*1024;
-        $buffer = '';
-        $cnt =0;
-        $handle = fopen($filename, 'rb');
-        while (!feof($handle)) {
-            $buffer = fread($handle, $chunk);
-            echo $buffer;
-            ob_flush();
-            flush();
-        }
-        $status = fclose($handle);
-        return $status;
-    }
 }
