@@ -43,6 +43,21 @@
         <?php //http://192.168.25.72/tivo/index.php?/job/queue/2/?keep&chopper ?>
     </div>
 
+    <div id="absolute_filler">
+	<div id="watchable_shows" style="display:block;">
+	<ul>
+	    <?php foreach($watchable as $file): ?>
+	    <li><a href="http://<?= $_SERVER["SERVER_NAME"] ?>:82/<?= $file ?>"><?= substr($file, 0, strrpos($file, '-')) ?></a></li>
+	    <?php endforeach; ?>
+	</ul>
+	</div>
+    </div>
+
+    <div id="navigation">
+	<span id="watch_videos_button"><img src="images/icons/game-monitor.png" height="16" width="16">Watch Videos</span>
+	<span><img src="images/icons/radioactivity.png" height="16" width="16">Nuke Processes</span>
+    </div>
+
     <div id="content">
     <ul id="show_list">
     <?php foreach($shows as $show): ?>

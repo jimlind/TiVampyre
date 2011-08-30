@@ -1,7 +1,8 @@
 $(document).ready(function(){
     
-    // Hide the Pop-up
+    // Hide stuff, this method wouldn't fly in a production environment.
     $("#selector").css('display', 'none');
+    $("#watchable_shows").css('display', 'none');
     
     // Show the Pop-up
     $(".show").click(function(){
@@ -37,6 +38,11 @@ $(document).ready(function(){
         $.post($url);
         $("#selector").css('display', 'none');
         $("#show_"+$v).find('img').attr("src", "images/icons/clock.png");
+    });
+    
+    // Show the watchable videos
+    $('#watch_videos_button').click(function(){
+        $("#watchable_shows").toggle();
     });
     
 });
