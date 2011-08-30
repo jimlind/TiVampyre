@@ -68,4 +68,20 @@ class File extends CI_Model
         $m .= "--overWrite ";
         shell_exec($m);
     }
+    
+    public function getWatchableVideos()
+    {
+	$files = array();
+	$handle = opendir($this->dir);
+	while (false !== ($file = readdir($handle))) {
+	    $ext = substr($file, -4);
+	    $modified = filemtime($this->dir.$file);
+	    $now = time();
+	    if ($ext == ".mp4" && $modified < $now - 60) {
+		$files[] = $file;
+	    }
+        }
+	closedir($handle);
+	return $files;
+    }
 }
