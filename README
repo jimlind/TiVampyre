@@ -15,19 +15,19 @@ Built on the CodeIgniter framework, so it is included.
 First things first, you'll need a proper LAMP stack.  After your SQL server
 is installed grab the SQLCREATES file from docs and create/import as desired
 
-> sudo aptitude install apache2
+> sudo apt-get install apache2
 > sudo a2enmod rewrite
-> sudo aptitude install mysql-server
-> sudo aptitude install php5
-> sudo aptitude install php5-mysql
+> sudo apt-get install mysql-server
+> sudo apt-get install php5
+> sudo apt-get install php5-mysql
 > sudo /etc/init.d/apache2 restart
 
 
 ** SYSTEM TOOLS **
 You'll need some additional tools to help find and download from your TiVo.
 
-> sudo aptitude install avahi-utils
-> sudo aptitude install curl
+> sudo apt-get install avahi-utils
+> sudo apt-get install curl
 
 
 ** TIVODECODE **
@@ -35,8 +35,8 @@ You'll need to decode the files from the TiVo to something useful.  You might
 be able to find a binary of this, but I prefer to build from source.  It's easy.
 Download the source then follow the commands.
 
-> sudo aptitude install gcc
-> sudo aptitude install make
+> sudo apt-get install gcc
+> sudo apt-get install make
 > cd ~
 > wget http://downloads.sourceforge.net/project/tivodecode/tivodecode/0.2pre4/tivodecode-0.2pre4.tar.gz
 > tar -xzvf tivodecode-0.2pre4.tar.gz
@@ -53,11 +53,11 @@ restrictions, but you can still get the goodies.
 Visit: //www.debian-multimedia.org/ then edit your /etc/apt/sources.list file
 appropriatly.  Now update your sources and install.
 
-> sudo aptitude update
-> sudo aptitude install debian-multimedia-keyring
-> sudo aptitude update
-> sudo aptitude install mplayer
-> sudo aptitude install mencoder
+> sudo apt-get update
+> sudo apt-get install debian-multimedia-keyring
+> sudo apt-get update
+> sudo apt-get install mplayer
+> sudo apt-get install mencoder
 
 
 ** WINE AND COMSKIP **
