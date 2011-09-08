@@ -25,9 +25,13 @@ class Video {
     private function getSize($target)
     {
 	$s  = "mplayer $target ";
+	$s .= "-ss 300 ";		// skip 300 seconds (5 minutes) to get proper size;
 	$s .= "-identify -frames 0 -vc null -vo null -ao null ";
 	$s .= "2>/dev/null | grep 'ID_VIDEO_WIDTH\|ID_VIDEO_HEIGHT'";
-        $o = shell_exec($s);
+        
+	
+	log_message('error', $s);
+	$o = shell_exec($s);
         $pattern = '/=([0-9.]*)/';
         preg_match_all($pattern, $o, $matches);
         if(count($matches[1]) == 0) return array('width'=>0, 'height'=>0);
@@ -40,7 +44,7 @@ class Video {
         $w = $size['width'];
         // My source files occasionally have 2 pixels of crap on the top
         $s  = "mplayer $target ";
-	$s .= "-vf crop=$w:$h:0:2,cropdetect -ss 1000 -frames 10 -vo null -ao null ";
+	$s .= "-vf crop=$w:$h:0:2,cropdetect -ss 300 -frames 10 -vo null -ao null ";
 	$s .= "2>/dev/null | grep 'CROP' | tail -1";
         $o = shell_exec($s);
         $pattern = '/crop=([0-9:]*)/';
@@ -88,6 +92,12 @@ class Video {
         } catch(Exception $e) {
             //do nothing
         }
+	
+	// * 
+	// TODO: Because FFMPEG doesn't care about the .edl file we need to
+	//	 chop the mpeg2 here and change the output.
+	// *
+	
         // return the edl file if it exists
         if (file_exists($edl)){
             return $edl;
@@ -105,7 +115,66 @@ class Video {
 	$ci =& get_instance();
 	$vConfig = $ci->config->item('tivampyre');
 	$workDir = $vConfig['working_directory'];
+
+	// start command line
+	$f  = "ffmpeg -i $target ";	// input
 	
+	// video encoding and compression
+	$f .= "-vcodec libx264 ";	// x264 video codec
+	$f .= "-flags2 +bpyramid+mixed_refs+wpred+dct8x8+fastpskip "; // flags for compression algorithm
+	$f .= "-refs 1 ";		// p-frame reference (default is 3)
+	$f .= "-aq_mode 0 ";		// disable adaptive quantization (enabled by default)
+	$f .= "-qcomp 0.6 ";
+	$f .= "-qmin 10 ";
+	$f .= "-qmax 51 ";
+	$f .= "-qdiff 4 ";
+	$f .= "-subq 2 ";		// subpixel motion esimation (default is 7, less than 2 is not recommended)
+	$f .= "-trellis 1 ";		// trellis quantization (default)	
+	$f .= "-bf 0 ";
+	$f .= "-cmp +chroma ";		// included in all presets
+	
+	// video filtering
+	$f .= "-vf yadif=0 ";		// deinterlace video with yadif filter
+	$f .= "-s {$width}x{$height} ";	// force resize (some commercials change size)
+	$f .= "-r 30000/1001 ";		// force NTSC framerate (29.97)
+	
+	// video settings
+	$f .= "-vcodec libx264 ";	// x264 video codec
+	$f .= "-flags2 +bpyramid+mixed_refs+wpred+dct8x8+fastpskip "; // flags for x264
+	$f .= "-refs 1 ";		// p-frame reference (default is 3)
+	$f .= "-aq_mode 0 ";		// disable adaptive quantization (enabled by default)
+	$f .= "-partitions +parti8x8+parti4x4+partp8x8+partb8x8 "; // enable all worthwhile partitions (default)	
+	$f .= "-me_method dia ";	// diamond motion estimation (fastest estimator)
+	$f .= "-qcomp 0.6 ";
+	$f .= "-qmin 10 ";
+	$f .= "-qmax 51 ";
+	$f .= "-qdiff 4 ";	
+	$f .= "-b {$bits}k ";		// video bitrate
+	
+	// audio settings
+	$f .= "-acodec libfaac ";	// use AAC audio codec
+	$f .= "-ab 128k ";		// audio bitrate
+	$f .= "-ac 2 ";			// stereo
+	$f .= "-async 4800 ";		// keeps audio synced with video
+	$f .= "-dts_delta_threshold 1 "; // also theoretically helps keep sync
+	
+	// global options
+	$f .= "-loglevel quiet ";	// we don't actually need any status message output
+	$f .= "-threads 0 ";		// multiple core and multiple processor support
+	
+	// output options
+	$f .= "-ss 00:00:02 ";		// skip first 2 seconds (almost always bad frames with bad audio)
+	$f .= "-f mp4 ";		// MP4 output format
+	$f .= "-y $output";		// overwrite existing files
+	
+	// TODO: support for cropping
+	// crop=in_w-100:in_h-100:100:100
+	// crop=[desired width]:[desired height]:[x coordinate]:[y coordinate]
+	
+	log_message('debug', $f);
+        shell_exec($f);
+	
+	/*
         $p  = "mencoder $target -o /dev/null ";
         $p .= "-ss 00:00:02 ";
 	$p .= "-ovc x264 ";
@@ -136,6 +205,7 @@ class Video {
         }
 	log_message('debug', $m);
         shell_exec($m);
+	*/
 	
         return file_exists($output);
     }
