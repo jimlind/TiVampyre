@@ -53,11 +53,18 @@ restrictions, but you can still get the goodies.
 Visit: //www.debian-multimedia.org/ then edit your /etc/apt/sources.list file
 appropriatly.  Now update your sources and install.
 
+The version of ffmpeg that you install should be later than what is available in
+the Squeeze releases in Debian.  Issue #2393 was causing some shows to not
+properly encode if the commercials (usually local) were a different resolution
+than the main content.  You can just use Wheezy for everything or use APT
+pinning to install ffmpeg from testing.
+
 > sudo apt-get update
 > sudo apt-get install debian-multimedia-keyring
 > sudo apt-get update
 > sudo apt-get install mplayer
 > sudo apt-get install mencoder
+> sudo apt-get install ffmpeg
 
 
 ** WINE AND COMSKIP **
