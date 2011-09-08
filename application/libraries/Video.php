@@ -174,39 +174,6 @@ class Video {
 	log_message('debug', $f);
         shell_exec($f);
 	
-	/*
-        $p  = "mencoder $target -o /dev/null ";
-        $p .= "-ss 00:00:02 ";
-	$p .= "-ovc x264 ";
-        $p .= "-x264encopts pass=1:global_header:level_idc=30:bitrate=$bits:bframes=0:qcomp=0.8:me=dia:subq=1:frameref=1:threads=auto ";
-        if ($crop !== false) $addFilter = ",".$crop;
-        $p .= "-vf pp=md,scale=$width:$height,harddup$addFilter ";
-        $p .= "-nosound ";
-        $p .= "-ofps 30000/1001 ";
-        $p .= "-passlogfile {$workDir}pass.log ";
-        log_message('debug', $p);
-        shell_exec($p);
-        
-        $m  = "mencoder $target -o $output ";
-	$m .= "-ss 00:00:02 ";
-	$m .= "-ovc x264 ";
-        $m .= "-x264encopts pass=2:global_header:level_idc=30:bitrate=$bits:bframes=0:qcomp=0.8:me=dia:subq=1:frameref=1:threads=auto ";
-        if ($crop !== false) $addFilter = ",".$crop;
-        $m .= "-vf pp=md,scale=$width:$height,harddup$addFilter ";
-        $m .= "-oac faac ";
-	$m .= "-faacopts mpeg=4:object=2:raw:br=128 ";
-	$m .= "-af volnorm=1 ";
-        $m .= "-ofps 30000/1001 ";
-        $m .= "-passlogfile {$workDir}pass.log ";
-        $m .= "-of lavf ";
-	$m .= "-lavfopts format=mp4 ";
-        if ($commercials) {
-            $m .= "-edl $commercials ";
-        }
-	log_message('debug', $m);
-        shell_exec($m);
-	*/
-	
         return file_exists($output);
     }
 }
