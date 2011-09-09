@@ -7,7 +7,7 @@ class Video {
         $commercials = false;
         $crop = false;
         $size = $this->getSize($input);
-        if ($job->full == 1) {
+        if ($job->full != 1) {
             $size = $this->getNewSize($size['height'], $size['width']);
         }
         if ($job->crop == 1) {
@@ -29,8 +29,7 @@ class Video {
 	$s .= "-identify -frames 0 -vc null -vo null -ao null ";
 	$s .= "2>/dev/null | grep 'ID_VIDEO_WIDTH\|ID_VIDEO_HEIGHT'";
         
-	
-	log_message('error', $s);
+	log_message('debug', $s);
 	$o = shell_exec($s);
         $pattern = '/=([0-9.]*)/';
         preg_match_all($pattern, $o, $matches);
@@ -54,7 +53,7 @@ class Video {
     
     private function getNewSize($height, $width)
     {
-        $h = ($width / $height) * 1024;
+        $h = ($height / $width) * 1024;
         $w = 1024;
         if ($h > $height || $w > $width) {
             $h = $height;
