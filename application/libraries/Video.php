@@ -116,7 +116,9 @@ class Video {
 	$workDir = $vConfig['working_directory'];
 
 	// start command line
-	$f  = "ffmpeg -i $target ";	// input
+	$f  = "ffmpeg ";		// http://ffmpeg.org/
+	$f .= "-ss 00:00:02 ";		// completely skip first 2 seconds, don't even look at them.
+	$f .= "-i $target ";		// input file
 	
 	// video encoding and compression
 	$f .= "-vcodec libx264 ";	// x264 video codec
