@@ -15,9 +15,9 @@ class Video {
         }
         $bits = $this->getVideoBitrate($size['height'], $size['width']);
         if ($job->chop == 1) {
-            $commercials = $this->detectCommercials($input);
+            $this->detectCommercials($input);
         }
-        $this->encode($input, $size, $bits, $commercials, $crop, $output);
+        $this->encode($input, $size, $bits, $job->chop, $crop, $output);
         if ($job->chop == 1) unlink($commercials);
         return file_exists($output);
     }
@@ -80,32 +80,68 @@ class Video {
         $c .= "--ini=$iniPath ";
         $c .= "$target";
 	shell_exec($c);
-        
+	
         $pos = strrpos($target, '.');
         $fileRoot = substr($target, 0, $pos);
         $edl = $fileRoot . ".edl";
+	
+	// Parse the EDL file created by comskip
+	$lines = file($edl);
+	$chapters = array();
+	foreach ($lines as $index => $line) {
+	    $values = explode("\t", $line); // Double quotes neccesary for escaping
+	    $a = floatval($values[0]);
+	    $b = floatval($values[1]);
+	    if ($index == 0) { // First line
+		$chapters[] = array('start' => 0,  'duration' => $a);
+	    }
+	    if ($index+1 < count($lines)) { // Something is next
+		$nextLine = $lines[$index+1];
+		$n = floatval(substr($nextLine, 0, strpos($nextLine, "\t")));
+		$chapters[] = array('start' => $b, 'duration' => $n-$b);
+	    } else { // Nothing next
+		$chapters[] = array('start' => $b);
+	    }
+	}
+	
+	// Chop up the original MPEG
+	$catPieces = "cat "; 
+	$workingDir = $vConfig['working_directory'];
+	foreach ($chapters as $index=>$chapter){
+	    $chapterFile = "{$workingDir}chapter{$index}.mpeg";
+	    
+	    $f  = "ffmpeg ";
+	    $f .= "-ss {$chapter['start']} ";
+	    $f .= "-i $target ";
+	    if (isset($chapter['duration'])) {
+		$f .= "-t {$chapter['duration']} ";
+	    }
+	    $f .= "-vcodec copy "; // copy video exactly
+	    $f .= "-acodec copy "; // copy audio exactly
+	    $f .= "-y $chapterFile";
+	    log_message('debug', $f);
+	    shell_exec($f);
+	    
+	    $catPieces .= "$chapterFile ";
+	}
+	$catPieces .= " > {$workingDir}cleaned.mpeg; rm {$workingDir}chapter*.mpeg;";
+	log_message('debug', $catPieces);
+	shell_exec($catPieces);
+
+	// Remove all the extra files hanging around
         try {
-            unlink($fileRoot . ".log");
+            unlink($edl);
+	    unlink($fileRoot . ".log");
             unlink($fileRoot . ".logo.txt");
             unlink($fileRoot . ".txt");
+	    unlink($target);
+	    rename("{$workingDir}cleaned.mpeg", $target);
         } catch(Exception $e) {
             //do nothing
         }
-	
-	// * 
-	// TODO: Because FFMPEG doesn't care about the .edl file we need to
-	//	 chop the mpeg2 here and change the output.
-	// *
-	
-        // return the edl file if it exists
-        if (file_exists($edl)){
-            return $edl;
-        } else {
-            return false;
-        }
     }
     
-    private function encode($target, $size, $bits, $commercials, $crop, $output)
+    private function encode($target, $size, $bits, $chop, $crop, $output)
     {
         $addFilter = "";
         $height = $size['height'];
@@ -117,7 +153,6 @@ class Video {
 
 	// start command line
 	$f  = "ffmpeg ";		// http://ffmpeg.org/
-	$f .= "-ss 00:00:02 ";		// completely skip first 2 seconds, don't even look at them.
 	$f .= "-i $target ";		// input file
 	
 	// video encoding and compression
@@ -156,15 +191,22 @@ class Video {
 	$f .= "-acodec libfaac ";	// use AAC audio codec
 	$f .= "-ab 128k ";		// audio bitrate
 	$f .= "-ac 2 ";			// stereo
-	$f .= "-async 4800 ";		// keeps audio synced with video
-	$f .= "-dts_delta_threshold 1 "; // also theoretically helps keep sync
+
 	
 	// global options
 	$f .= "-loglevel quiet ";	// we don't actually need any status message output
 	$f .= "-threads 0 ";		// multiple core and multiple processor support
 	
+	// audio sync
+	if ($job->crop == 1) {
+	    $f .= "-async 4800 ";		// keeps audio synced with video
+	    $f .= "-dts_delta_threshold 1 ";	// also theoretically helps keep sync
+	} else {
+	    $f .= "-copyts ";			// copy time stamps
+	    $f .= "-ss 00:00:02 ";		// skip first 2 seconds, properly seeking
+	}
+	
 	// output options
-	$f .= "-ss 00:00:02 ";		// skip first 2 seconds (almost always bad frames with bad audio)
 	$f .= "-f mp4 ";		// MP4 output format
 	$f .= "-y $output";		// overwrite existing files
 	
