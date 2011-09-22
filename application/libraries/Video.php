@@ -177,23 +177,14 @@ class Video {
 	$f .= "-r 30000/1001 ";		// force NTSC framerate (29.97)
 	
 	// video settings
-	$f .= "-vcodec libx264 ";	// x264 video codec
-	$f .= "-flags2 +bpyramid+mixed_refs+wpred+dct8x8+fastpskip "; // flags for x264
-	$f .= "-refs 1 ";		// p-frame reference (default is 3)
-	$f .= "-aq_mode 0 ";		// disable adaptive quantization (enabled by default)
-	$f .= "-partitions +parti8x8+parti4x4+partp8x8+partb8x8 "; // enable all worthwhile partitions (default)	
+	$f .= "-partitions +parti8x8+parti4x4+partp8x8+partb8x8 "; // enable all worthwhile partitions (default)
 	$f .= "-me_method dia ";	// diamond motion estimation (fastest estimator)
-	$f .= "-qcomp 0.6 ";
-	$f .= "-qmin 10 ";
-	$f .= "-qmax 51 ";
-	$f .= "-qdiff 4 ";	
 	$f .= "-b {$bits}k ";		// video bitrate
 	
 	// audio settings
 	$f .= "-acodec libfaac ";	// use AAC audio codec
 	$f .= "-ab 128k ";		// audio bitrate
 	$f .= "-ac 2 ";			// stereo
-
 	
 	// global options
 	$f .= "-loglevel quiet ";	// we don't actually need any status message output
@@ -201,6 +192,7 @@ class Video {
 	
 	// audio sync
 	if ($job->crop == 1) {
+	    $f .= "-fflags +genpts ";		// rebuilds PTS, needed for funky MPEGs that come out of joining
 	    $f .= "-async 4800 ";		// keeps audio synced with video
 	    $f .= "-dts_delta_threshold 1 ";	// also theoretically helps keep sync
 	} else {
