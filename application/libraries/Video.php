@@ -191,7 +191,7 @@ class Video {
 	$f .= "-threads 0 ";		// multiple core and multiple processor support
 	
 	// audio sync
-	if ($job->chop == 1) {
+	if ($chop == 1) {
 	    $f .= "-fflags +genpts ";		// rebuilds PTS, needed for funky MPEGs that come out of joining
 	    $f .= "-async 4800 ";		// keeps audio synced with video
 	    $f .= "-dts_delta_threshold 1 ";	// also theoretically helps keep sync
