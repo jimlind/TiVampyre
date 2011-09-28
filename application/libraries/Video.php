@@ -159,8 +159,8 @@ class Video {
 	// video encoding and compression
 	$f .= "-vcodec libx264 ";	// x264 video codec
 	$f .= "-flags2 +bpyramid+mixed_refs+wpred+dct8x8+fastpskip "; // flags for compression algorithm
-	$f .= "-refs 1 ";		// p-frame reference (default is 3)
-	$f .= "-aq_mode 0 ";		// disable adaptive quantization (enabled by default)
+	$f .= "-refs 2 ";		// p-frame reference (default is 3)
+	$f .= "-aq_mode 1 ";		// enable adaptive quantization (enabled by default)
 	$f .= "-qcomp 0.6 ";
 	$f .= "-qmin 10 ";
 	$f .= "-qmax 51 ";
