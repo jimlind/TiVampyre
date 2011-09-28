@@ -18,7 +18,6 @@ class Video {
             $this->detectCommercials($input);
         }
         $this->encode($input, $size, $bits, $job->chop, $crop, $output);
-        if ($job->chop == 1) unlink($commercials);
         return file_exists($output);
     }
     
@@ -182,9 +181,11 @@ class Video {
 	$f .= "-b {$bits}k ";		// video bitrate
 	
 	// audio settings
-	$f .= "-acodec libfaac ";	// use AAC audio codec
-	$f .= "-ab 128k ";		// audio bitrate
-	$f .= "-ac 2 ";			// stereo
+	$f .= "-acodec libfaac ";		// use AAC audio codec
+	$f .= "-ab 128k ";			// audio bitrate
+	$f .= "-ac 2 ";				// stereo
+	$f .= "-async 4800 ";			// keeps audio synced with video
+	$f .= "-dts_delta_threshold 60 ";	// allow timestamp adjustment of 60 seconds
 	
 	// global options
 	$f .= "-loglevel quiet ";	// we don't actually need any status message output
@@ -193,10 +194,7 @@ class Video {
 	// audio sync
 	if ($chop == 1) {
 	    $f .= "-fflags +genpts ";		// rebuilds PTS, needed for funky MPEGs that come out of joining
-	    $f .= "-async 4800 ";		// keeps audio synced with video
-	    $f .= "-dts_delta_threshold 1 ";	// also theoretically helps keep sync
 	} else {
-	    $f .= "-copyts ";			// copy time stamps
 	    $f .= "-ss 00:00:02 ";		// skip first 2 seconds, properly seeking
 	}
 	
