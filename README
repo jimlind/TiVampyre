@@ -63,7 +63,6 @@ pinning to install ffmpeg from testing.
 > sudo apt-get install debian-multimedia-keyring
 > sudo apt-get update
 > sudo apt-get install mplayer
-> sudo apt-get install mencoder
 > sudo apt-get install ffmpeg
 
 
@@ -76,6 +75,7 @@ the /opt/comskip/ directory.
 (ComSkip is still actively maintained, look for newer versions)
 
 > sudo apt-get install unzip
+> cd ~
 > wget http://www.kaashoek.com/files/comskip80_042.zip
 > unzip comskip80_042.zip -d comskip
 > sudo cp -r comskip /opt/
