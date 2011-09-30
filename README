@@ -82,6 +82,9 @@ the /opt/comskip/ directory.
 
 ComSkip is a Windows Utility so it won't work natively in Linux.  Wine happens
 to run this command line tool quite well.
+If you go a complete Wheezy install it could make the installation of Wine a bit 
+more difficult since it isn't mainteined in the release yet.  Ignore the commands
+below and use the .deb files from http://dev.carbon-project.org/debian/wine-unstable/
 
 > sudo apt-get install wine
 > sudo apt-get remove libnss-mdns
