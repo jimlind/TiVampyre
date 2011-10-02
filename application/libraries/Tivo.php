@@ -45,6 +45,8 @@ class Tivo {
     // Download a specific file from the TiVo
     public function downloadFile($url, $path)
     {
+	$url = str_replace("!", "\!", $url);
+	
 	$mak = $this->mak;
 	$c  = "curl \"$url\" "; //source
 	$c .= "--digest -k "; //tivo needs these??
@@ -61,6 +63,7 @@ class Tivo {
 	$mak = $this->mak;
 	$d  = "tivodecode $input ";
 	$d .= "-m $mak ";
+	$d .= "-n "; //do not verify MAK while decoding
 	$d .= "-o $output ";
 	log_message('debug', $d);
 	shell_exec($d);

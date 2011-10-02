@@ -107,13 +107,13 @@ class Video {
 	$catPieces = "cat "; 
 	$workingDir = $vConfig['working_directory'];
 	foreach ($chapters as $index=>$chapter){
-	    if ($chapter['duration'] == 0) continue; // Don't worry about zero length files.
+	    if (isset($chapter['duration']) && $chapter['duration'] == 0) continue; // Don't worry about zero length files.
 	    
 	    $chapterFile = "{$workingDir}chapter{$index}.mpeg";
 	    
 	    $f  = "ffmpeg ";
-	    $f .= "-ss {$chapter['start']} ";
 	    $f .= "-i $target ";
+	    $f .= "-ss {$chapter['start']} ";
 	    if (isset($chapter['duration'])) {
 		$f .= "-t {$chapter['duration']} ";
 	    }
