@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS tivo;
+CREATE DATABASE IF NOT EXISTS `tivo`;
 
 CREATE TABLE `tivo`.`shows` (
   `id` int(11) NOT NULL,
