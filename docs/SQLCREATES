@@ -1,4 +1,6 @@
-CREATE TABLE `shows` (
+CREATE DATABASE IF NOT EXISTS tivo;
+
+CREATE TABLE `tivo`.`shows` (
   `id` int(11) NOT NULL,
   `show_title` varchar(128) NOT NULL,
   `duration` int(11) NOT NULL,
@@ -14,7 +16,7 @@ CREATE TABLE `shows` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `availability` (
+CREATE TABLE `tivo`.`availability` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `show_id` int(11) NOT NULL,
   `available` tinyint(1) NOT NULL,
@@ -23,7 +25,7 @@ CREATE TABLE `availability` (
   UNIQUE KEY `show_id` (`show_id`)
 );
 
-CREATE TABLE `jobs` (
+CREATE TABLE `tivo`.`jobs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `show_id` int(11) NOT NULL,
   `status` varchar(12) NOT NULL,
@@ -35,7 +37,7 @@ CREATE TABLE `jobs` (
   UNIQUE KEY `show_id` (`show_id`)
 );
 
-CREATE TABLE `icons` (
+CREATE TABLE `tivo`.`icons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `status` varchar(12) NOT NULL,
   `icon` varchar(64) NOT NULL,
@@ -43,16 +45,16 @@ CREATE TABLE `icons` (
   UNIQUE KEY `status` (`status`)
 );
 
-INSERT INTO `icons` VALUES (1, 'default',     'television--plus.png');
-INSERT INTO `icons` VALUES (2, 'waiting',     'clock.png');
-INSERT INTO `icons` VALUES (3, 'downloading', 'drive-download.png');
-INSERT INTO `icons` VALUES (4, 'downloaded',  'drive-medium.png');
-INSERT INTO `icons` VALUES (5, 'encoding',    'film-cast.png');
-INSERT INTO `icons` VALUES (6, 'complete',    'clipboard-task.png');
-INSERT INTO `icons` VALUES (7, 'error 1',     'exclamation-red-frame.png');
-INSERT INTO `icons` VALUES (8, 'error 2',     'exclamation-red-frame.png');
+INSERT INTO `tivo`.`icons` VALUES (1, 'default',     'television--plus.png');
+INSERT INTO `tivo`.`icons` VALUES (2, 'waiting',     'clock.png');
+INSERT INTO `tivo`.`icons` VALUES (3, 'downloading', 'drive-download.png');
+INSERT INTO `tivo`.`icons` VALUES (4, 'downloaded',  'drive-medium.png');
+INSERT INTO `tivo`.`icons` VALUES (5, 'encoding',    'film-cast.png');
+INSERT INTO `tivo`.`icons` VALUES (6, 'complete',    'clipboard-task.png');
+INSERT INTO `tivo`.`icons` VALUES (7, 'error 1',     'exclamation-red-frame.png');
+INSERT INTO `tivo`.`icons` VALUES (8, 'error 2',     'exclamation-red-frame.png');
 
-CREATE TABLE `config` (
+CREATE TABLE `tivo`.`config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(12) NOT NULL,
   `value` varchar(64) NOT NULL,
