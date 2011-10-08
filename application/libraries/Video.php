@@ -158,6 +158,9 @@ class Video {
 	
 	// video encoding and compression
 	$f .= "-vcodec libx264 ";	// x264 video codec
+	$f .= "-coder 1 ";
+	$f .= "-cmp +chroma ";
+	$f .= "-flags  +loop ";
 	$f .= "-flags2 +bpyramid+mixed_refs+wpred+dct8x8+fastpskip "; // flags for compression algorithm
 	$f .= "-refs 2 ";		// p-frame reference (default is 3)
 	$f .= "-aq_mode 1 ";		// enable adaptive quantization (enabled by default)
@@ -165,7 +168,7 @@ class Video {
 	$f .= "-qmin 10 ";
 	$f .= "-qmax 51 ";
 	$f .= "-qdiff 4 ";
-	$f .= "-subq 2 ";		// subpixel motion esimation (default is 7, less than 2 is not recommended)
+	$f .= "-subq 10 ";		// subpixel motion esimation (default is 7, less than 2 is not recommended)
 	$f .= "-trellis 1 ";		// trellis quantization (default)	
 	$f .= "-bf 0 ";
 	$f .= "-cmp +chroma ";		// included in all presets
@@ -176,8 +179,8 @@ class Video {
 	$f .= "-r 30000/1001 ";		// force NTSC framerate (29.97)
 	
 	// video settings
-	$f .= "-partitions +parti8x8+parti4x4+partp8x8+partb8x8 "; // enable all worthwhile partitions (default)
-	$f .= "-me_method dia ";	// diamond motion estimation (fastest estimator)
+	$f .= "-partitions +parti8x8+parti4x4+partp8x8+partp4x4+partb8x8 "; // enable all worthwhile partitions (default)
+	$f .= "-me_method tesa ";		// motion estimation
 	$f .= "-b {$bits}k ";		// video bitrate
 	
 	// audio settings
@@ -195,7 +198,8 @@ class Video {
 	if ($chop == 1) {
 	    $f .= "-fflags +genpts ";		// rebuilds PTS, needed for funky MPEGs that come out of joining
 	} else {
-	    $f .= "-ss 00:00:02 ";		// skip first 2 seconds, properly seeking
+	    $f .= "-copyts ";
+            $f .= "-ss 00:00:02 ";		// skip first 2 seconds, properly seeking
 	}
 	
 	// output options
@@ -206,7 +210,7 @@ class Video {
 	// crop=in_w-100:in_h-100:100:100
 	// crop=[desired width]:[desired height]:[x coordinate]:[y coordinate]
 	
-	log_message('debug', $f);
+	log_message('error', $f);
         shell_exec($f);
 	
         return file_exists($output);
