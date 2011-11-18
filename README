@@ -2,7 +2,7 @@ TiVampyre: Your TiVo Vampire
 
 Designed as a PHP front-end to a TiVo Ripping Service.
 Lots of Dependencies, everything is as well documented as it needs to be.
-Built/Tested for a server running Debian Squeeze/Wheezy and a Series 3 TiVo.
+Built/Tested for a server running Debian Wheezy and a Series 3 TiVo.
 Built/Tested for Chrome/Safari based browsers.
 
 See the 'docs' folder for licenses and other goodies.
@@ -53,18 +53,15 @@ restrictions, but you can still get the goodies.
 Visit: //www.debian-multimedia.org/ then edit your /etc/apt/sources.list file
 appropriatly.  Now update your sources and install.
 
-The version of ffmpeg that you install should be later than what is available in
-the Squeeze releases in Debian.  Issue #2393 was causing some shows to not
-properly encode if the commercials (usually local) were a different resolution
-than the main content.  You can just use Wheezy for everything or use APT
-pinning to install ffmpeg from testing.
+The rc4+svn20111024-0.0 release of mencoder doesn't do what I need it to so you are probably better off sticking with rc4+svn20110926-0.1 for now if at all possible.
 
 > sudo apt-get update
 > sudo apt-get install debian-multimedia-keyring
 > sudo apt-get update
 > sudo apt-get install mplayer
-> sudo apt-get install ffmpeg
-
+> sudo apt-get install mencoder
+> sudo apt-get install handbrake-cli
+> sudo apt-get install gpac
 
 ** WINE AND COMSKIP **
 You'll need the Comskip utility (and thusly Wine) to detect and skip
@@ -83,7 +80,7 @@ the /opt/comskip/ directory.
 ComSkip is a Windows Utility so it won't work natively in Linux.  Wine happens
 to run this command line tool quite well.
 If you go a complete Wheezy install it could make the installation of Wine a bit 
-more difficult since it isn't mainteined in the release yet.  Ignore the commands
+more difficult since it isn't maintained in the release yet.  Ignore the commands
 below and use the .deb files from http://dev.carbon-project.org/debian/wine-unstable/
 
 > sudo apt-get install wine
