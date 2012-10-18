@@ -6,18 +6,19 @@ class Video {
     {
         $resize = $job->full != 1;
 	$crop = $job->crop == 1;
-	$size = $this->getSize($input);
-	if ($resize && $size['width'] > 1024) {
-	    $size['height'] = 1024/($size['width']/$size['height']);
-	    $size['width'] = 1024;
-	}
-        $quality = $this->getVideoQuality($size['height'], $size['width']);
-        $this->encode($input, $quality, $resize, $crop, $output);
+	$outputDimensions = $this->getOutputDimensions($input, $crop, $resize);
+        $size = $outputDimensions['size'];
+        $crop = $outputDimensions['crop'];
+        
+        $quality = $this->getVideoQuality($size['height'], $size['width']);     
+        $this->encode($input, $quality, $size, $crop, $output);
 	$this->fix($output, $job->chop, $input);
 	
         return file_exists($output);
     }
     
+    // I don't know if I can trust mplayer.
+    // This is depreciated.
     private function getSize($target)
     {
 	$s  = "mplayer $target ";
@@ -34,6 +35,120 @@ class Video {
 	return array('width'=>$matches[1][0], 'height'=>$matches[1][1]);
     }
     
+    private function getOutputDimensions($target, $crop, $resize)
+    {   
+        $s = array(
+            'width' => 0,
+            'height'  => 0,
+        );
+        
+        $c = array(
+            'top'    => 0,
+            'bottom' => 0,
+            'left'   => 0,
+            'right'  => 0,
+        );
+        
+        // start command line
+        $h  = "HandBrakeCLI ";
+        $h .= "-i $target "; //input
+        $h .= "-o /dev/null "; //output
+
+        $h .= "--start-at duration:0 ";
+        $h .= "--stop-at duration:1 ";
+
+        $h .= "2>&1";
+
+        log_message('debug', $h);
+        $o = shell_exec($h);
+
+        $pattern = '|\+ size: (\d+)x(\d+),|';
+        preg_match_all($pattern, $o, $matches);
+        
+        $s['width']  = intval($matches[1][0]);
+        $s['height'] = intval($matches[2][0]);
+
+        // Find aspect ratio
+        $pattern = '|, aspect (\d+):(\d+),|';
+        preg_match_all($pattern, $o, $matches);
+        $aspectRatio = $matches[1][0] / $matches[2][0];
+        
+        
+        // Adjust height or width if neccesary to match aspect ratio (scale up)
+        $ourRatio = $s['width'] / $s['height'];
+        $range = 0.1;
+        if (($ourRatio < $aspectRatio - $range) || ($ourRatio > $aspectRatio + $range)) {
+            // Check adding height
+            $newHeight = $s['width'] / $aspectRatio;
+            $newHeightArea = $s['width'] * $newHeight;
+            // Check adding width
+            $newWidth = $s['height'] * $aspectRatio;
+            $newWidthArea = $s['height'] * $newWidth;
+            // Apply best fit
+            if ($newHeightArea > $newWidthArea) {
+                $s['height'] = $newHeight;
+            } else {
+                $s['width'] = $newWidth;
+            }
+        }
+        
+        if ($crop) {
+            $pattern = '|autocrop = (\d+)/(\d+)/(\d+)/(\d+)|';
+            preg_match_all($pattern, $o, $matches);
+
+            $c['top']    = intval($matches[1][0]);
+            $c['bottom'] = intval($matches[2][0]);
+            $c['left']   = intval($matches[3][0]);
+            $c['right']  = intval($matches[4][0]);
+        }
+
+        $outSize = array();
+        $outSize['height'] = $s['height'] - $c['top'] - $c['bottom'];
+        $outSize['width']  = $s['width'] - $c['left'] - $c['right']; 
+
+        // Default HD content to 1024 wide for iPads
+        if ($resize && $outSize['width'] > 1024) {
+	    $outSize['height'] = 1024/($outSize['width']/$outSize['height']);
+	    $outSize['width'] = 1024;
+	}
+        
+        // iPhone, iPad, etc can't handle higher than 1080p
+        if ($outSize['height'] > 1080) {
+            $outSize['width'] = 1080/($outSize['height']/$outSize['width']);
+	    $outSize['height'] = 1080;
+        }
+        
+        // Try to match standard HD sizes
+        $range = 24;
+        $h = 1080;
+        $w = 1920;
+        if (($outSize['height'] >= $h - $range) && ($outSize['height'] <= $h + $range) &&
+            ($outSize['width'] >= $w - $range) && ($outSize['width'] <= $w + $range)) {
+            log_message('debug', "Force 1080p Resolution");
+	    $outSize['height'] = $h;
+            $outSize['width'] = $w;
+        }
+        $range = 12;
+        $h = 720;
+        $w = 1280;
+        if (($outSize['height'] >= $h - $range) && ($outSize['height'] <= $h + $range) &&
+            ($outSize['width'] >= $w - $range) && ($outSize['width'] <= $w + $range)) {
+            log_message('debug', "Force 720p Resolution");
+	    $outSize['height'] = $h;
+            $outSize['width'] = $w;
+        }
+        
+        // Whole Integers
+        $outSize['height'] = intval($outSize['height']);
+        $outSize['width'] = intval($outSize['width']);
+        
+        return array(
+            'size' => $outSize,
+            'crop' => $c,
+        );
+    }
+        
+    
     private function getVideoQuality($height, $width)
     {
 	// computers don't care if this is left unsimplified
@@ -48,7 +163,7 @@ class Video {
         return round($qOut);
     }
  
-     private function encode($target, $quality, $resize, $crop, $output)
+    private function encode($target, $quality, $size, $crop, $output)
     {
         $addFilter = "";
 	
@@ -73,16 +188,12 @@ class Video {
 	$h .= "-D 1.0 ";	//dynamic volume compression
 
 	// crop and resize
-	if ($resize) {
-	    $h .= "-X 1024 ";		//max width 1024
-	}
-	if (!$crop) {
-	    $h .= "--crop 0:0:0:0 ";	//no cropping, default is auto crop
-	}
+	$h .= "-w {$size['width']} ";	//width
+        $h .= "-l {$size['height']} ";	//height
+        $h .= "--crop {$crop['top']}:{$crop['bottom']}:{$crop['left']}:{$crop['right']} ";
 	
 	// filters		
 	$h .= "--detelecine --decomb ";	// detelecine and decomb
-	$h .= "--loose-anamorphic ";	// keep a good aspect ratio
 
 	log_message('debug', $h);
         shell_exec($h);
