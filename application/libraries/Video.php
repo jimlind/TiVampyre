@@ -69,7 +69,7 @@ class Video {
         $s['height'] = intval($matches[2][0]);
 
         // Find aspect ratio
-        $pattern = '|, aspect (\d+):(\d+),|';
+        $pattern = '|, aspect ([\d.]+):([\d.]+),|';
         preg_match_all($pattern, $o, $matches);
         $aspectRatio = $matches[1][0] / $matches[2][0];
         
