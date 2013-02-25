@@ -46,11 +46,30 @@ class Tivo {
     public function downloadFile($url, $path)
     {
 	$url = str_replace("!", "\!", $url);
-	
+	$server = substr($url, 0, strpos($url, "/", 8));
+	$time = time();
 	$mak = $this->mak;
+	
+	// Get Cookie
+	$c  = "curl \"$server\" "; //source
+	$c .= "-u tivo:$mak "; //username and password
+	$c .= "-c /tmp/cookie_$time.txt "; //storing cookies is necessary, we just don't want them.
+	log_message('debug', $c);
+	shell_exec($c);
+	
+	// Extend Cookie
+	$cookie = file_get_contents("/tmp/cookie_$time.txt");
+	$pattern = "/(FALSE\s+)(1360972800)(\s+sid)/";
+	$oneYearLater = strtotime("+1 year", $time);
+	$replacement = '${1}' . $oneYearLater . '${3}';
+	$newCookie = preg_replace($pattern, $replacement, $cookie);
+	file_put_contents("/tmp/cookie_$time.txt", $newCookie);
+	
+	// Download File
 	$c  = "curl \"$url\" "; //source
 	$c .= "--digest -k "; //tivo needs these??
 	$c .= "-u tivo:$mak "; //username and password
+	$c .= "-b /tmp/cookie_$time.txt "; //use cookie with extende expiration
 	$c .= "-c /tmp/cookies.txt "; //storing cookies is necessary, we just don't want them.
 	$c .= "--retry 12 --retry-delay 10 "; //help retry??
 	$c .= "-o $path"; //output
