@@ -19,5 +19,8 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 
     return $twig;
 }));
+$app['tivo_locater'] = function ($app) {
+    return new JimLind\TiVo\Location($app['monolog']);
+};
 
 return $app;
