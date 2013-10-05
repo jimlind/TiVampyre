@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Shows{% endblock %}
+
+{% block content %}
+	<h1>Shows</h1>
+	<ul>
+		{% for result in results %}
+			<li>{{ result.show_title }} : {{ result.episode_title }}</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
