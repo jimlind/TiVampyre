@@ -1,0 +1,9 @@
+Run a Command
+*************
+
+php console get-shows-data
+
+Run the Unit Tests
+******************
+
+vendor/bin/phpunit tests

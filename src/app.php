@@ -1,14 +1,26 @@
 <?php
 
 use Silex\Application;
+use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
 
 $app = new Application();
+$app->register(new Igorw\Silex\ConfigServiceProvider(
+	__DIR__ . '/../config/tivampyre.json'
+));
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver'   => 'pdo_sqlite',
+        'path'     => __DIR__.'/../db/tivampyre.db',
+    ),
+));
+$app->register(new MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/../logs/tivampyre.log',
+));
 $app->register(new UrlGeneratorServiceProvider());
-$app->register(new ValidatorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider(), array(
     'twig.path'    => array(__DIR__.'/../templates'),
@@ -21,6 +33,14 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 }));
 $app['tivo_locater'] = function ($app) {
     return new JimLind\TiVo\Location($app['monolog']);
+};
+$app['tivo_now_playing'] = function ($app) {
+	return new JimLind\TiVo\NowPlaying(
+		$app['tivo_locater'],
+		$app['tivampyre_mak'],
+		$app['monolog'],
+		$app['db']
+	);
 };
 
 return $app;
