@@ -21,7 +21,8 @@ $console->register('db-setup')
 					station var_char(16),
 					hd var_char(4),
 					episode_number int,
-					url text
+					url text,
+					ts datetime
 				)';
 			$app['db']->query($showsSQL);
 		});
@@ -34,9 +35,10 @@ $console->register('db-destroy')
 $console->register('get-shows-data')
 		->setDescription('Get all show data from the TiVo')
 		->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-			$showList = $app['tivo_now_playing']->download();
+			$showList  = $app['tivo_now_playing']->download();
+			$timeStamp = new DateTime('now');
 			foreach ($showList as $show) {
-				$transaction = $show->writeToDatabase($app['db']);
+				$transaction = $show->writeToDatabase($app['db'], $timeStamp);
 				if ($transaction == TiVo\Show::INSERT) {
 					// TODO
 					// TWEET

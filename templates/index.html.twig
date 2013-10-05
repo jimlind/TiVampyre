@@ -6,7 +6,15 @@
 	<h1>Shows</h1>
 	<ul>
 		{% for result in results %}
-			<li>{{ result.show_title }} : {{ result.episode_title }}</li>
+			<li>
+				{{ result.show_title }} : {{ result.episode_title }}<br />
+				<span>
+					{{ result.episode_number }} : {{ result.description}}<br />
+					{{ (result.duration/60000)|number_format(0) }} min long on
+					{{ result.station }} {{ result.channel }} at {{ result.date }}</br>
+					In HD? {{ result.hd }}
+				</span>
+			</li>
 		{% endfor %}
 	</ul>
 {% endblock %}

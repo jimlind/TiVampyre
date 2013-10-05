@@ -43,14 +43,14 @@ class Show {
 		$this->hd            = (string) $details->HighDefinition;
 		$this->date          = (string) $details->CaptureDate;
 
-		$this->url = $links->Content->Url;
+		$this->url = (string) $links->Content->Url;
 	}
 
 	public function getDetail() {
 		return $this->showTitle . ':' . $this->episodeTitle . ':' . $this->episodeNumber;
 	}
 
-	public function writeToDatabase(\Doctrine\DBAL\Connection $connection) {
+	public function writeToDatabase(\Doctrine\DBAL\Connection $connection, \DateTime $timeStamp) {
 		$count = $connection->fetchColumn('SELECT COUNT(id) FROM shows WHERE id = ?', array($this->id));
 		if (intval($count) == 0) {
 			$connection->insert('shows', array(
@@ -63,7 +63,8 @@ class Show {
 				'channel' => $this->channel,
 				'station' => $this->station,
 				'hd' => $this->hd,
-				'date' => $this->date,
+				'date' => date('Y-m-d H:i:s', hexdec((string) $this->date)),
+				'ts' => $timeStamp->format('Y-m-d H:i:s')
 			));
 			return self::INSERT;
 		} else {
