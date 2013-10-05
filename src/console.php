@@ -9,19 +9,20 @@ $console = new Application('TiVampyre', '2.0');
 $console->register('db-setup')
 		->setDescription('Setup the SQLite Database Tables')
 		->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-			$showsSQL = 'CREATE TABLE shows (
-				id int,
-				show_title var_char(128),
-				episode_title var_char(128),
-				duration int,
-				date datetime,
-				description text,
-				channel int,
-				station var_char(16),
-				hd var_char(4),
-				episode_number int,
-				url text
-			)';
+			$showsSQL = '
+				CREATE TABLE shows (
+					id int,
+					show_title var_char(128),
+					episode_title var_char(128),
+					duration int,
+					date datetime,
+					description text,
+					channel int,
+					station var_char(16),
+					hd var_char(4),
+					episode_number int,
+					url text
+				)';
 			$app['db']->query($showsSQL);
 		});
 $console->register('db-destroy')
