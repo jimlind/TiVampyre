@@ -10,13 +10,16 @@ class NowPlaying {
 	private $ip;
 	private $mak;
 	private $logger;
+	private $process;
 
-	function __construct(Location $location, $mak, Logger $logger) {
-		$this->ip     = $location->find();
-		$this->mak    = $mak;
+	function __construct(Location $location, $mak, Logger $logger, Process $process) {
+		$this->ip = $location->find();
+		$this->mak = $mak;
 		$this->logger = $logger;
+		$this->process = $process;
+
 		//TODO Disable this override.
-		$this->ip     = '192.168.42.101';
+		$this->ip = '192.168.42.101';
 	}
 
 	public function download() {
@@ -26,8 +29,8 @@ class NowPlaying {
 		}
 
 		$anchorOffset = 0;
-		$xmlPiece     = $this->downloadXmlPiece($anchorOffset);
-		$showList     = $this->xmlToShows($xmlPiece);
+		$xmlPiece = $this->downloadXmlPiece($anchorOffset);
+		$showList = $this->xmlToShows($xmlPiece);
 
 		while ($xmlPiece) {
 			$anchorOffset = count($showList);
@@ -47,14 +50,14 @@ class NowPlaying {
 			'Recurse' => 'Yes',
 			'AnchorOffset' => $anchorOffset,
 		);
-		$url     = 'https://' . $this->ip . '/TiVoConnect?' . http_build_query($data);
+		$url = 'https://' . $this->ip . '/TiVoConnect?' . http_build_query($data);
 		$command = "curl -s '$url' -k --digest -u tivo:" . $this->mak;
 
-		$process = new Process($command);
-		$process->setTimeout(600); // 10 minutes
-		$process->run();
+		$this->process->setCommandLine($command);
+		$this->process->setTimeout(600); // 10 minutes
+		$this->process->run();
 
-		$xml = simplexml_load_string($process->getOutput());
+		$xml = simplexml_load_string($this->process->getOutput());
 		$itemCount = (int) $xml->ItemCount;
 		if ($itemCount == 0) {
 			return false;
@@ -72,4 +75,5 @@ class NowPlaying {
 		}
 		return $shows;
 	}
+
 }

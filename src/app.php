@@ -43,7 +43,7 @@ $app['tivo_now_playing'] = function ($app) {
 		$app['tivo_locater'],
 		$app['tivampyre_mak'],
 		$app['monolog'],
-		$app['db']
+		$app['process']
 	);
 };
 
