@@ -26,6 +26,7 @@ $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider(), array(
     'twig.path'    => array(__DIR__.'/../templates'),
+	//TODO Disable this override.
     //'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
 ));
 $app['process'] = new Process('');

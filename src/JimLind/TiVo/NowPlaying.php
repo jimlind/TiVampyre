@@ -12,9 +12,11 @@ class NowPlaying {
 	private $logger;
 
 	function __construct(Location $location, $mak, Logger $logger) {
-		$this->ip     = '192.168.42.101';//$location->find();
+		$this->ip     = $location->find();
 		$this->mak    = $mak;
 		$this->logger = $logger;
+		//TODO Disable this override.
+		$this->ip     = '192.168.42.101';
 	}
 
 	public function download() {
