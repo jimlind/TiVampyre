@@ -9,7 +9,8 @@
 			<li>
 				{{ result.show_title }} : {{ result.episode_title }}<br />
 				<span>
-					{{ result.episode_number }} : {{ result.description}}<br />
+					{{ result.episode_number }} :
+					{{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}<br />
 					{{ (result.duration/60000)|number_format(0) }} min long on
 					{{ result.station }} {{ result.channel }} at {{ result.date }}</br>
 					In HD? {{ result.hd }}
