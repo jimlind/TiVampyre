@@ -1,7 +1,9 @@
 Run a Command
 *************
 
+php console db-setup
 php console get-shows-data
+php console db-destroy
 
 Run the Unit Tests
 ******************

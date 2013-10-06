@@ -3,37 +3,33 @@
 namespace JimLind\TiVo;
 
 use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\Process\Process;
 
 class Location
 {
 	private $logger;
+	private $process;
 
-	function __construct(Logger $logger) {
+	function __construct(Logger $logger, Process $process) {
 		$this->logger = $logger;
+		$this->process = $process;
 	}
 
 	public function find() {
-		$command = 'avahi-browse -l -r -t _tivo-videos._tcp 2>&1';
-		$return  = null;
-		$status  = null;
-		exec($command, $return, $status);
+		$command = 'avahi-browse -l -r -t _tivo-videos._tcp';
+		$this->process->setCommandLine($command);
+		$this->process->setTimeout(60); // 1 minute
+		$this->process->run();
+		$output = $this->process->getOutput();
 
-		if ($status !== 0) {
-			$this->logger->addWarning(
-				'Command avahi-browse not installed or configured. ' .
-				'Install avahi-utils package.'
-			);
+		if (empty($output)) {
+			$this->logger->addWarning('Problem locating a proper device on the
+				network. The avahi-browse tool may not be installed.');
 			return false;
 		}
 
-		if (count($return) == 0) {
-			$this->logger->addWarning('TiVo not found on your network.');
-			return false;
-		}
-
-		$addressFound = false;
-		foreach ($return as $line) {
-			$pattern = '/^ address = \[(\d+.\d+.\d+.\d+]*)]$/';
+		foreach (explode(PHP_EOL, $output) as $line) {
+			$pattern = '/^\s+address = \[(\d+\.\d+\.\d+\.\d+)\]$/';
 			preg_match($pattern, $line, $matches);
 			if (!empty($matches) && isset($matches[1])) {
 				return $matches[1];
