@@ -19,31 +19,31 @@ class NowPlaying {
 		$this->process = $process;
 
 		//TODO Disable this override.
-		$this->ip = '192.168.42.101';
+		//$this->ip = '192.168.42.101';
 	}
 
 	public function download() {
 		if ($this->ip === false) {
 			$this->logger->addWarning('Can not download without a TiVo.');
-			return false;
+			return array();
 		}
 
 		$anchorOffset = 0;
-		$xmlPiece = $this->downloadXmlPiece($anchorOffset);
-		$showList = $this->xmlToShows($xmlPiece);
+		$xmlFile = $this->downloadXmlFile($anchorOffset);
+		$showList = $this->xmlFileToArray($xmlFile);
 
-		while ($xmlPiece) {
+		while ($xmlFile) {
 			$anchorOffset = count($showList);
-			$xmlPiece = $this->downloadXmlPiece($anchorOffset);
-			if ($xmlPiece) {
-				$showList = array_merge($showList, $this->xmlToShows($xmlPiece));
+			$xmlFile = $this->downloadXmlFile($anchorOffset);
+			if ($xmlFile) {
+				$showList = array_merge($showList, $this->xmlFileToArray($xmlFile));
 			}
 		}
 
 		return $showList;
 	}
 
-	private function downloadXmlPiece($anchorOffset) {
+	private function downloadXmlFile($anchorOffset) {
 		$data = array(
 			'Command' => 'QueryContainer',
 			'Container' => '/NowPlaying',
@@ -58,6 +58,12 @@ class NowPlaying {
 		$this->process->run();
 
 		$xml = simplexml_load_string($this->process->getOutput());
+		if (!is_object($xml)) {
+			return false;
+		}
+		if (!isset($xml->ItemCount)) {
+			return false;
+		}
 		$itemCount = (int) $xml->ItemCount;
 		if ($itemCount == 0) {
 			return false;
@@ -66,11 +72,12 @@ class NowPlaying {
 		}
 	}
 
-	public function xmlToShows($simpleXml) {
+	private function xmlFileToArray($simpleXml) {
 		$shows = array();
-		foreach ($simpleXml->Item as $item) {
-			$show = new Show();
-			$show->translateXML($item);
+		if (!isset($simpleXml->Item)) {
+			return $shows;
+		}
+		foreach ($simpleXml->Item as $show) {
 			$shows[] = $show;
 		}
 		return $shows;

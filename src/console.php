@@ -37,7 +37,8 @@ $console->register('get-shows-data')
 		->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
 			$showList  = $app['tivo_now_playing']->download();
 			$timeStamp = new DateTime('now');
-			foreach ($showList as $show) {
+			foreach ($showList as $showXML) {
+				$show = new TiVo\Show($showXML);
 				$transaction = $show->writeToDatabase($app['db'], $timeStamp);
 				if ($transaction == TiVo\Show::INSERT) {
 					// TODO

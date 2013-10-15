@@ -19,10 +19,7 @@ class Show {
 	private $hd = null;
 	private $url = null;
 
-	/**
-	 * @param SimpleXMLElement $xml
-	 */
-	public function translateXML($xml) {
+	public function __construct(\SimpleXMLElement $xml) {
 		$details   = $xml->Details;
 		$links     = $xml->Links;
 		$detailUrl = (string) $links->TiVoVideoDetails->Url;
