@@ -4,9 +4,9 @@ namespace JimLind\TiVo;
 
 class LocationTest extends \PHPUnit_Framework_TestCase {
 
-	private $locator;
-	private $process;
 	private $logger;
+	private $process;
+	private $locator;
 
 	public function setUp() {
 		$mockLoggerBuilder = $this->getMockBuilder('\Symfony\Bridge\Monolog\Logger');
@@ -38,14 +38,6 @@ class LocationTest extends \PHPUnit_Framework_TestCase {
 
 		$found = $this->locator->find();
 		$this->assertEquals($found, $output);
-	}
-
-	public static function getExecReturn() {
-		return $this->execReturn;
-	}
-
-	public static function getExecStatus() {
-		return $this->execStatus;
 	}
 
 	public function provider() {
