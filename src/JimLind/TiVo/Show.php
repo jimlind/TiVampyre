@@ -76,7 +76,19 @@ class Show {
 			);
 			return self::UPDATE;
 		}
-		die;
+	}
+
+	public function startedRecordingMessage() {
+		$message  = 'I started recording ' . $this->showTitle . ' ';
+		if (!empty($this->episodeTitle)) {
+			$message .= '- ' . $this->episodeTitle . ' ';
+		}
+		$message .= 'on ' . $this->station . ' ' . $this->channel;
+		if (strtoupper($this->hd) == 'YES') {
+			$message .= ' in HD';
+		}
+		$message .= '.';
+		return $message;
 	}
 
 }

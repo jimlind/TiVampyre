@@ -41,8 +41,7 @@ $console->register('get-shows-data')
 				$show = new TiVo\Show($showXML);
 				$transaction = $show->writeToDatabase($app['db'], $timeStamp);
 				if ($transaction == TiVo\Show::INSERT) {
-					// TODO
-					// TWEET
+					$app['twitter']->send($show->startedRecordingMessage());
 				}
 			}
 		});

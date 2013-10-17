@@ -30,6 +30,12 @@ $app->register(new TwigServiceProvider(), array(
     //'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
 ));
 $app['process'] = new Process('');
+$app['twitter'] = new Twitter(
+	$app['twitter_consumer_key'],
+	$app['twitter_consumer_secret'],
+	$app['twitter_access_token'],
+	$app['twitter_access_token_secret']
+);
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     // add custom globals, filters, tags, ...
 
