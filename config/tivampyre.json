@@ -1,5 +1,9 @@
 {
 	"tivampyre_mak": "7678113199",
 	"tivampyre_comskip_path": "/opt/comskip/",
-	"tivampyre_working_directory": "/disk2/tivo/"
+	"tivampyre_working_directory": "/disk2/tivo/",
+	"twitter_consumer_key": "UGHbTr78nufbgjivpg1Mg",
+	"twitter_consumer_secret": "QA20bZIFcUiiPAVfEQdE9zuMXczpK6jpSgE4bxkKK4",
+	"twitter_access_token": "1692825732-g9J1c6WtCsYFMYJB8M3M91wjBt42fUYzwZKRqE1",
+	"twitter_access_token_secret": "ffG2FIgI7Jym3lxnT74fLuuWQWISnNwAYjUBIEAO4Wc"
 }

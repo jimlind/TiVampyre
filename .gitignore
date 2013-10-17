@@ -6,3 +6,5 @@ composer.lock
 /nbproject/
 
 db/tivampyre.db
+
+config/tivampyre.json
