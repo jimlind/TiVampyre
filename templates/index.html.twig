@@ -6,7 +6,7 @@
 	<h1>Shows</h1>
 	<ul>
 		{% for result in results %}
-			<li>
+			<li class="clickableShow" data-id='{{ result.id }}'>
 				{{ result.show_title }} : {{ result.episode_title }}<br />
 				<span>
 					{{ result.episode_number }} :
