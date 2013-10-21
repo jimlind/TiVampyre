@@ -7,6 +7,9 @@
 	<ul>
 		{% for result in results %}
 			<li class="clickableShow" data-id='{{ result.id }}'>
+				{% if result.img is defined %}
+					<img src="data:image/png;base64,{{ result.img }}" />
+				{% endif %}
 				{{ result.show_title }} : {{ result.episode_title }}<br />
 				<span>
 					{{ result.episode_number }} :

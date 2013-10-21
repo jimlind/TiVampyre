@@ -8,7 +8,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $app->get('/', function() use ($app) {
 	$showResults = $app['db']->fetchAll('SELECT * FROM shows ORDER BY show_title, episode_number, date');
-    return $app['twig']->render('index.html.twig', array(
+    $imageService = $app['image_service'];
+
+	foreach ($showResults as &$result) {
+		$result['img'] = $imageService->getBase64($result['show_title'] . " tv");
+		break;
+	}
+
+	return $app['twig']->render('index.html.twig', array(
 		'results' => $showResults,
 	));
 });

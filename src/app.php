@@ -52,5 +52,17 @@ $app['tivo_now_playing'] = function ($app) {
 		$app['process']
 	);
 };
+$app['google_scraper'] = function ($app) {
+	return new JimLind\Image\Google(
+		$app['google_api_key'],
+		$app['process']
+	);
+};
+$app['image_service'] = function ($app) {
+	return new JimLind\Image\Builder(
+		array('h' => 100, 'w' => 100),
+		$app['google_scraper']
+	);
+};
 
 return $app;

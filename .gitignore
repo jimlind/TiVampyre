@@ -8,3 +8,5 @@ composer.lock
 db/tivampyre.db
 
 config/tivampyre.json
+
+config/tivampyre.json
