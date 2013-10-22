@@ -3,26 +3,7 @@
     <head>
         <title>{% block title '' %} - TiVampyre</title>
         <link href="{{ app.request.basepath }}/css/main.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript">
-			// Wait for the DOM to be ready.
-			document.addEventListener('DOMContentLoaded', function () {
-				// Collect clickable shows and loop over them.
-				var shows = document.getElementsByClassName('clickableShow');
-				for (var i = 0; i < shows.length; ++i) {
-					// Perform action when clicked.
-					shows[i].onclick = function(x){
-						var id = this.getAttribute("data-id");
-						var xhr = new XMLHttpRequest();
-						xhr.open('POST', '/submit', true);
-						xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-						xhr.onload = function() {
-							console.log(this.responseText);
-						}
-						xhr.send('id='+id);
-					};
-				}
-			});
-		</script>
+		<script type="text/javascript" src="{{ app.request.basepath }}/js/script.js"></script>
     </head>
     <body>
         {% block content %}{% endblock %}

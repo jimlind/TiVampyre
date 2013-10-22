@@ -8,12 +8,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $app->get('/', function() use ($app) {
 	$showResults = $app['db']->fetchAll('SELECT * FROM shows ORDER BY show_title, episode_number, date');
-    $imageService = $app['image_service'];
-
-	foreach ($showResults as &$result) {
-		$result['img'] = $imageService->getBase64($result['show_title'] . " tv");
-		break;
-	}
 
 	return $app['twig']->render('index.html.twig', array(
 		'results' => $showResults,
@@ -23,6 +17,12 @@ $app->post('/submit', function(Request $request) use ($app) {
 	$id = $request->get('id');
 	$data = array('apple', 'orange', $id);
 	return new JsonResponse($data);
+});
+$app->post('/image', function(Request $request) use ($app) {
+	$title = $request->get('title');
+	$imageService = $app['image_service'];
+	$base64 = $imageService->getBase64($title . " tv");
+	return new JsonResponse(array('base64' => $base64));
 });
 $app->error(function (\Exception $e, $code) use ($app) {
     if (in_array($code, array(404, 405))) {
