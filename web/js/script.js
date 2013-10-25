@@ -4,11 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Collect show image placeholders
 	var logos = document.getElementsByClassName('showLogo');
 	for (var i = 0; i < logos.length; ++i) {
-		loadFromGoogle(logos[i]);
-		// TODO: Load All The Images;
-		if (i > 2) {
-			break;
-		}
+		loadImage(logos[i]);
 	}
 
 	// Collect clickable shows and loop over them.
@@ -28,14 +24,30 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 });
 
-function loadFromGoogle(img){
+function loadImage(img) {
 	var title = img.getAttribute("data-title");
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/image', true);
-	xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	xhr.onload = function() {
-		var response = JSON.parse(this.responseText);
-		img.src="data:image/png;base64," + response['base64'];
+	var hashed = hash(title);
+	var stored = localStorage.getItem(hashed);
+	if (!stored) {
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', '/image', true);
+		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xhr.onload = function() {
+			var response = JSON.parse(this.responseText);
+			localStorage.setItem(hashed, response['base64']);
+			img.src="data:image/png;base64," + response['base64'];
+		}
+		xhr.send('title='+title);
+	} else {
+		img.src="data:image/png;base64," + stored;
 	}
-	xhr.send('title='+title);
+}
+
+function hash(inputString) {
+	inputArray = inputString.split("");
+	hashed = inputArray.reduce(function(a, b) {
+		a = ((a << 5) - a) + b.charCodeAt(0);
+		return a & a;
+	}, 0);
+	return hashed;
 }
