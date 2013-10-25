@@ -14,8 +14,8 @@ class JobQueue {
 	}
 
 	public function add($id) {
-		$this->connection->insert('shows', array(
-			'show_id' => $id,
+		$this->connection->insert('job_queue', array(
+			'show_id' => (int) $id,
 			'status'  => 1,
 			'ts'      => date('Y-m-d H:i:s')
 		));

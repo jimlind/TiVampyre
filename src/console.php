@@ -29,7 +29,7 @@ $console->register('db-setup')
 				CREATE TABLE job_queue (
 					id      INTEGER PRIMARY KEY AUTOINCREMENT,
 					show_id INTEGER,
-					status  INTEGER
+					status  INTEGER,
 					ts      TEXT
 				)';
 			$app['db']->query($jobQueueSQL);
@@ -52,12 +52,12 @@ $console->register('db-setup')
 $console->register('db-destroy')
 		->setDescription('Destroy the SQLite Database Tables')
 		->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-			$dropSQL = '
-				DROP TABLE shows;
-				DROP TABLE job_queue;
-				DROP TABLE job_status;
-				';
-			$app['db']->query($dropSQL);
+			$dropShows = 'DROP TABLE shows';
+			$app['db']->query($dropShows);
+			$dropQueue = 'DROP TABLE job_queue';
+			$app['db']->query($dropQueue);
+			$dropStatus = 'DROP TABLE job_status';
+			$app['db']->query($dropStatus);
 		});
 $console->register('get-shows-data')
 		->setDescription('Get all show data from the TiVo')

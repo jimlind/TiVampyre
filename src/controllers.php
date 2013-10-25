@@ -15,8 +15,8 @@ $app->get('/', function() use ($app) {
 });
 $app->post('/submit', function(Request $request) use ($app) {
 	$id = $request->get('id');
-	$data = array('apple', 'orange', $id);
-	return new JsonResponse($data);
+	$app['job_queue']->add($id);
+	return new JsonResponse(true);
 });
 $app->post('/image', function(Request $request) use ($app) {
 	$title = $request->get('title');
