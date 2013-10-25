@@ -15,10 +15,9 @@ class Google {
 	}
 
 	function getOneURL($keywords) {
-		$images = array();
-
 		$url = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=';
 		$url .= urlencode($keywords).'&start=0&key='.$this->key;
+		$url .= '&as_filetype=jpg&imgsz=medium|large';
 
 		$command = "curl -s '$url'";
 
