@@ -25,7 +25,7 @@ $app->post('/image', function(Request $request) use ($app) {
 	return new JsonResponse(array('base64' => $base64));
 });
 $app->error(function (\Exception $e, $code) use ($app) {
-    if (in_array($code, array(404, 405))) {
+	if (in_array($code, array(404, 405))) {
 		$page = '404.html.twig';
 	} else {
 		$page = '500.html.twig';
