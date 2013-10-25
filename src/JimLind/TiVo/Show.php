@@ -32,15 +32,14 @@ class Show {
 
 		$this->showTitle     = (string) $details->Title;
 		$this->episodeTitle  = (string) $details->EpisodeTitle;
-		$this->episodeNumber = (string) $details->EpisodeNumber;
-		$this->duration      = (int) $details->Duration;
+		$this->episodeNumber = (int)    $details->EpisodeNumber;
+		$this->duration      = (int)    $details->Duration;
 		$this->description   = (string) $details->Description;
-		$this->channel       = (int) $details->SourceChannel;
+		$this->channel       = (int)    $details->SourceChannel;
 		$this->station       = (string) $details->SourceStation;
 		$this->hd            = (string) $details->HighDefinition;
 		$this->date          = (string) $details->CaptureDate;
-
-		$this->url = (string) $links->Content->Url;
+		$this->url           = (string) $links->Content->Url;
 	}
 
 	public function getDetail() {
@@ -51,17 +50,18 @@ class Show {
 		$count = $connection->fetchColumn('SELECT COUNT(id) FROM shows WHERE id = ?', array($this->id));
 		if (intval($count) == 0) {
 			$connection->insert('shows', array(
-				'id' => $this->id,
-				'show_title' => $this->showTitle,
-				'episode_title' => $this->episodeTitle,
+				'id'             => $this->id,
+				'show_title'     => $this->showTitle,
+				'episode_title'  => $this->episodeTitle,
 				'episode_number' => $this->episodeNumber,
-				'duration' => $this->duration,
-				'description' => $this->description,
-				'channel' => $this->channel,
-				'station' => $this->station,
-				'hd' => $this->hd,
-				'date' => date('Y-m-d H:i:s', hexdec((string) $this->date)),
-				'ts' => $timeStamp->format('Y-m-d H:i:s')
+				'duration'       => $this->duration,
+				'description'    => $this->description,
+				'channel'        => $this->channel,
+				'station'        => $this->station,
+				'hd'             => $this->hd,
+				'date'           => date('Y-m-d H:i:s', hexdec((string) $this->date)),
+				'url'            => $this->url,
+				'ts'             => $timeStamp->format('Y-m-d H:i:s')
 			));
 			return self::INSERT;
 		} else {
