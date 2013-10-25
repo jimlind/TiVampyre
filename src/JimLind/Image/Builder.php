@@ -13,7 +13,7 @@ class Builder {
 		$this->google = $google;
 	}
 
-	function getBase64($keywords) {
+	function prepare($keywords) {
 		$url = $this->google->getOneURL($keywords);
 		$image = imagecreatefromjpeg($url);
 
@@ -28,9 +28,18 @@ class Builder {
 
 		$thumb = imagecreatetruecolor($this->sizes['h'], $this->sizes['w']);
 		imagecopyresampled($thumb, $image, 0, 0, 0, 0, $this->sizes['h'], $this->sizes['w'], $smallestSide, $smallestSide);
+		return $thumb;
+	}
 
+	function getPNG($keywords) {
+		$imageRef = $this->prepare($keywords);
+		return imagepng($imageRef);
+	}
+
+	function getBase64($keywords) {
+		$imageRef = $this->prepare($keywords);
 		ob_start();
-		imagepng($thumb);
+		imagepng($imageRef);
 		$png = ob_get_clean();
 
 		return base64_encode($png);
