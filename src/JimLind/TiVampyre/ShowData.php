@@ -19,6 +19,21 @@ class ShowData {
     }
 
     /**
+     * Get all the show records with the most recent timestamp.
+     * 
+     * @return array - Array of records
+     */
+    public function getCurrent() {
+        $q = 'SELECT * 
+            FROM shows
+            WHERE ts=(
+                SELECT MAX(ts) FROM shows
+            )
+            ORDER BY show_title, episode_number, date';
+        return $this->connection->fetchAll($q);
+    }
+    
+    /**
      * Writes a show to the show database table.
      * 
      * @param \JimLind\TiVo\Show $show
