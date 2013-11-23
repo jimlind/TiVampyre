@@ -1,3 +1,10 @@
+Setup Notes
+***********
+
+You will need to check the permissions on the database file and db directory.
+It is created by the command line and accessed by the apache user.
+This might be able to be automated, at the very least easy to check.
+
 Run a Command
 *************
 
