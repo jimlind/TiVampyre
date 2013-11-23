@@ -1,6 +1,7 @@
 <?php
 
-use JimLind\TiVo;
+use JimLind\TiVampyre\ShowData;
+use JimLind\TiVo\Show;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -71,11 +72,11 @@ $console->register('get-shows-data')
             // Keep a local timestamp so database writes have the same stamp.
             $timestamp  = new DateTime('now');
             foreach ($nowPlaying as $showXML) {
-                $show = new TiVo\Show($showXML);
-                $transaction = $show->writeToDatabase($app['db'], $timestamp);
+                $show = new Show($showXML);
+                $transaction = $app['show_data']->write($show, $timestamp);
                 // If the action is an insert and it isn't the initial run then Tweet.
-                if ($transaction == TiVo\Show::INSERT && !$initialRun) {
-                    $app['twitter']->send($show->startedRecordingMessage());
+                if ($transaction == ShowData::INSERT && !$initialRun) {
+                    $app['twitter']->send($show->getStartedRecordingMessage());
                 }
             }
         });
