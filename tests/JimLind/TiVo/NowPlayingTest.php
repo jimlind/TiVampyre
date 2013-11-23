@@ -80,6 +80,14 @@ class NowPlayingTest extends \PHPUnit_Framework_TestCase {
 				'expected' => array(),
 				'output' => true,
 			),
+                        array(
+                                'ip' => '192.168.0.1',
+				'return' => array(
+					'<xml><NorseWords>Ragnarok</NorseWords></xml>',
+				),
+				'expected' => array(),
+				'output' => true,
+			),
 			array(
 				'ip' => '192.168.0.1',
 				'return' => array(

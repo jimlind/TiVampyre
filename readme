@@ -9,6 +9,7 @@ Run the Unit Tests
 ******************
 
 vendor/bin/phpunit tests
+vendor/bin/phpunit --coverage-text tests
 
 Configuration Options
 *********************
