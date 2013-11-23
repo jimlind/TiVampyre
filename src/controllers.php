@@ -6,12 +6,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-$app->get('/', function() use ($app) {
-	$showResults = $app['db']->fetchAll('SELECT * FROM shows ORDER BY show_title, episode_number, date');
-
-	return $app['twig']->render('index.html.twig', array(
-		'results' => $showResults,
-	));
+$app->get('/', function() use ($app) {    
+    $showResults = $app['show_data']->getCurrent();
+    return $app['twig']->render('index.html.twig', array(
+        'results' => $showResults,
+    ));
 });
 $app->post('/submit', function(Request $request) use ($app) {
 	$id = $request->get('id');
