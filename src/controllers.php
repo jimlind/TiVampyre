@@ -12,6 +12,11 @@ $app->get('/', function() use ($app) {
         'results' => $showResults,
     ));
 });
+$app->get('/jobs', function() use ($app) {
+    $jobs = $app['job_queue']->getAll();
+    var_dump($jobs);
+    return "<p>That was the jobs</p>";
+});
 $app->post('/submit', function(Request $request) use ($app) {
 	$id = $request->get('id');
 	$app['job_queue']->add($id);
