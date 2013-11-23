@@ -21,7 +21,7 @@ $app->post('/submit', function(Request $request) use ($app) {
 $app->post('/image', function(Request $request) use ($app) {
 	$title = $request->get('title');
 	$imageService = $app['image_service'];
-	$base64 = $imageService->getBase64($title . " tv");
+	$base64 = $imageService->getBase64($title . ' tv');
 	return new JsonResponse(array('base64' => $base64));
 });
 $app->error(function (\Exception $e, $code) use ($app) {
