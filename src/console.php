@@ -64,13 +64,17 @@ $console->register('db-destroy')
 $console->register('get-shows-data')
         ->setDescription('Get all show data from the TiVo')
         ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-            $showCount = intval($app['db']->fetchColumn('SELECT COUNT(id) FROM shows'));
-            $showList  = $app['tivo_now_playing']->download();
-            $timeStamp = new DateTime('now');
-            foreach ($showList as $showXML) {
+            // It is the initial run if there is no current show data.
+            $initialRun = $app['show_data']->totalCount() == 0;
+            // Get all the shows available on the TiVo.
+            $nowPlaying = $app['tivo_now_playing']->download();
+            // Keep a local timestamp so database writes have the same stamp.
+            $timestamp  = new DateTime('now');
+            foreach ($nowPlaying as $showXML) {
                 $show = new TiVo\Show($showXML);
-                $transaction = $show->writeToDatabase($app['db'], $timeStamp);
-                if ($transaction == TiVo\Show::INSERT && $showCount > 0) {
+                $transaction = $show->writeToDatabase($app['db'], $timestamp);
+                // If the action is an insert and it isn't the initial run then Tweet.
+                if ($transaction == TiVo\Show::INSERT && !$initialRun) {
                     $app['twitter']->send($show->startedRecordingMessage());
                 }
             }
