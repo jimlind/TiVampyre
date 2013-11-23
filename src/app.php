@@ -55,6 +55,9 @@ $app['tivo_now_playing'] = function ($app) {
 $app['job_queue'] = function ($app) {
 	return new JimLind\TiVampyre\JobQueue($app['db']);
 };
+$app['show_data'] = function ($app) {
+	return new JimLind\TiVampyre\ShowData($app['db']);
+};
 $app['google_scraper'] = function ($app) {
 	return new JimLind\Image\Google(
 		$app['google_api_key'],
