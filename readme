@@ -5,11 +5,16 @@ php console db-setup
 php console get-shows-data
 php console db-destroy
 
-Run the Unit Tests
-******************
+Unit Tests
+**********
+    Straight Tests
+    $ vendor/bin/phpunit tests
 
-vendor/bin/phpunit tests
-vendor/bin/phpunit --coverage-text tests
+    Test Coverage to the Terminal
+    $ vendor/bin/phpunit --coverage-text tests
+
+    Test Coverage to HTML
+    $ vendor/bin/phpunit --coverage-html ./reports tests
 
 Configuration Options
 *********************
