@@ -84,11 +84,9 @@ class ShowData {
         $showArray       = $show->getAsDBALArray();
         $showArray['ts'] = $this->formatTimestamp($timestamp);
         $identifier      = array('id' => $showArray['id']);
-        $this->connection->update('shows',
-            array(
-                'duration' => $showArray['duration'],
-                'date' => $showArray['date'],
-            ),
+        $this->connection->update(
+            'shows',
+            $showArray,
             $identifier
         );
     }
