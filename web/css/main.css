@@ -52,7 +52,7 @@ h2 {
 }
 h3 {
     background-color: #EEE;
-    border-bottom: 1px solid #FFF;
+    border-top: 3px solid #FFF;
     cursor: pointer;
     font-size: 12pt;
     padding: 4pt 0 4pt 10pt;
@@ -62,9 +62,28 @@ h3 {
 }
 .episodeDetails {
     display: none;
-    font-size: 10px;
 }
-
+#modal {
+    background: rgba(0,0,0,0.6);
+    display: none;
+    position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    z-index: 2;
+}
+#modal.active {
+    display: block;
+}
+#dialog {
+    background: #fff;
+    border-radius: 10px;
+    height: 200px;
+    margin: 10% auto;
+    padding: 6pt;
+    width: 400px;      
+}
 .cols1{width:100%;}
 .cols2{width:50%;}
 .cols3{width:33.33%;}
