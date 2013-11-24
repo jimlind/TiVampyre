@@ -1,16 +1,51 @@
-h1 {
-	background-color:#99ffff;
+html, body {
+    font-family: "Palatino Linotype", Palatino, "Book Antiqua", "Lucida Bright", Georgia, serif ;
+    margin: 0;
+    padding: 0;
 }
-h2, h3 {
-	margin:0;
-	padding:0;
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    background-color: #666;
+    color: #EEE;
+    font-size: 18pt;
+    padding: 5px 20px;
+}
+.show {
+    float: left;
+    height: 160pt;
+    padding: 8pt 0 0 0;
+    position: relative;
+    width: 160pt;
 }
 .showLogo {
-	border-radius:50px;
-	height:100px;
-	width:100px;
+    border-radius: 50px;
+    cursor: pointer;
+    display: block;
+    height: 100px;
+    margin: 0 auto;
+    width: 100px;
 }
-.showDetails {
-	font-size:10px;
+h2 {
+    font-size: 18pt;
+    margin: 4pt 6pt;
+    text-align: center;
 }
+.showEpisodes {
+    color: #666;
+    font-size: 10pt;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+.episode {
+    border: 1px solid blue;
+    display: none;
+}
+.episodeDetails {
+    font-size:10px;
+}
+
 

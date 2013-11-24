@@ -3,26 +3,35 @@
 {% block title %}Shows{% endblock %}
 
 {% block content %}
-	<h1>Shows</h1>
-	<div>
-		{% set currentTitle = '' %}
-		{% for result in results %}
-			{% if result.show_title != currentTitle %}
-				<h2>{{ result.show_title }}</h2>
-				{% set currentTitle = result.show_title %}
-				<img class="showLogo" data-title="{{ result.show_title }}" />
-					{# src="data:image/png;base64,{{ result.img }}" /> #}
-			{% endif %}
-			<div class="clickableShow" data-id="{{ result.id }}">
-				<h3>{{ result.episode_title }}</h3>
-				<div class="showDetails">
-					{{ result.episode_number }} :
-					{{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}<br />
-					{{ (result.duration/60000)|number_format(0) }} min long on
-					{{ result.station }} {{ result.channel }} at {{ result.date }}</br>
-					In HD? {{ result.hd }}
-				</div>
-			</div>
-		{% endfor %}
-	</div>
+    <h1>Shows</h1>
+    <div>
+        {% set currentTitle = '' %}
+        {% for result in results %}
+            {% if result.show_title != currentTitle %}
+                {# Open Show DIV #}
+                <div class="show">
+        
+                <img class="showLogo" data-title="{{ result.show_title }}" />
+                <h2>{{ result.show_title }}</h2>
+                {% set currentTitle = result.show_title %}
+                <div class="showEpisodes"><span class="showingCount"></span></div>
+            {% endif %}
+                    
+            <div class="episode" data-id="{{ result.id }}">
+                <h3>{{ result.episode_title }}</h3>
+                <div class="episodeDetails">
+                    {{ result.episode_number }} :
+                    {{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}<br />
+                    {{ (result.duration/60000)|number_format(0) }} min long on
+                    {{ result.station }} {{ result.channel }} at {{ result.date }}</br>
+                    In HD? {{ result.hd }}
+                </div>
+            </div>
+            
+            {% if results[loop.index].show_title != result.show_title %}
+                {# Close Show DIV #}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}

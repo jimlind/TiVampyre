@@ -1,12 +1,28 @@
 // Wait for the DOM to be ready.
 document.addEventListener('DOMContentLoaded', function () {
 
-	// Collect show image placeholders
-	var logos = document.getElementsByClassName('showLogo');
-	for (var i = 0; i < logos.length; ++i) {
-		loadImage(logos[i]);
-	}
-
+        // Collect shows.
+        var shows = document.getElementsByClassName('show');
+        for (var i = 0; i < shows.length; ++i) {
+            var show = shows[i];
+            // Collect show image placeholders and load.
+            var logos = show.getElementsByClassName('showLogo');
+            if (logos.length === 1) {
+                loadImage(logos[0]);
+            }
+            // Collect episodes count and display.
+            var episodes = show.getElementsByClassName('episode').length;
+            var showingText = episodes + " showing";
+            if (episodes > 1) {
+                showingText += "s";
+            }
+            // Fill showing count text.
+            var countSpans = show.getElementsByClassName('showingCount')
+            if (countSpans.length === 1) {
+                countSpans[0].innerHTML = showingText;
+            }
+        }
+        
 	// Collect clickable shows and loop over them.
 	var shows = document.getElementsByClassName('clickableShow');
 	for (var i = 0; i < shows.length; ++i) {
