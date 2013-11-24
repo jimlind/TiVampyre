@@ -9,7 +9,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var logos = show.getElementsByClassName('showLogo');
         if (logos.length === 1) {
             loadImage(logos[0]);
+            // Clicking logo opens the episode list.
+            logos[0].onclick = function(event){
+                allShows = document.getElementsByClassName('show');
+                for (var i = 0; i < allShows.length; ++i) {
+                    allShows[i].classList.remove('opened');
+                }
+                selectedEpisodes = this.parentNode.classList.add('opened');
+            }
         }
+        
         // Collect episodes count and display.
         var episodes = show.getElementsByClassName('episode').length;
         var showingText = episodes + " showing";
@@ -38,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     };
+    // Force the resize event to be triggered.
     window.dispatchEvent(new Event('resize'));
         
     // Collect clickable shows and loop over them.
