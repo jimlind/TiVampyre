@@ -11,11 +11,21 @@ document.addEventListener('DOMContentLoaded', function () {
             loadImage(logos[0]);
             // Clicking logo opens the episode list.
             logos[0].onclick = function(event){
+                var parent = this.parentNode;
+                // Close all opened episodes 
                 allShows = document.getElementsByClassName('show');
                 for (var i = 0; i < allShows.length; ++i) {
                     allShows[i].classList.remove('opened');
                 }
-                selectedEpisodes = this.parentNode.classList.add('opened');
+                // If it one episode just click it.
+                var episodeTitles = parent.getElementsByTagName('h3');
+                if (episodeTitles.length === 1) {
+                    episodeTitles[0].dispatchEvent(new Event('click'));
+                    return true;
+                }
+                // Open the list of episodes.
+                selectedEpisodes = parent.classList.add('opened');
+                
             }
         }
         
