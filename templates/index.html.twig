@@ -3,8 +3,7 @@
 {% block title %}Shows{% endblock %}
 
 {% block content %}
-    <h1>Shows</h1>
-    <div>
+    <div id="content">
         {% set currentTitle = '' %}
         {% for result in results %}
             {% if result.show_title != currentTitle %}
