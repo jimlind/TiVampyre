@@ -51,15 +51,18 @@ h2 {
     z-index: 1;
 }
 h3 {
-    border-bottom: 1px solid black;
+    background-color: #EEE;
+    border-bottom: 1px solid #FFF;
+    cursor: pointer;
     font-size: 12pt;
-    padding: 4pt 0 0 0;
+    padding: 4pt 0 4pt 10pt;
 }
 .opened .episode {
     display: block;
 }
 .episodeDetails {
-    font-size:10px;
+    display: none;
+    font-size: 10px;
 }
 
 .cols1{width:100%;}

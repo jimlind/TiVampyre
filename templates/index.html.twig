@@ -17,7 +17,16 @@
             {% endif %}
                     
             <div class="episode" data-id="{{ result.id }}">
-                <h3>{{ result.episode_title }}</h3>
+                <h3>
+                    {% if result.episode_number != 0 %}
+                        {{ result.episode_number }} - 
+                    {% endif %}
+                    {% if result.episode_title != '' %}
+                        {{ result.episode_title }}
+                    {% else %}
+                        {{ result.date|date("m/d/Y") }}
+                    {% endif %}
+                </h3>
                 <div class="episodeDetails">
                     {{ result.episode_number }} :
                     {{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}<br />
