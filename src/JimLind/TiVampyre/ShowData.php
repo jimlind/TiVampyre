@@ -33,10 +33,18 @@ class ShowData {
         return $this->connection->fetchAll($q);
     }
     
+    public function getCurrentFormatted() {
+        $data = $this->getCurrent();
+        foreach($data as $index => $dataPoint) {
+            $data[$index]['episode'] = $this->formatEpisodeTitle($dataPoint);
+        }
+        return $data;
+    }
+    
     /**
      * Writes a show to the show database table.
      * 
-     * @param \JimLind\TiVo\Show $show
+     * @param Show $show
      * @param \DateTime $timestamp
      * @return string - Constant in this class.
      */
@@ -75,6 +83,24 @@ class ShowData {
      */
     private function formatTimestamp(\DateTime $timestamp) {
         return $timestamp->format('Y-m-d H:i:s');
+    }
+    
+    /**
+     * Format the episode data as something universal and readable.
+     * @param array $show
+     * @return string
+     */
+    private function formatEpisodeTitle($show) {
+        $fullEpisode = '';
+        if ($show['episode_number'] != '0') {
+            $fullEpisode .= $show['episode_number'] . ' - ';
+        }
+        $fullEpisode .= $show['episode_title'];
+        if ($show['episode_title'] == '') {
+            $recordedDate = new \DateTime($show['date']);
+            $fullEpisode .= $recordedDate->format('m/d/Y');
+        }
+        return $fullEpisode;
     }
     
     /**

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $app->get('/', function() use ($app) {    
-    $showResults = $app['show_data']->getCurrent();
+    $showResults = $app['show_data']->getCurrentFormatted();
     return $app['twig']->render('index.html.twig', array(
         'results' => $showResults,
     ));

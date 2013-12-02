@@ -17,22 +17,17 @@
             {% endif %}
                     
             <div class="episode" data-id="{{ result.id }}">
-                <h3>
-                    {% if result.episode_number != 0 %}
-                        {{ result.episode_number }} - 
-                    {% endif %}
-                    {% if result.episode_title != '' %}
-                        {{ result.episode_title }}
-                    {% else %}
-                        {{ result.date|date("m/d/Y") }}
-                    {% endif %}
-                </h3>
+                <h3>{{ result.episode}}</h3>
                 <div class="episodeDetails">
-                    {{ result.episode_number }} :
-                    {{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}<br />
-                    {{ (result.duration/60000)|number_format(0) }} min long on
-                    {{ result.station }} {{ result.channel }} at {{ result.date }}</br>
-                    In HD? {{ result.hd }}
+                    <h4>{{ result.show_title}}</h4>
+                    <h5>{{ result.episode }}</h4>
+                    <p>{{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}</p>
+                    <p>{{ (result.duration/60000)|number_format(0) }} minutes long
+                    on {{ result.station }} {{ result.channel }}
+                    {% if result.hd == 'Yes' %}
+                        in HD
+                    {% endif %}
+                    at {{ result.date|date("m/d/Y H:i") }}.
                 </div>
             </div>
             

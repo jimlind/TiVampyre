@@ -84,6 +84,11 @@ h3 {
     padding: 6pt;
     width: 400px;      
 }
+#dialogInfo h4, #dialogInfo h5, #dialogInfo p {
+    margin: 0;
+    padding: 0;
+}
+
 .cols1{width:100%;}
 .cols2{width:50%;}
 .cols3{width:33.33%;}

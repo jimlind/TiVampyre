@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         
         // Collect episodes count and display.
-        var episodes = show.getElementsByClassName('episode').length;
+        var episodes = show.getElementsByTagName('h3').length;
         var showingText = episodes + " showing";
         if (episodes > 1) {
             showingText += "s";
@@ -62,26 +62,33 @@ document.addEventListener('DOMContentLoaded', function () {
         
     // Collect showing titles and loop over them.
     var titles = document.getElementsByTagName('h3');
-    var modal =  document.getElementById('modal');
-    var dialog =  document.getElementById('dialog');
+    var modal = document.getElementById('modal');
+    var dialogInfo = document.getElementById('dialogInfo');
     for (var i = 0; i < titles.length; ++i) {
         // Open modal when clicked.
         titles[i].onclick = function(event){
             var details = this.parentNode.getElementsByClassName('episodeDetails');
             if (details.length === 1) {
-                dialog.innerHTML = details[0].innerHTML;
+                dialogInfo.innerHTML = details[0].innerHTML;
             }
             modal.classList.add('active');
         };
     }
     
-    /*
-    var id = this.getAttribute("data-id");
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/submit', true);
-    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xhr.send('id='+id);
-     */
+    var cancelButton = document.getElementById('dialogCancel');
+    cancelButton.onclick = function(event) {
+        modal.classList.remove('active');
+    };
+    
+    var startButton = document.getElementById('dialogStart');
+    startButton.onclick = function(event) {
+        var id = this.getAttribute("data-id");
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/submit', true);
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhr.send('id='+id);
+        modal.classList.remove('active');
+    };
 });
 
 function loadImage(img) {
@@ -104,10 +111,10 @@ function loadImage(img) {
 }
 
 function hash(inputString) {
-	inputArray = inputString.split("");
-	hashed = inputArray.reduce(function(a, b) {
-		a = ((a << 5) - a) + b.charCodeAt(0);
-		return a & a;
-	}, 0);
-	return hashed;
+    inputArray = inputString.split("");
+    hashed = inputArray.reduce(function(a, b) {
+        a = ((a << 5) - a) + b.charCodeAt(0);
+        return a & a;
+    }, 0);
+    return hashed;
 }
