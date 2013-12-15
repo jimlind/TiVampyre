@@ -21,7 +21,10 @@
                 <div class="episodeDetails">
                     <h4>{{ result.show_title}}</h4>
                     <h5>{{ result.episode }}</h4>
-                    <p>{{ result.description|replace({'Copyright Tribune Media Services, Inc.': ''})}}</p>
+                    {% set description = result.description|replace({'Copyright Tribune Media Services, Inc.': ''}) %}
+                    {% if not description is empty %}
+                        <p>{{ description }}</p>
+                    {% endif %}
                     <p>{{ (result.duration/60000)|number_format(0) }} minutes long
                     on {{ result.station }} {{ result.channel }}
                     {% if result.hd == 'Yes' %}

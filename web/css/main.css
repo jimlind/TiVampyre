@@ -52,10 +52,11 @@ h2 {
 }
 h3 {
     background-color: #EEE;
+    border-radius: 4px;
     border-top: 3px solid #FFF;
     cursor: pointer;
     font-size: 12pt;
-    padding: 4pt 0 4pt 10pt;
+    padding: 4pt 5pt 4pt 10pt;
 }
 .opened .episode {
     display: block;
@@ -82,11 +83,55 @@ h3 {
     height: 200px;
     margin: 10% auto;
     padding: 6pt;
+    position: relative;
     width: 400px;      
 }
 #dialogInfo h4, #dialogInfo h5, #dialogInfo p {
     margin: 0;
-    padding: 0;
+    padding: 2pt;
+}
+#dialogInfo h4 {
+    border-bottom: 1px solid #000;
+    font-size: 16pt;
+    margin-bottom: 4pt;
+}
+#dialogInfo h5, #dialogInfo p, #dialog label {
+    font-size: 10pt;
+}
+#dialogInfo p {
+    max-height: 34pt;
+    overflow: hidden;
+}
+#dialog form {
+    overflow: hidden;
+    padding: 4pt 0;
+}
+#dialog label {
+    display: block;
+    float: left;
+    width: 50%;
+}
+#dialog img {
+    vertical-align:text-top;
+}
+#dialogCancel, #dialogStart {
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 3pt 16pt;
+}
+#dialogCancel {
+    background-color: #FCC;
+    position: absolute;
+        bottom: 8pt;
+        left: 8pt;
+}
+#dialogStart {
+    background-color: #CFC;
+    position: absolute;
+        bottom: 8pt;
+        right: 8pt;
 }
 
 .cols1{width:100%;}
