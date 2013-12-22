@@ -76,7 +76,14 @@ $console->register('get-shows-data')
                 $transaction = $app['show_data']->write($show, $timestamp);
                 // If the action is an insert and it isn't the initial run then Tweet.
                 if ($transaction == ShowData::INSERT && !$initialRun) {
-                    $app['twitter']->send($show->getStartedRecordingMessage());
+                    $tweet = $show->getStartedRecordingMessage();
+                    try {
+                        $app['twitter']->send($tweet);
+                    } catch(Exception $e) {
+                        $app['monolog']->addWarning($tweet);
+                        $app['monolog']->addWarning($e->getMessage());
+                        $output->writeln($e->getMessage());
+                    }
                 }
             }
         });
