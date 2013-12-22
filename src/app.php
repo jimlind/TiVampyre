@@ -20,7 +20,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 ));
 $app->register(new MonologServiceProvider(), array(
     'monolog.logfile' => __DIR__.'/../logs/tivampyre.log',
-	'monolog.level'   => \Monolog\Logger::WARNING,
+    'monolog.level'   => \Monolog\Logger::WARNING,
 ));
 $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
