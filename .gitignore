@@ -1,14 +1,8 @@
 /vendor/
-composer.lock
-
 
 .DS_Store
 /nbproject/
 
 db/tivampyre.db
-
 config/tivampyre.json
-
-config/tivampyre.json
-
 reports/
