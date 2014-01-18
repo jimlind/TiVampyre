@@ -11,8 +11,8 @@ $console = new Application('TiVampyre', '2.0');
 $console->register('db-setup')
         ->setDescription('Setup the SQLite Database Tables')
         ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-            $showsSQL = '
-                CREATE TABLE shows (
+            $showSQL = '
+                CREATE TABLE show (
                     id             INTEGER PRIMARY KEY,
                     show_title     TEXT,
                     episode_title  TEXT,
@@ -26,7 +26,7 @@ $console->register('db-setup')
                     url            TEXT,
                     ts             TEXT
                 )';
-            $app['db']->query($showsSQL);
+            $app['db']->query($showSQL);
             $jobQueueSQL = '
                 CREATE TABLE job_queue (
                     id      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,15 +54,15 @@ $console->register('db-setup')
 $console->register('db-destroy')
         ->setDescription('Destroy the SQLite Database Tables')
         ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-            $dropShows = 'DROP TABLE shows';
-            $app['db']->query($dropShows);
+            $dropShow = 'DROP TABLE show';
+            $app['db']->query($dropShow);
             $dropQueue = 'DROP TABLE job_queue';
             $app['db']->query($dropQueue);
             $dropStatus = 'DROP TABLE job_status';
             $app['db']->query($dropStatus);
         });
         
-$console->register('get-shows-data')
+$console->register('get-shows')
         ->setDescription('Get all show data from the TiVo')
         ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
             // It is the initial run if there is no current show data.

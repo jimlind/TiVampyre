@@ -9,7 +9,7 @@ Run a Command
 *************
 
 php console db-setup
-php console get-shows-data
+php console get-shows
 php console db-destroy
 
 Unit Tests
