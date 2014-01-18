@@ -1,5 +1,7 @@
 <?php
 
+use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Igorw\Silex\ConfigServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\MonologServiceProvider;
@@ -8,14 +10,29 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\Process\Process;
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 $app = new Application();
-$app->register(new Igorw\Silex\ConfigServiceProvider(
-	__DIR__ . '/../config/tivampyre.json'
+$app->register(new ConfigServiceProvider(
+    __DIR__ . '/../config/tivampyre.json'
 ));
-$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+$app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
-        'driver'   => 'pdo_sqlite',
-        'path'     => __DIR__.'/../db/tivampyre.db',
+        'driver' => 'pdo_sqlite',
+        'path'   => __DIR__ . '/../db/tivampyre.db',
+    ),
+));
+$app->register(new DoctrineOrmServiceProvider, array(
+    'orm.proxies_dir' => __DIR__ . '/../cache/doctrine/proxies',
+    'orm.em.options'  => array(
+        'mappings' => array(
+            array(
+                'type'      => 'annotation',
+                'namespace' => 'TiVampyre\Entity',
+                'path'      => __DIR__ . '/TiVampyre/Entity',
+            ),
+        ),
     ),
 ));
 $app->register(new MonologServiceProvider(), array(
@@ -26,49 +43,50 @@ $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider(), array(
     'twig.path'    => array(__DIR__.'/../templates'),
-	//TODO Disable this override.
-    //'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
+    'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
 ));
 $app['process'] = new Process('');
 $app['twitter'] = new Twitter(
-	$app['twitter_consumer_key'],
-	$app['twitter_consumer_secret'],
-	$app['twitter_access_token'],
-	$app['twitter_access_token_secret']
+    $app['twitter_consumer_key'],
+    $app['twitter_consumer_secret'],
+    $app['twitter_access_token'],
+    $app['twitter_access_token_secret']
 );
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    // add custom globals, filters, tags, ...
-
+    // add custom twig globals, filters, tags, ...
     return $twig;
 }));
 $app['tivo_locater'] = function ($app) {
-    return new JimLind\TiVo\Location($app['monolog'], $app['process']);
+    return new TiVo\Location($app['monolog'], $app['process']);
 };
 $app['tivo_now_playing'] = function ($app) {
-	return new JimLind\TiVo\NowPlaying(
-		$app['tivo_locater'],
-		$app['tivampyre_mak'],
-		$app['monolog'],
-		$app['process']
-	);
+    return new TiVo\NowPlaying(
+        $app['tivo_locater'],
+        $app['tivampyre_mak'],
+        $app['monolog'],
+        $app['process']
+    );
 };
 $app['job_queue'] = function ($app) {
-	return new JimLind\TiVampyre\JobQueue($app['db']);
+    return new TiVampyre\JobQueue($app['db']);
 };
 $app['show_data'] = function ($app) {
-	return new JimLind\TiVampyre\ShowData($app['db']);
+    return new TiVampyre\ShowData($app['db']);
 };
 $app['google_scraper'] = function ($app) {
-	return new JimLind\Image\Google(
-		$app['google_api_key'],
-		$app['process']
-	);
+    return new Image\Google(
+        $app['google_api_key'],
+        $app['process']
+    );
 };
 $app['image_service'] = function ($app) {
-	return new JimLind\Image\Builder(
-		array('h' => 100, 'w' => 100),
-		$app['google_scraper']
-	);
+    return new Image\Builder(
+        array(
+            'h' => 100,
+            'w' => 100,
+        ),
+        $app['google_scraper']
+    );
 };
 
 return $app;
