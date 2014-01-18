@@ -3,8 +3,74 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2325d358961fd97710d733b5a67803ac",
+    "hash": "699d41fd745eb99aa6be53bec204e66f",
     "packages": [
+        {
+            "name": "dflydev/doctrine-orm-service-provider",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dflydev/dflydev-doctrine-orm-service-provider.git",
+                "reference": "cbb2e4022ad46675d7406398c024191c6f3539f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dflydev/dflydev-doctrine-orm-service-provider/zipball/cbb2e4022ad46675d7406398c024191c6f3539f0",
+                "reference": "cbb2e4022ad46675d7406398c024191c6f3539f0",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "~2.3",
+                "php": ">=5.3.3",
+                "pimple/pimple": "1.*@dev"
+            },
+            "require-dev": {
+                "cilex/cilex": "1.*@dev",
+                "cilex/console-service-provider": "@dev",
+                "silex/silex": "1.*@dev"
+            },
+            "suggest": {
+                "dflydev/psr0-resource-locator-service-provider": "1.0.*@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Dflydev\\Cilex\\Provider\\DoctrineOrm": "src",
+                    "Dflydev\\Pimple\\Provider\\DoctrineOrm": "src",
+                    "Dflydev\\Silex\\Provider\\DoctrineOrm": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dragonfly Development Inc.",
+                    "email": "info@dflydev.com",
+                    "homepage": "http://dflydev.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau@dflydev.com",
+                    "homepage": "http://beausimensen.com"
+                }
+            ],
+            "description": "Doctrine ORM Service Provider",
+            "keywords": [
+                "cilex",
+                "doctrine",
+                "orm",
+                "pimple",
+                "silex"
+            ],
+            "time": "2013-12-11 22:49:54"
+        },
         {
             "name": "dg/twitter-php",
             "version": "v3.1",
@@ -513,6 +579,82 @@
                 "parser"
             ],
             "time": "2013-01-12 18:59:04"
+        },
+        {
+            "name": "doctrine/orm",
+            "version": "v2.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/doctrine2.git",
+                "reference": "84373d05a4198ec380918d535abf83c454c3867f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/84373d05a4198ec380918d535abf83c454c3867f",
+                "reference": "84373d05a4198ec380918d535abf83c454c3867f",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/collections": "~1.1",
+                "doctrine/dbal": "~2.4",
+                "ext-pdo": "*",
+                "php": ">=5.3.2",
+                "symfony/console": "~2.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master",
+                "symfony/yaml": "~2.1"
+            },
+            "suggest": {
+                "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
+            },
+            "bin": [
+                "bin/doctrine",
+                "bin/doctrine.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\ORM\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                }
+            ],
+            "description": "Object-Relational-Mapper for PHP",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "orm"
+            ],
+            "time": "2013-11-12 12:40:13"
         },
         {
             "name": "igorw/config-service-provider",
