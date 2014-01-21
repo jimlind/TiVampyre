@@ -1,7 +1,5 @@
 <?php
 
-use JimLind\TiVampyre\ShowData;
-use JimLind\TiVo\Show;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,7 +8,7 @@ $console = new Application('TiVampyre', '2.0');
 
 $console->register('db-setup')
         ->setDescription('Setup the SQLite Database Tables')
-        ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
+        ->setCode(function() use ($app) {
             $showSQL = '
                 CREATE TABLE show (
                     id             INTEGER PRIMARY KEY,
@@ -50,42 +48,22 @@ $console->register('db-setup')
             ';
             $app['db']->query($jobStatusSQL);
         });
-        
 $console->register('db-destroy')
         ->setDescription('Destroy the SQLite Database Tables')
-        ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
+        ->setCode(function() use ($app) {
             $dropShow = 'DROP TABLE show';
             $app['db']->query($dropShow);
             $dropQueue = 'DROP TABLE job_queue';
             $app['db']->query($dropQueue);
             $dropStatus = 'DROP TABLE job_status';
             $app['db']->query($dropStatus);
-        });
-        
+        }); 
 $console->register('get-shows')
         ->setDescription('Get all show data from the TiVo')
-        ->setCode(function (InputInterface $input, OutputInterface $output) use ($app) {
-            // It is the initial run if there is no current show data.
-            $initialRun = $app['show_data']->totalCount() == 0;
-            // Get all the shows available on the TiVo.
-            $nowPlaying = $app['tivo_now_playing']->download();
-            // Keep a local timestamp so database writes have the same stamp.
-            $timestamp  = new DateTime('now');
-            foreach ($nowPlaying as $showXML) {
-                $show = new Show($showXML);
-                $transaction = $app['show_data']->write($show, $timestamp);
-                // If the action is an insert and it isn't the initial run then Tweet.
-                if ($transaction == ShowData::INSERT && !$initialRun) {
-                    $tweet = $show->getStartedRecordingMessage();
-                    try {
-                        $app['twitter']->send($tweet);
-                    } catch(Exception $e) {
-                        $app['monolog']->addWarning($tweet);
-                        $app['monolog']->addWarning($e->getMessage());
-                        $output->writeln($e->getMessage());
-                    }
-                }
-            }
+        ->setCode(function() use ($app) {
+            $showService = $app['show_service'];
+            $showService->rebuildLocalIndex();
+            $showService->sendTweets();
         });
 
 return $console;
