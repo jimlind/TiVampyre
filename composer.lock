@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "699d41fd745eb99aa6be53bec204e66f",
+    "hash": "3353756a41c021ede66692624dc2b9ed",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -73,16 +73,16 @@
         },
         {
             "name": "dg/twitter-php",
-            "version": "v3.1",
+            "version": "v3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dg/twitter-php.git",
-                "reference": "2425744d2cc93960f16b2e5739cd978df8defe59"
+                "reference": "5ca5b8cb823972e1239656c5f3b17ddd28e6d816"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dg/twitter-php/zipball/2425744d2cc93960f16b2e5739cd978df8defe59",
-                "reference": "2425744d2cc93960f16b2e5739cd978df8defe59",
+                "url": "https://api.github.com/repos/dg/twitter-php/zipball/5ca5b8cb823972e1239656c5f3b17ddd28e6d816",
+                "reference": "5ca5b8cb823972e1239656c5f3b17ddd28e6d816",
                 "shasum": ""
             },
             "type": "library",
@@ -107,7 +107,7 @@
                 "oauth",
                 "twitter"
             ],
-            "time": "2013-03-06 19:10:39"
+            "time": "2014-01-17 16:59:53"
         },
         {
             "name": "doctrine/annotations",
