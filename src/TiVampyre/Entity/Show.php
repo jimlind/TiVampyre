@@ -14,16 +14,30 @@ class Show
      */
     protected $id;
     
+    public function getId()
+    {
+        return $this->id;
+    }
     /**
      * @Column(type="string", name="show_title")
      */
     protected $showTitle;
 
+    public function getShowTitle()
+    {
+        return $this->showTitle;
+    }
+    
     /**
      * @Column(type="string", name="episode_title")
      */
     protected $episodeTitle;
-
+    
+    public function getEpisodeTitle()
+    {
+        return $this->episodeTitle;
+    }
+    
     /**
      * @Column(type="integer", name="episode_number")
      */
@@ -49,16 +63,30 @@ class Show
      */
     protected $channel;
     
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+    
     /**
      * @Column(type="string", name="station")
      */
     protected $station;
+    
+    public function getStation()
+    {
+        return $this->station;
+    }
     
     /**
      * @Column(type="string", name="hd")
      */
     protected $hd;
     
+    public function getHD()
+    {
+        return $this->hd;
+    }
     /**
      * @Column(type="string", name="url")
      */
@@ -68,4 +96,41 @@ class Show
      * @Column(type="string", name="ts")
      */
     protected $ts;
+    
+    public function setTimeStamp(\DateTime $ts) {
+        $this->ts = $ts->format('Y-m-d H:i:s');
+    }
+    
+    /**
+     * Populate the entity from an XML object
+     * 
+     * @param SimpleXMLElement $xml
+     * @return Show
+     */
+    public function populate($xml) {
+        // Gather the important bits from the XML
+        $details   = $xml->Details;
+        $links     = $xml->Links;
+        $matches   = array();
+        $detailUrl = (string) $links->TiVoVideoDetails->Url;
+        preg_match('/.+?id=([0-9]+)$/', $detailUrl, $matches);
+        if (!isset($matches[1])) {
+            return false;
+        }
+
+        // Fill in the details
+        $this->id            = (int)    $matches[1];
+        $this->showTitle     = (string) $details->Title;
+        $this->episodeTitle  = (string) $details->EpisodeTitle;
+        $this->episodeNumber = (int)    $details->EpisodeNumber;
+        $this->duration      = (int)    $details->Duration;
+        $this->description   = (string) $details->Description;
+        $this->channel       = (int)    $details->SourceChannel;
+        $this->station       = (string) $details->SourceStation;
+        $this->hd            = (string) $details->HighDefinition;
+        $this->date          = (string) $details->CaptureDate;
+        $this->url           = (string) $links->Content->Url;
+        
+        return $this;
+    }
 }

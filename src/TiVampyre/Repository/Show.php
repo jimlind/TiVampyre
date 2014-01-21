@@ -6,14 +6,16 @@ use Doctrine\ORM\EntityRepository;
 
 class Show extends EntityRepository
 {
-    public function fart(){
-        $query = $this->_em->createQuery('SELECT s FROM TiVampyre\Entity\Show s');
-        $users = $query->getResult(); // array of User objects
-        
-        return $users;
-        
-        return array('one');
+    /**
+     * Returns a count of all shows in database
+     * 
+     * @return integer
+     */
+    public function countAll(){
+        $query = $this->_em->createQuery('SELECT count(s) FROM TiVampyre\Entity\Show s');
+        return $query->getSingleScalarResult();
     }
+    
     /**
      * Get all the show records with the most recent timestamp.
      * 
