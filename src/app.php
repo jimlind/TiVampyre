@@ -70,8 +70,13 @@ $app['tivo_now_playing'] = function ($app) {
 $app['job_queue'] = function ($app) {
     return new TiVampyre\JobQueue($app['db']);
 };
-$app['show_data'] = function ($app) {
-    return new TiVampyre\ShowData($app['db']);
+$app['show_service'] = function ($app) {
+    return new TiVampyre\Service\Show(
+        $app['orm.em'],
+        $app['tivo_now_playing'],
+        $app['twitter'],
+        $app['monolog']
+    );
 };
 $app['google_scraper'] = function ($app) {
     return new Image\Google(
