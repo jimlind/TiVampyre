@@ -23,6 +23,11 @@ Unit Tests
     Test Coverage to HTML
     $ vendor/bin/phpunit --coverage-html ./reports tests
 
+Code Sniffing
+*************
+
+    $ vendor/bin/phpcs src/
+
 Configuration Options
 *********************
 
