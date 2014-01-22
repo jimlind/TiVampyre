@@ -1,4 +1,15 @@
 <?php
+/**
+ * TiVampyre Show Service
+ * 
+ * PHP version 5
+ * 
+ * @category Service
+ * @package  TiVampyre
+ * @author   Jim Lind <spoon.vw@gmail.com>
+ * @license  The MIT License
+ * @link     https://github.com/jimlind/TiVampyre
+ */
 
 namespace TiVampyre\Service;
 
@@ -8,62 +19,100 @@ use Symfony\Bridge\Monolog\Logger;
 use TiVo\NowPlaying;
 use Twitter;
 
-class Show {
+/**
+ * This service contains all the heavy lifting involved with importing shows.
+ * It will get XML data from the NowPlaying Class put it in the appropiate
+ * places, and generate and sent Tweets as neccessary.
+ * 
+ * @category Service
+ * @package  TiVampyre
+ * @author   Jim Lind <spoon.vw@gmail.com>
+ * @license  The MIT License
+ * @link     https://github.com/jimlind/TiVampyre
+ */
+class Show
+{
     
-    private $entityManager;
-    private $nowPlaying;
-    private $twitter;
-    private $logger;
-    private $repository;
-    private $timestamp;
-    private $tweets;
-    
+    private $_entityManager;
+    private $_nowPlaying;
+    private $_twitter;
+    private $_logger;
+    private $_repository;
+    private $_timestamp;
+    private $_tweets;
+       
+    /**
+     * Constructor.
+     * 
+     * @param EntityManager $entityManager Doctrine Entity Manager
+     * @param NowPlaying    $nowPlaying    Access to Now Playing list
+     * @param Twitter       $twitter       Twitter API translator
+     * @param Logger        $logger        Where to log errors
+     */
     public function __construct(
         EntityManager $entityManager,
         NowPlaying $nowPlaying,
         Twitter $twitter,
         Logger $logger
     ) {
-        $this->entityManager = $entityManager;
-        $this->nowPlaying = $nowPlaying;
-        $this->twitter = $twitter;
-        $this->logger = $logger;
-        $this->repository = $this->entityManager->getRepository("TiVampyre\Entity\Show");
-        $this->tweets = array();
+        $this->_entityManager = $entityManager;
+        $this->_nowPlaying = $nowPlaying;
+        $this->_twitter = $twitter;
+        $this->_logger = $logger;
+        $this->_repository = $entityManager->getRepository("TiVampyre\Entity\Show");
+        $this->_tweets = array();
     }
     
-    /*
+    /**
      * Downloads all available shows and send them to be processed.
+     * 
+     * @return null No return
      */
     public function rebuildLocalIndex()
     {
-        $allAvailableShows = $this->nowPlaying->download();
-        $isInitialRun = ($this->repository->countAll() == 0);
-        $this->timestamp = new \DateTime('now');
+        $allAvailableShows = $this->_nowPlaying->download();
+        $isInitialRun = ($this->_repository->countAll() == 0);
+        $this->_timestamp = new \DateTime('now');
         // Word on the street is array_walk is faster than foreach.        
         array_walk(
             $allAvailableShows,
-            array($this, 'processShow'),
+            array($this, '_processShow'),
             $isInitialRun
         );
-        $this->entityManager->flush();
+        $this->_entityManager->flush();
     }
     
-    private function processShow($showXML, $index, $isInitialRun)
+    /**
+     * Writes a show entity to the database and compose a Tweet if neccessary.
+     * 
+     * @param SimpleXMLElement $showXML   Show data in XML format
+     * @param integer          $index     Ignore value from array walk
+     * @param boolean          $dontTweet Don't compose a Tweet
+     * 
+     * @return null                       No return
+     */
+    private function _processShow($showXML, $index, $dontTweet = false)
     {
         $show = new Entity\Show();
-        $show->setTimeStamp($this->timestamp);
+        $show->setTimeStamp($this->_timestamp);
         $show->populate($showXML);
-        // Write a tweet if it isn't the first run, and it is a new show.
-        $isShowNew = is_null($this->repository->find($show->getId()));
-        if (!$isInitialRun && $isShowNew) {
-            $this->composeTweet($show);
+        // Write a tweet if not overridden, and it is a new show.
+        $isShowNew = is_null($this->_repository->find($show->getId()));
+        if (!$dontTweet && $isShowNew) {
+            $this->_composeTweet($show);
         }
         // Merge instead of persist because we don't have original data object.
-        $this->entityManager->merge($show);
+        $this->_entityManager->merge($show);
     }
     
-    private function composeTweet($show)
+    /**
+     * Using an entity write a Tweet and add it to an array for later usage.
+     * 
+     * @param Entity/Show $show A show entity
+     * 
+     * @return null             No return
+     */
+    private function _composeTweet($show)
     {
         $tweet = 'I started recording ' . $show->getShowTitle() . ' ';
         $episodeTitle = $show->getEpisodeTitle();
@@ -74,23 +123,36 @@ class Show {
         if (strtoupper($show->getHD()) == 'YES') {
             $tweet .= ' in HD';
         }
-        $this->tweets[] = $tweet . '.';
+        $this->_tweets[] = $tweet . '.';
     } 
     
-    public function sendTweets() {
+    /**
+     * Walk through the tweets array calling a function for each.
+     * 
+     * @return null No return
+     */
+    public function sendTweets()
+    {
         array_walk(
-            $this->tweets,
-            array($this, 'sendTweet')
+            $this->_tweets,
+            array($this, '_sendTweet')
         );
     }
     
-    private function sendTweet($tweet)
+    /**
+     * Send a Tweet or log a warning.
+     * 
+     * @param string $tweet A message indicating that the show started recording.
+     * 
+     * @return null No return
+     */
+    private function _sendTweet($tweet)
     {
         try {
-            $this->twitter->send($tweet);
+            $this->_twitter->send($tweet);
         } catch(\Exception $e) {
-            $this->logger->addWarning($tweet);
-            $this->logger->addWarning($e->getMessage());
+            $this->_logger->addWarning($tweet);
+            $this->_logger->addWarning($e->getMessage());
         }
-    }
+    }   
 }
