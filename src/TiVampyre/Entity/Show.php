@@ -102,6 +102,24 @@ class Show
     }
     
     /**
+     * Format the episode data as something universal and readable.
+     * 
+     * @return string
+     */
+    public function summarize() {
+        $summary = '';
+        if ($this->episodeNumber != '0') {
+            $summary .= $this->episodeNumber . ' - ';
+        }
+        $summary .= $this->episodeTitle;
+        if ($this->episodeTitle == '') {
+            $recordedDate = new \DateTime($this->date);
+            $summary .= $recordedDate->format('m/d/Y');
+        }
+        return $summary;
+    }
+    
+    /**
      * Populate the entity from an XML object
      * 
      * @param SimpleXMLElement $xml
@@ -128,7 +146,7 @@ class Show
         $this->channel       = (int)    $details->SourceChannel;
         $this->station       = (string) $details->SourceStation;
         $this->hd            = (string) $details->HighDefinition;
-        $this->date          = (string) $details->CaptureDate;
+        $this->date          = date('Y-m-d H:i:s', hexdec((string) $details->CaptureDate));
         $this->url           = (string) $links->Content->Url;
         
         return $this;

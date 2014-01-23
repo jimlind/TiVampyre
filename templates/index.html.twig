@@ -6,20 +6,21 @@
     <div id="content">
         {% set currentTitle = '' %}
         {% for result in results %}
-            {% if result.show_title != currentTitle %}
+            {% if result.showTitle != currentTitle %}
                 {# Open Show DIV #}
                 <div class="show">
         
-                <img class="showLogo" data-title="{{ result.show_title }}" />
-                <h2>{{ result.show_title }}</h2>
-                {% set currentTitle = result.show_title %}
+                <img class="showLogo" data-title="{{ result.showTitle }}" />
+                <h2>{{ result.showTitle }}</h2>
+                {% set currentTitle = result.showTitle %}
                 <div class="showEpisodes"><span class="showingCount"></span></div>
             {% endif %}
-                    
+            
             <div class="episode" data-id="{{ result.id }}">
-                <h3>{{ result.episode}}</h3>
+                <h3>{{ result.summarize }}</h3>
+                {#
                 <div class="episodeDetails">
-                    <h4>{{ result.show_title}}</h4>
+                    <h4>{{ result.showTitle}}</h4>
                     <h5>{{ result.episode }}</h4>
                     {% set description = result.description|replace({'Copyright Tribune Media Services, Inc.': ''}) %}
                     {% if not description is empty %}
@@ -32,9 +33,10 @@
                     {% endif %}
                     at {{ result.date|date("m/d/Y H:i") }}.
                 </div>
+                #}
             </div>
             
-            {% if results[loop.index].show_title != result.show_title %}
+            {% if results[loop.index].showTitle != result.showTitle %}
                 {# Close Show DIV #}
                 </div>
             {% endif %}
