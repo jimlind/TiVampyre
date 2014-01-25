@@ -64,6 +64,20 @@ class Show
     }
     
     /**
+     * Gets extremely basic show information from the show repository.
+     * 
+     * @return array Title and Quantity from database.
+     */
+    public function getHomepageData()
+    {
+        $dql = 'SELECT s.showTitle, COUNT(s.id) as qty '.
+               'FROM TiVampyre\Entity\Show s '. 
+               'GROUP BY s.showTitle';
+        $query = $this->_entityManager->createQuery($dql);
+        return $query->getResult();
+    }
+    
+    /**
      * Downloads all available shows and send them to be processed.
      * 
      * @return null No return
