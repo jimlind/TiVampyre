@@ -1,12 +1,11 @@
 <?php
 
-namespace JimLind\Image;
+namespace Image;
 
 class Builder {
 
 	private $google;
 	private $sizes;
-	private $data;
 
 	function __construct($sizes, Google $google) {
 		$this->sizes = $sizes;

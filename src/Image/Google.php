@@ -1,6 +1,6 @@
 <?php
 
-namespace JimLind\Image;
+namespace Image;
 
 use Symfony\Component\Process\Process;
 
