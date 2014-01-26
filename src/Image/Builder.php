@@ -13,8 +13,21 @@ class Builder {
 	}
 
 	function prepare($keywords) {
-		$url = $this->google->getOneURL($keywords);
-		$image = imagecreatefromjpeg($url);
+                // GD might throw warnings, and there's nothing I can do about it.
+                // Suppress the warnings.
+                $reportingLevel = error_reporting();
+                error_reporting($reportingLevel ^ E_WARNING);
+            
+                for ($i = 0; $i < 4; $i++) {
+                    $url = $this->google->getOneURL($keywords, $i);
+                    $image = @imagecreatefromjpeg($url);
+                    if ($image) {
+                        break;
+                    }
+                }
+                
+                // Reenable previous error reporting leve..
+                error_reporting($reportingLevel ^ E_WARNING);
 
 		$width  = imagesx($image);
 		$height = imagesy($image);

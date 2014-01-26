@@ -14,11 +14,12 @@ class Google {
         $this->process = $process;
     }
 
-    function getOneURL($keywords) {
-        $url = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=';
-        $url .= urlencode($keywords).'&start=0&key='.$this->key;
-        $url .= '&as_filetype=jpg&imgsz=medium|large';
-
+    function getOneURL($keywords, $start) {
+        $url = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0' .
+               '&q=' . urlencode($keywords) .
+               '&start=' . intval($start) . '&key=' . $this->key .
+               '&as_filetype=jpg&imgsz=medium|large';
+        
         $command = "curl -s '$url'";
 
         $this->process->setCommandLine($command);
