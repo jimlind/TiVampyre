@@ -13,6 +13,9 @@ use Symfony\Component\Process\Process;
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+// Set TimeZone
+date_default_timezone_set('America/Chicago');
+
 $app = new Application();
 $app->register(new ConfigServiceProvider(
     __DIR__ . '/../config/tivampyre.json'
@@ -43,7 +46,7 @@ $app->register(new UrlGeneratorServiceProvider());
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new TwigServiceProvider(), array(
     'twig.path'    => array(__DIR__.'/../templates'),
-    'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
+    //'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
 ));
 $app['process'] = new Process('');
 $app['twitter'] = new Twitter(
