@@ -20,7 +20,7 @@ class Builder {
             
                 for ($i = 0; $i < 4; $i++) {
                     $url = $this->google->getOneURL($keywords, $i);
-                    $image = @imagecreatefromjpeg($url);
+                    $image = imagecreatefromjpeg($url);
                     if ($image) {
                         break;
                     }
