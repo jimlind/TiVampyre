@@ -19,7 +19,6 @@ h2, h3 {
 }
 .showLogo {
     border-radius: 50px;
-    cursor: pointer;
     display: block;
     height: 100px;
     margin: 0 auto;
@@ -30,9 +29,14 @@ h2 {
     margin: 4pt 6pt;
     text-align: center;
 }
-.opened h2 {
-    display: none;
+.showQty {
+    color: #666;
+    font-size: 10pt;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
 }
+/*
 .showEpisodes {
     color: #666;
     font-size: 10pt;
@@ -133,6 +137,7 @@ h3 {
         bottom: 8pt;
         right: 8pt;
 }
+*/
 
 .cols1{width:100%;}
 .cols2{width:50%;}

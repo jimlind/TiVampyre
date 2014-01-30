@@ -4,42 +4,21 @@
 
 {% block content %}
     <div id="content">
-        {% set currentTitle = '' %}
         {% for result in results %}
-            {% if result.showTitle != currentTitle %}
-                {# Open Show DIV #}
-                <div class="show">
-        
-                <img class="showLogo" data-title="{{ result.showTitle }}" />
+            <div class="show">
+                <a href="{{ app.url_generator.generate('show', {'name': result.showTitle}) }}">
+                    <img class="showLogo" data-title="{{ result.showTitle }}" />
+                </a>
                 <h2>{{ result.showTitle }}</h2>
-                {% set currentTitle = result.showTitle %}
-                <div class="showEpisodes"><span class="showingCount"></span></div>
-            {% endif %}
-            
-            <div class="episode" data-id="{{ result.id }}">
-                <h3>{{ result.summarize }}</h3>
-                {#
-                <div class="episodeDetails">
-                    <h4>{{ result.showTitle}}</h4>
-                    <h5>{{ result.episode }}</h4>
-                    {% set description = result.description|replace({'Copyright Tribune Media Services, Inc.': ''}) %}
-                    {% if not description is empty %}
-                        <p>{{ description }}</p>
+                <div class="showQty">
+                    {{ result.qty }}
+                    {% if result.qty > 1 %}
+                        SHOWINGS
+                    {% else %}
+                        SHOWING
                     {% endif %}
-                    <p>{{ (result.duration/60000)|number_format(0) }} minutes long
-                    on {{ result.station }} {{ result.channel }}
-                    {% if result.hd == 'Yes' %}
-                        in HD
-                    {% endif %}
-                    at {{ result.date|date("m/d/Y H:i") }}.
                 </div>
-                #}
             </div>
-            
-            {% if results[loop.index].showTitle != result.showTitle %}
-                {# Close Show DIV #}
-                </div>
-            {% endif %}
         {% endfor %}
     </div>
 {% endblock %}

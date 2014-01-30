@@ -1,0 +1,22 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <h1>{{ name }}</h1>
+        {% for result in results %}
+            <hr />
+            <div class="episode">
+                <h3>{{ result.summarize }}</h3>
+                <div>{{ result.getDescription }}</div>
+                <div>{{ (result.getDuration / 60000) | round }} minutes</div>
+                <div>{{ result.getDate | date('l F jS Y g:i A')}}</div>
+                <div>{{ result.channel }} {{ result.station }}</div>
+                {% if result.hd == 'Yes' %}
+                    <div>High Definition</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

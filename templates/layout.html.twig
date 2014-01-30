@@ -8,11 +8,12 @@
     </head>
     <body>
         {% block content %}{% endblock %}
+        {#
         <div id="modal">
             <div id="dialog">
                 <div id="dialogInfo"></div>
-                <form>
-                    <input type="hidden" id="show"/>
+                <form id="dialogForm">
+                    <input type="hidden" name="id" id="show"/>
                     <div>
                         <label for="keep"><img src="{{ basepath }}/images/icons/keep.png"/>
                         <input type="checkbox" id="keep"/> Keep MP2 Files</label>
@@ -31,6 +32,6 @@
                     <span id="dialogStart">Start Processing</span>
                 </div>
             </div>
-        </div>
+        </div>#}
     </body>
 </html>

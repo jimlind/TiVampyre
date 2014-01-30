@@ -14,29 +14,15 @@ class Show
      */
     protected $id;
     
-    public function getId()
-    {
-        return $this->id;
-    }
     /**
      * @Column(type="string", name="show_title")
      */
     protected $showTitle;
-
-    public function getShowTitle()
-    {
-        return $this->showTitle;
-    }
     
     /**
      * @Column(type="string", name="episode_title")
      */
     protected $episodeTitle;
-    
-    public function getEpisodeTitle()
-    {
-        return $this->episodeTitle;
-    }
     
     /**
      * @Column(type="integer", name="episode_number")
@@ -63,30 +49,16 @@ class Show
      */
     protected $channel;
     
-    public function getChannel()
-    {
-        return $this->channel;
-    }
-    
     /**
      * @Column(type="string", name="station")
      */
     protected $station;
-    
-    public function getStation()
-    {
-        return $this->station;
-    }
     
     /**
      * @Column(type="string", name="hd")
      */
     protected $hd;
     
-    public function getHD()
-    {
-        return $this->hd;
-    }
     /**
      * @Column(type="string", name="url")
      */
@@ -96,6 +68,57 @@ class Show
      * @Column(type="string", name="ts")
      */
     protected $ts;
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getShowTitle()
+    {
+        return $this->showTitle;
+    }
+    
+    public function getEpisodeTitle()
+    {
+        return $this->episodeTitle;
+    }
+    
+    public function getEpisodeNumber()
+    {
+        return $this->episodeNumber;
+    }
+    
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+            
+    public function getDate()
+    {
+        return $this->date;
+    }
+    
+    public function getDescription()
+    {
+        $boring = 'Copyright Tribune Media Services, Inc.';
+        return str_replace($boring, '', $this->description);
+    }
+    
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+    
+    public function getStation()
+    {
+        return $this->station;
+    }
+    
+    public function getHD()
+    {
+        return $this->hd;
+    }
     
     public function setTimeStamp(\DateTime $ts) {
         $this->ts = $ts->format('Y-m-d H:i:s');

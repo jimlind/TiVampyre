@@ -78,6 +78,18 @@ class Show
     }
     
     /**
+     * Gets all episode entities based on a show name
+     * 
+     * @param string $name
+     * 
+     * @return array An array of entities.
+     */
+    public function getEpisodes($name)
+    {
+        return $this->_repository->findByShowTitle($name);
+    }
+    
+    /**
      * Downloads all available shows and send them to be processed.
      * 
      * @return null No return
