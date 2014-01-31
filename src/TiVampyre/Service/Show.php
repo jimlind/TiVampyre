@@ -70,9 +70,12 @@ class Show
      */
     public function getHomepageData()
     {
-        $dql = 'SELECT s.showTitle, COUNT(s.id) as qty '.
-               'FROM TiVampyre\Entity\Show s '. 
-               'GROUP BY s.showTitle';
+        $dql = 'SELECT s1.showTitle, COUNT(s1.id) as qty ' .
+               'FROM TiVampyre\Entity\Show s1 ' .
+               'WHERE s1.ts=( ' .
+               '   SELECT MAX(s2.ts) FROM TiVampyre\Entity\Show s2 ' .
+               ') ' .
+               'GROUP BY s1.showTitle';
         $query = $this->_entityManager->createQuery($dql);
         return $query->getResult();
     }
