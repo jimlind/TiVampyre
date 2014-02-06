@@ -178,7 +178,7 @@ class Show
     private function _sendTweet($tweet)
     {
         try {
-            $this->_twitter->send($tweet);
+            //$this->_twitter->send($tweet);
         } catch(\Exception $e) {
             $this->_logger->addWarning($tweet);
             $this->_logger->addWarning($e->getMessage());

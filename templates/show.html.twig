@@ -3,8 +3,9 @@
 {% block title %}{{ name }}{% endblock %}
 
 {% block content %}
-    <div id="content">
+    <div id="show">
         <h1>{{ name }}</h1>
+        <img id="showLogo" class="showLogo" data-title="{{ name }}" />
         {% for result in results %}
             <hr />
             <div class="episode">

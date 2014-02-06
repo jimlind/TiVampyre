@@ -3,40 +3,55 @@ html, body {
     margin: 0;
     padding: 0;
 }
-#content {
-    padding: 4pt 0 0 0;
-}
-h2, h3 {
+h1, h2, h3 {
     margin: 0;
     padding: 0;
+    text-align: center;
 }
-.show {
-    float: left;
-    height: 160pt;
-    padding: 8pt 0 0 0;
-    position: relative;
-    width: 160pt;
+h1 {
+    font-size: 24pt;
 }
-.showLogo {
+h2 {
+    font-size: 18pt;
+    margin: 4pt 6pt;
+    max-height: 60pt;
+    overflow: hidden;
+    text-align: center;
+}
+.showImage {
     border-radius: 50px;
     display: block;
     height: 100px;
     margin: 0 auto;
     width: 100px;
 }
-h2 {
-    font-size: 18pt;
-    margin: 4pt 6pt;
-    text-align: center;
+#index {
+    padding: 4pt 0 0 0;
 }
-.showQty {
+#index .show {
+    float: left;
+    height: 160pt;
+    padding: 8pt 0 0 0;
+    position: relative;
+    width: 160pt;
+}
+#index .showQty {
     color: #666;
     font-size: 10pt;
     text-align: center;
     text-transform: uppercase;
     width: 100%;
 }
+#show {
+    margin: 0 auto;
+    max-width: 500px;
+    padding: 10pt 0 0 0;
+}
 /*
+#li {
+
+}
+
 .showEpisodes {
     color: #666;
     font-size: 10pt;
