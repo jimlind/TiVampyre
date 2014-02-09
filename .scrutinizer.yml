@@ -1,4 +1,4 @@
 before_commands:
-  - "composer install --dump-autoload"
+  - composer dump-autoload
 tools:
   php_code_coverage: true
