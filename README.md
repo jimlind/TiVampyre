@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/jimlind/TiVampyre.png?branch=master)](https://travis-ci.org/jimlind/TiVampyre)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/jimlind/TiVampyre/badges/quality-score.png?s=e003707ba25734325318a4944b35f744671de239)](https://scrutinizer-ci.com/g/jimlind/TiVampyre/)
+[![Code Coverage](https://scrutinizer-ci.com/g/jimlind/TiVampyre/badges/coverage.png?s=59a59db4fdd6e15033e16e0c1edfa8c425342893)](https://scrutinizer-ci.com/g/jimlind/TiVampyre/)
 
 ###Installation
 
