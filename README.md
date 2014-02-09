@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jimlind/TiVampyre.png?branch=master)](https://travis-ci.org/jimlind/TiVampyre)
+
 ###Installation
 
 Here's all the junk I had to install on my box running the most recent (at the 
