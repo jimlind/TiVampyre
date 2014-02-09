@@ -2,6 +2,8 @@
 
 namespace Image;
 
+use Image\Google as Google;
+
 class GoogleTest extends \PHPUnit_Framework_TestCase {
 
     private $key;
@@ -14,7 +16,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase {
         $mockProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\Process');
 	$this->process = $mockProcessBuilder->disableOriginalConstructor()->getMock();
         
-        $this->fixture = new \Image\Google($this->key, $this->process);
+        $this->fixture = new Google($this->key, $this->process);
     }
 
     /**
