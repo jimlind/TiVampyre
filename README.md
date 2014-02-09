@@ -33,7 +33,7 @@ This might be able to be automated, at the very least easy to check.
     Test Coverage to HTML
     $ vendor/bin/phpunit --coverage-html ./reports tests
 
-##Code Sniffing
+###Code Sniffing
 
     $ vendor/bin/phpcs src/
 
