@@ -1,6 +1,6 @@
 <?php
 
-namespace JimLind\TiVo;
+namespace TiVo;
 
 class NowPlayingTest extends \PHPUnit_Framework_TestCase {
 
@@ -55,7 +55,7 @@ class NowPlayingTest extends \PHPUnit_Framework_TestCase {
 		}
 
 		// Constructor
-		$nowPlaying = new \JimLind\TiVo\NowPlaying(
+		$nowPlaying = new \TiVo\NowPlaying(
 			$this->location,
 			'MAK',
 			$this->logger,

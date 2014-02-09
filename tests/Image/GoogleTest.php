@@ -1,6 +1,6 @@
 <?php
 
-namespace JimLind\Image;
+namespace Image;
 
 class GoogleTest extends \PHPUnit_Framework_TestCase {
 
@@ -14,7 +14,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase {
         $mockProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\Process');
 	$this->process = $mockProcessBuilder->disableOriginalConstructor()->getMock();
         
-        $this->fixture = new \JimLind\Image\Google($this->key, $this->process);
+        $this->fixture = new \Image\Google($this->key, $this->process);
     }
 
     /**

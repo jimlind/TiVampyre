@@ -1,6 +1,6 @@
 <?php
 
-namespace JimLind\TiVo;
+namespace TiVo;
 
 class LocationTest extends \PHPUnit_Framework_TestCase {
 
@@ -15,7 +15,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase {
 		$mockProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\Process');
 		$this->process = $mockProcessBuilder->disableOriginalConstructor()->getMock();
 
-		$this->locator = new \JimLind\TiVo\Location($this->logger, $this->process);
+		$this->locator = new \TiVo\Location($this->logger, $this->process);
 	}
 
 	/**
