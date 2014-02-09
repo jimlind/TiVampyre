@@ -1,4 +1,0 @@
-before_commands:
-  - composer dump-autoload
-tools:
-  php_code_coverage: true
