@@ -39,7 +39,7 @@ This might be able to be automated, at the very least easy to check.
 
 ###Configuration Options
 
-edit ./config/tivampyre.json
+./config/tivampyre.json
 
 ####tivampyre_mak (Media Access Key)**
 
