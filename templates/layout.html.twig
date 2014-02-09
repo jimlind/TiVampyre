@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    {% set basepath = app.request.basepath %}
+    <head>
+        <title>{% block title '' %} - TiVampyre</title>
+        <link href="{{ basepath }}/css/main.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="{{ basepath }}/js/show-image.js"></script>
+        <script type="text/javascript" src="{{ basepath }}/js/script.js"></script>
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+        {#
+        <div id="modal">
+            <div id="dialog">
+                <div id="dialogInfo"></div>
+                <form id="dialogForm">
+                    <input type="hidden" name="id" id="show"/>
+                    <div>
+                        <label for="keep"><img src="{{ basepath }}/images/icons/keep.png"/>
+                        <input type="checkbox" id="keep"/> Keep MP2 Files</label>
+                        <label for="chop"><img src="{{ basepath }}/images/icons/cut.png"/>
+                        <input type="checkbox" id="cut"/> Cut Commercials</label>
+                    </div>
+                    <div>
+                        <label for="full"><img src="{{ basepath }}/images/icons/full_resolution.png"/>
+                        <input type="checkbox" id="full"/> Full Resolution</label>
+                        <label for="crop"><img src="{{ basepath }}/images/icons/crop.png"/>
+                        <input type="checkbox" id="crop"/> Crop Letterbox</label>
+                    </div>
+                </form>
+                <div>
+                    <span id="dialogCancel">Cancel</span>
+                    <span id="dialogStart">Start Processing</span>
+                </div>
+            </div>
+        </div>#}
+    </body>
+</html>

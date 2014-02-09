@@ -1,0 +1,165 @@
+html, body {
+    font-family: "Palatino Linotype", Palatino, "Book Antiqua", "Lucida Bright", Georgia, serif ;
+    margin: 0;
+    padding: 0;
+}
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+h1 {
+    font-size: 24pt;
+}
+h2 {
+    font-size: 18pt;
+    margin: 4pt 6pt;
+    max-height: 60pt;
+    overflow: hidden;
+    text-align: center;
+}
+.showImage {
+    border-radius: 50px;
+    display: block;
+    height: 100px;
+    margin: 0 auto;
+    width: 100px;
+}
+#index {
+    padding: 4pt 0 0 0;
+}
+#index .show {
+    float: left;
+    height: 160pt;
+    padding: 8pt 0 0 0;
+    position: relative;
+    width: 160pt;
+}
+#index .showQty {
+    color: #666;
+    font-size: 10pt;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+#show {
+    margin: 0 auto;
+    max-width: 500px;
+    padding: 10pt 0 0 0;
+}
+/*
+#li {
+
+}
+
+.showEpisodes {
+    color: #666;
+    font-size: 10pt;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+}
+.opened .showEpisodes {
+    display: none;
+}
+.episode {
+    background-color: #FFF;
+    display: none;
+    padding: 0 10pt;
+    position: relative;
+    z-index: 1;
+}
+h3 {
+    background-color: #EEE;
+    border-radius: 4px;
+    border-top: 3px solid #FFF;
+    cursor: pointer;
+    font-size: 12pt;
+    padding: 4pt 5pt 4pt 10pt;
+}
+.opened .episode {
+    display: block;
+}
+.episodeDetails {
+    display: none;
+}
+#modal {
+    background: rgba(0,0,0,0.6);
+    display: none;
+    position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    z-index: 2;
+}
+#modal.active {
+    display: block;
+}
+#dialog {
+    background: #fff;
+    border-radius: 10px;
+    height: 200px;
+    margin: 10% auto;
+    padding: 6pt;
+    position: relative;
+    width: 400px;      
+}
+#dialogInfo h4, #dialogInfo h5, #dialogInfo p {
+    margin: 0;
+    padding: 2pt;
+}
+#dialogInfo h4 {
+    border-bottom: 1px solid #000;
+    font-size: 16pt;
+    margin-bottom: 4pt;
+}
+#dialogInfo h5, #dialogInfo p, #dialog label {
+    font-size: 10pt;
+}
+#dialogInfo p {
+    max-height: 34pt;
+    overflow: hidden;
+}
+#dialog form {
+    overflow: hidden;
+    padding: 4pt 0;
+}
+#dialog label {
+    display: block;
+    float: left;
+    width: 50%;
+}
+#dialog img {
+    vertical-align:text-top;
+}
+#dialogCancel, #dialogStart {
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 3pt 16pt;
+}
+#dialogCancel {
+    background-color: #FCC;
+    position: absolute;
+        bottom: 8pt;
+        left: 8pt;
+}
+#dialogStart {
+    background-color: #CFC;
+    position: absolute;
+        bottom: 8pt;
+        right: 8pt;
+}
+*/
+
+.cols1{width:100% !important;}
+.cols2{width:50% !important;}
+.cols3{width:33.33% !important;}
+.cols4{width:25% !important;}
+.cols5{width:20% !important;}
+.cols6{width:16.67% !important;}
+.cols7{width:14.28% !important;}
+.cols8{width:12.5% !important;}
+.cols9{width:11.11% !important;}

@@ -1,0 +1,63 @@
+CREATE DATABASE IF NOT EXISTS `tivo`;
+
+CREATE TABLE `tivo`.`shows` (
+  `id` int(11) NOT NULL,
+  `show_title` varchar(128) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `episode_title` varchar(128) NOT NULL,
+  `description` text NOT NULL,
+  `channel` int(11) NOT NULL,
+  `station` varchar(16) NOT NULL,
+  `hd` varchar(4) NOT NULL,
+  `episode_number` int(11) NOT NULL,
+  `url` text NOT NULL,
+  `final_name` varchar(250) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `tivo`.`availability` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `show_id` int(11) NOT NULL,
+  `available` tinyint(1) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `show_id` (`show_id`)
+);
+
+CREATE TABLE `tivo`.`jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `show_id` int(11) NOT NULL,
+  `status` varchar(12) NOT NULL,
+  `keep` tinyint(1) DEFAULT '0',
+  `chop` tinyint(1) DEFAULT '0',
+  `full` tinyint(1) DEFAULT '0',
+  `crop` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `show_id` (`show_id`)
+);
+
+CREATE TABLE `tivo`.`icons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `status` varchar(12) NOT NULL,
+  `icon` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `status` (`status`)
+);
+
+INSERT INTO `tivo`.`icons` VALUES (1, 'default',     'television--plus.png');
+INSERT INTO `tivo`.`icons` VALUES (2, 'waiting',     'clock.png');
+INSERT INTO `tivo`.`icons` VALUES (3, 'downloading', 'drive-download.png');
+INSERT INTO `tivo`.`icons` VALUES (4, 'downloaded',  'drive-medium.png');
+INSERT INTO `tivo`.`icons` VALUES (5, 'encoding',    'film-cast.png');
+INSERT INTO `tivo`.`icons` VALUES (6, 'complete',    'clipboard-task.png');
+INSERT INTO `tivo`.`icons` VALUES (7, 'error 1',     'exclamation-red-frame.png');
+INSERT INTO `tivo`.`icons` VALUES (8, 'error 2',     'exclamation-red-frame.png');
+
+CREATE TABLE `tivo`.`config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(12) NOT NULL,
+  `value` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
+);

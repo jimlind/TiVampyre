@@ -1,0 +1,10 @@
+{
+	"tivampyre_mak": "1234567890",
+	"tivampyre_comskip_path": "/usr/local/bin/",
+	"tivampyre_working_directory": "/home/root/tv/"
+	"twitter_consumer_key": "tWiTteRConsUMerKeY",
+	"twitter_consumer_secret": "TwiTTeRConSuMeRSEcreT",
+	"twitter_access_token": "12345678-twITteRAcceSStoKEn",
+	"twitter_access_token_secret": "TWittTeRaCcesSTOkeNSecRET",
+	"google_api_key": "GOoglEAPikeY-GOoglEAPikeY"
+}

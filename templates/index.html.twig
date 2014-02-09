@@ -1,0 +1,24 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}Shows{% endblock %}
+
+{% block content %}
+    <div id="index">
+        {% for result in results %}
+            <div class="show">
+                <a href="{{ app.url_generator.generate('show', {'name': result.showTitle}) }}">
+                    <img class="showImage" data-title="{{ result.showTitle }}" />
+                </a>
+                <h2>{{ result.showTitle }}</h2>
+                <div class="showQty">
+                    {{ result.qty }}
+                    {% if result.qty > 1 %}
+                        SHOWINGS
+                    {% else %}
+                        SHOWING
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{
+    "name": "tivampyer-config",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "silex/silex": "1.1.*",
+        "symfony/class-loader": "2.3.*",
+        "symfony/console": "2.3.*",
+        "symfony/monolog-bridge": "2.3.*",
+        "symfony/process": "2.3.*",
+        "symfony/twig-bridge": "2.3.*",
+        "doctrine/dbal": "2.4.*",
+        "dflydev/doctrine-orm-service-provider": "1.0.*",
+        "igorw/config-service-provider": "1.2.*",
+        "dg/twitter-php": "3.2.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "squizlabs/php_codesniffer": "1.*"
+    },
+    "autoload": {
+        "psr-0": {"": "src/"}
+    }
+}
