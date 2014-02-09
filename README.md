@@ -33,7 +33,8 @@ This might be able to be automated, at the very least easy to check.
     $ vendor/bin/phpunit --coverage-text
 
     Test Coverage to HTML
-    $ vendor/bin/phpunit --coverage-html ./reports
+    $ vendor/bin/phpunit --coverage-html ./
+    *Then push to the gh-pages branch*
 
 ###Code Sniffing
 
