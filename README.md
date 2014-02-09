@@ -29,13 +29,13 @@ This might be able to be automated, at the very least easy to check.
 
 ###Unit Tests
     Straight Tests
-    $ vendor/bin/phpunit tests
+    $ vendor/bin/phpunit
 
     Test Coverage to the Terminal
-    $ vendor/bin/phpunit --coverage-text tests
+    $ vendor/bin/phpunit --coverage-text
 
     Test Coverage to HTML
-    $ vendor/bin/phpunit --coverage-html ./reports tests
+    $ vendor/bin/phpunit --coverage-html ./reports
 
 ###Code Sniffing
 
