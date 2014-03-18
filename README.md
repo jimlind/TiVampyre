@@ -26,6 +26,7 @@ This might be able to be automated, at the very least easy to check.
     php console db-destroy
 
 ###Unit Tests
+
     Straight Tests
     $ vendor/bin/phpunit
 
@@ -39,6 +40,10 @@ This might be able to be automated, at the very least easy to check.
 ###Code Sniffing
 
     $ vendor/bin/phpcs src/
+
+###Run Composer from HHVM for Speed
+
+	hhvm ~/bin/composer.phar install --no-dev --optimize-autoloader
 
 ###Configuration Options
 
