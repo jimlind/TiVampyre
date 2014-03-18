@@ -9,7 +9,7 @@
         "symfony/monolog-bridge": "2.3.*",
         "symfony/process": "2.3.*",
         "symfony/twig-bridge": "2.3.*",
-        "doctrine/dbal": "2.4.*",
+        "doctrine/dbal": "2.5.*@dev",
         "dflydev/doctrine-orm-service-provider": "1.0.*",
         "igorw/config-service-provider": "1.2.*",
         "dg/twitter-php": "3.2.*"
