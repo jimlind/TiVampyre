@@ -20,6 +20,11 @@ $app = new Application();
 $app->register(new ConfigServiceProvider(
     __DIR__ . '/../config/tivampyre.json'
 ));
+// Process Optional Settings
+if (!isset($app['tivo_ip'])) {
+    $app['tivo_ip'] = false;
+}
+
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver' => 'pdo_sqlite',
@@ -60,7 +65,11 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     return $twig;
 }));
 $app['tivo_locater'] = function ($app) {
-    return new TiVo\Location($app['monolog'], $app['process']);
+    return new TiVo\Location(
+        $app['monolog'],
+        $app['process'],
+        $app['tivo_ip']
+    );
 };
 $app['tivo_now_playing'] = function ($app) {
     return new TiVo\NowPlaying(

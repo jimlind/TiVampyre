@@ -121,7 +121,7 @@ class Show
      * @return null                       No return
      */
     private function _processShow($showXML, $index, $dontTweet = false)
-    {
+    {        
         $show = new Entity\Show();
         $show->setTimeStamp($this->_timestamp);
         $show->populate($showXML);
@@ -161,7 +161,7 @@ class Show
      * @return null No return
      */
     public function sendTweets()
-    {
+    {        
         array_walk(
             $this->_tweets,
             array($this, '_sendTweet')
@@ -178,7 +178,7 @@ class Show
     private function _sendTweet($tweet)
     {
         try {
-            //$this->_twitter->send($tweet);
+            $this->_twitter->send($tweet);
         } catch(\Exception $e) {
             $this->_logger->addWarning($tweet);
             $this->_logger->addWarning($e->getMessage());

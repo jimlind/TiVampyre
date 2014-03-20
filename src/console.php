@@ -57,13 +57,25 @@ $console->register('db-destroy')
             $app['db']->query($dropQueue);
             $dropStatus = 'DROP TABLE job_status';
             $app['db']->query($dropStatus);
+        });
+$console->register('db-truncate')
+        ->setDescription('Truncate the SQLite Database Tables')
+        ->setCode(function() use ($app) {
+            $truncateShow = 'DELETE FROM show';
+            $app['db']->query($truncateShow);
+            $truncateQueue = 'DELETE FROM job_queue';
+            $app['db']->query($truncateQueue);
+            $truncateStatus = 'DELETE FROM job_status';
+            $app['db']->query($truncateStatus);
         }); 
 $console->register('get-shows')
         ->setDescription('Get all show data from the TiVo')
         ->setCode(function() use ($app) {
             $showService = $app['show_service'];
             $showService->rebuildLocalIndex();
-            $showService->sendTweets();
+            if (isset($app['twitter_production']) && $app['twitter_production']) {
+                $showService->sendTweets();
+            }            
         });
 
 return $console;
