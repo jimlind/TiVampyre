@@ -2,7 +2,7 @@
 
 ###Installation
 
-####Server
+####Services
 
 I run Ubuntu 14.04 LTS so if you want something else you are on your own.
 
@@ -25,20 +25,22 @@ sudo apt-get update
 sudo apt-get install handbrake-cli
 ```
 
-Since this just runs on my local network and isn't considered production I run it it on HHVM.
+The Avahi daemon is a good way to make it easy to locate the server on the network.
 
-Here's all the junk I had to install on my box running the most recent (at the 
-time of printing) version of Ubuntu.
+```sh
+sudo apt-get install avahi-utils
+```
 
-* libapache2-mod-php5
-* php5-cli
-* php5-curl
-* php5-gd
-* php5-json
-* php5-sqlite
-* avahi-utils
+Nginx is the best way to run HHVM as a web server. 
+```sh
+sudo apt-get install nginx
+sudo /usr/share/hhvm/install_fastcgi.sh
+
+```
 
 ###Setup Notes
+
+Checkout this repository. I like to put it in the /var/www/TiVampyre directory.
 
 You will need to check the permissions on the database file and db directory.
 It is created by the command line and accessed by the apache user.
@@ -46,9 +48,14 @@ This might be able to be automated, at the very least easy to check.
 
 ###Run a Command
 
-    hhvm console db-setup
-    hhvm console get-shows
-    hhvm console db-destroy
+    hhvm /var/www/TiVampyre/console db-setup
+    hhvm /var/www/TiVampyre/console get-shows
+    hhvm /var/www/TiVampyre/console db-destroy
+
+###Schedule Crontab
+```
+02,32 * * * * hhvm /var/www/TiVampyre/console get-shows >/dev/null 2>&1    
+```
 
 ###Unit Tests
 
