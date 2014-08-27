@@ -1,19 +1,20 @@
 // Wait for the DOM to be ready.
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Open connection to database.
-    var database = null;
+    var showImageService = null;
     if (typeof(openDatabase) === typeof(Function)) {
-        database = openDatabase('TiVampyre', '1', 'TV Manager', 5242880); // 5MB
-        database.transaction(function(tx) {
-            $create = 'CREATE TABLE IF NOT EXISTS logo(hash TEXT, base64 TEXT)';
-            tx.executeSql($create);
-        });
+        showImageService = new ShowImageWebKit();
+    } else if ("indexedDB" in window) {
+        showImageService = new ShowImageGecko();
+    } else {
+        showImageService = new ShowImage();
     }
 
     var shows = document.getElementsByClassName('showImage');
-    for (var i = 0; i < shows.length; ++i) {
-        new ShowImage(database, shows[i]);
+    if (showImageService !== null && shows.length > 0) {
+        for (var i = 0; i < shows.length; ++i) {
+            showImageService.addShowImage(shows[i]);
+        }
     }
     
     // Dynamically resize the show width.
