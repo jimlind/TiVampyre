@@ -10,15 +10,15 @@ ShowImage.prototype.loadImageRemote = function(image)
     var self = this;
     var title = image.getAttribute("data-title");
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/image', true);
+    xhr.open("POST", "/image", true);
     xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhr.onload = function() {
         var response = JSON.parse(this.responseText);
-        var base64 = response['base64'];
+        var base64 = response["base64"];
         self.setImage(image, base64);
         self.saveImage(title, base64);
     };
-    xhr.send('title=' + title);
+    xhr.send("title=" + title);
 };
 
 ShowImage.prototype.saveImage = function() {}
