@@ -21,10 +21,7 @@ ShowImage.prototype.loadImageRemote = function(image)
     xhr.send('title=' + title);
 };
 
-ShowImage.prototype.saveImage = function(title, base64)
-{
-    return 0;
-}
+ShowImage.prototype.saveImage = function() {}
 
 ShowImage.prototype.setImage = function(image, base64)
 {
