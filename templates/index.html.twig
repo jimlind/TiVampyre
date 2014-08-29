@@ -5,10 +5,8 @@
 {% block content %}
     <div id="index">
         {% for result in results %}
-            <div class="show">
-                <a href="{{ app.url_generator.generate('show', {'name': result.showTitle}) }}">
-                    <img class="showImage" data-title="{{ result.showTitle }}" />
-                </a>
+            <a class="show" href="{{ app.url_generator.generate('show', {'name': result.showTitle}) }}">
+                <img class="showImage" data-title="{{ result.showTitle }}" />
                 <h2>{{ result.showTitle }}</h2>
                 <div class="showQty">
                     {{ result.qty }}
@@ -18,7 +16,7 @@
                         SHOWING
                     {% endif %}
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}

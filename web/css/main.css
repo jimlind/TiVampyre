@@ -33,7 +33,11 @@ h2 {
     height: 160pt;
     padding: 8pt 0 0 0;
     position: relative;
+    text-decoration: none;
     width: 160pt;
+}
+#index .show h2 {
+    color: #000;
 }
 #index .showQty {
     color: #666;
