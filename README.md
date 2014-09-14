@@ -2,12 +2,14 @@
 
 ###Installation
 
-####Services
+####Server Configurations.
 
 I run Ubuntu 14.04 LTS so if you want something else you are on your own.
 
 HHVM is the fastest most compatible PHP runtime so install it following the 
 [directions](https://github.com/facebook/hhvm/wiki/Prebuilt-Packages-on-Ubuntu-14.04).
+In my dev environment I just use the version of HHVM from PuPHPet and I'm not too 
+particular because they are close enough for my uses.
 
 ```sh
 wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | sudo apt-key add -
@@ -38,6 +40,14 @@ sudo /usr/share/hhvm/install_fastcgi.sh
 
 ```
 
+Install Composer for PHP dependancies. The dev environment has it installed as an executable
+automatically.
+
+```sh
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/
+```
+
 ###Setup Notes
 
 Checkout this repository. I like to put it in the /var/www/TiVampyre directory.
@@ -45,6 +55,10 @@ Checkout this repository. I like to put it in the /var/www/TiVampyre directory.
 You will need to check the permissions on the database file and db directory.
 It is created by the command line and accessed by the apache user.
 This might be able to be automated, at the very least easy to check.
+
+####Run Composer PHAR
+
+hhvm /usr/local/bin/composer.phar install --no-dev --optimize-autoloader
 
 ###Development Environment
 
@@ -82,10 +96,6 @@ Vagrant 1.6.3
 ###Code Sniffing
 
     $ vendor/bin/phpcs src/
-
-###Run Composer from HHVM for Speed
-
-	hhvm ~/bin/composer.phar install --no-dev --optimize-autoloader
 
 ###Configuration Options
 
