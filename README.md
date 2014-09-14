@@ -70,6 +70,13 @@ VirtualBox 4.3.14
 Vagrant 1.6.3
 ```
 
+HHVM doesn't throw all errors to the screen because of the way the JIT bits work so
+you'll want to watch the error log.
+
+```sh
+tail -f /var/log/hhvm/error.log
+```
+
 ###Run a Command
 
     hhvm /var/www/TiVampyre/console db-setup
