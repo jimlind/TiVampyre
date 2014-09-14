@@ -46,6 +46,16 @@ You will need to check the permissions on the database file and db directory.
 It is created by the command line and accessed by the apache user.
 This might be able to be automated, at the very least easy to check.
 
+###Development Environment
+
+I've committed the Vagrantfile and the puphpet folders that it uses that I use for 
+development. Using the version of VirtualBox and Vagrant documented below.
+
+```
+VirtualBox 4.3.14
+Vagrant 1.6.3
+```
+
 ###Run a Command
 
     hhvm /var/www/TiVampyre/console db-setup
