@@ -5,3 +5,4 @@
 
 db/tivampyre.db
 config/tivampyre.json
+.vagrant/
