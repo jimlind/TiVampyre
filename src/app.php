@@ -10,16 +10,17 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\Process\Process;
 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
 // Set TimeZone
 date_default_timezone_set('America/Chicago');
 
+$configFile = __DIR__ . '/../config/tivampyre.jsonX';
+if (file_exists($configFile) == false) {
+    throw new Exception('No Config File. Fix that.');
+}
+
 $app = new Application();
-$app->register(new ConfigServiceProvider(
-    __DIR__ . '/../config/tivampyre.json'
-));
+$app->register(new ConfigServiceProvider($configFile));
+
 // Process Optional Settings
 if (!isset($app['tivo_ip'])) {
     $app['tivo_ip'] = false;
