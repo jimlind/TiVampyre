@@ -2,7 +2,6 @@
 
 namespace JimLind\TiVampyre;
 
-use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Process\Process;
 
 class JobQueue {

@@ -15,7 +15,7 @@ namespace TiVampyre\Service;
 
 use Doctrine\ORM\EntityManager;
 use TiVampyre\Entity;
-use Symfony\Bridge\Monolog\Logger;
+use Monolog\Logger;
 use TiVo\NowPlaying;
 use Twitter;
 
