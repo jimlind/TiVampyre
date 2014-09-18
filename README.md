@@ -79,9 +79,9 @@ tail -f /var/log/hhvm/error.log
 
 ###Run a Command
 
-    hhvm /var/www/TiVampyre/console db-setup
-    hhvm /var/www/TiVampyre/console get-shows
-    hhvm /var/www/TiVampyre/console db-destroy
+    hhvm console db-setup
+    hhvm console get-shows
+    hhvm console db-destroy
 
 ###Schedule Crontab
 ```
