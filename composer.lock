@@ -395,12 +395,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "a67db17b3d5bf373ba7a827db52dd0c7066cb08a"
+                "reference": "d12672808124e711c2cb78a82d4461ba2e89c7ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a67db17b3d5bf373ba7a827db52dd0c7066cb08a",
-                "reference": "a67db17b3d5bf373ba7a827db52dd0c7066cb08a",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/d12672808124e711c2cb78a82d4461ba2e89c7ef",
+                "reference": "d12672808124e711c2cb78a82d4461ba2e89c7ef",
                 "shasum": ""
             },
             "require": {
@@ -458,7 +458,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2014-10-27 17:14:07"
+            "time": "2014-10-29 16:12:22"
         },
         {
             "name": "doctrine/inflector",
@@ -826,11 +826,17 @@
         },
         {
             "name": "jimlind/tivo-php",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jimlind/tivo-php",
-                "reference": "6a112a434eaadb840ad642a0f78c3538e9d1daa1"
+                "url": "https://github.com/jimlind/tivo-php.git",
+                "reference": "f891beaa822c775499a71e2ececbb8c7ae045481"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jimlind/tivo-php/zipball/f891beaa822c775499a71e2ececbb8c7ae045481",
+                "reference": "f891beaa822c775499a71e2ececbb8c7ae045481",
+                "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "~4.2",
@@ -843,6 +849,7 @@
                     "JimLind\\TiVo": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -855,10 +862,10 @@
             "description": "Communicate with a S3 TiVo via Guzzle",
             "homepage": "https://github.com/jimlind/tivo-php",
             "keywords": [
-                "guzzle",
+                "Guzzle",
                 "tivo"
             ],
-            "time": "2014-10-28 02:47:30"
+            "time": "2014-10-30 02:59:44"
         },
         {
             "name": "monolog/monolog",
