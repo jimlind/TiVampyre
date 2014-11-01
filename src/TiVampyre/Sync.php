@@ -130,7 +130,7 @@ class Sync
      */
     protected function composeTweet($show)
     {
-        $tweet = 'I started recording ' . $show->getShowTitle() . ' ';
+        $tweet        = 'I started recording ' . $show->getShowTitle() . ' ';
         $episodeTitle = $show->getEpisodeTitle();
         if (!empty($episodeTitle)) {
             $tweet .= '- ' . $episodeTitle . ' ';
