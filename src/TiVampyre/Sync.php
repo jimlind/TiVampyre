@@ -84,6 +84,7 @@ class Sync
             $this->entityManager->merge($show);
         }
         $this->entityManager->flush();
+        $this->repository->deleteOutdated();
     }
 
     /**
