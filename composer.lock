@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "90b28440594338c5d291daeff7c9a6c8",
+    "hash": "288607a93ec5152135473a3b2e5803a7",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -1812,6 +1812,45 @@
     ],
     "packages-dev": [
         {
+            "name": "m6web/symfony2-coding-standard",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/M6Web/Symfony2-coding-standard.git",
+                "reference": "51190f81cd40b86b204874b79761ddd5aa2b3023"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/M6Web/Symfony2-coding-standard/zipball/51190f81cd40b86b204874b79761ddd5aa2b3023",
+                "reference": "51190f81cd40b86b204874b79761ddd5aa2b3023",
+                "shasum": ""
+            },
+            "suggest": {
+                "m6web/coke": "PHP CodeSniffer configurator",
+                "squizlabs/php_codesniffer": "PHP CodeSniffer"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mikael Randy",
+                    "role": "maintainer"
+                }
+            ],
+            "description": "Symfony2 PHP CodeSniffer Coding Standard",
+            "keywords": [
+                "Symfony2",
+                "codesniffer",
+                "m6web",
+                "phpcs",
+                "standard"
+            ],
+            "time": "2014-10-07 08:21:43"
+        },
+        {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.18",
             "source": {
@@ -2303,7 +2342,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "doctrine/dbal": 20
+        "doctrine/dbal": 20,
+        "m6web/symfony2-coding-standard": 20
     },
     "prefer-stable": false,
     "platform": {
