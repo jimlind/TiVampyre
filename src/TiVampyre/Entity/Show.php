@@ -80,7 +80,7 @@ class Show extends BaseShow
 
     public function getDate()
     {
-        //TODO: Translate String to Date
+        return new \DateTime($this->date);
     }
 
     public function setDate($date)
@@ -93,7 +93,7 @@ class Show extends BaseShow
 
     public function getTimeStamp()
     {
-        //TODO: Translate String to Date
+        return new \DateTime($this->ts);
     }
 
     public function setTimeStamp(\DateTime $ts)

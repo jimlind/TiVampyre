@@ -33,6 +33,7 @@ class Tweet
             $this->sendTweet($tweetString);
         } else {
             echo $tweetString;
+            echo PHP_EOL;
         }
     }
 
