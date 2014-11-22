@@ -42,6 +42,20 @@ class Show extends EntityRepository
     }
 
     /**
+     * Return all currently available show Ids.
+     *
+     * @return integer[]
+     */
+    public function getAllIds()
+    {
+        $dql    = 'SELECT s.id FROM TiVampyre\Entity\Show s';
+        $query  = $this->getEntityManager()->createQuery($dql);
+        $result = $query->getResult();
+
+        return array_map('current', &$result);
+    }
+
+    /**
      * Delete all shows without a current timestamp.
      */
     public function deleteOutdated()
