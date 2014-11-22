@@ -22,17 +22,32 @@ class Tweet
     }
 
     /**
-     * Capture a dispatched event.
+     * Capture an event to tweet a show.
      *
      * @param TiVampyre\Twitter\TweetEvent $event
      */
-    public function capture(TweetEvent $event)
+    public function captureShowEvent(TweetEvent $event)
     {
         $tweetString = $this->composeShowTweet($event->getShow());
         if ($this->production) {
             $this->sendTweet($tweetString);
         } else {
             echo $tweetString;
+        }
+    }
+
+    /**
+     * Capture an event to tweet a preview.
+     *
+     * @param TiVampyre\Twitter\TweetEvent $event
+     */
+    public function capturePreviewEvent(TweetEvent $event)
+    {
+        $preview = $event->getPreview();
+        if ($this->production) {
+            $this->sendTweet('preview');
+        } else {
+            echo 'preview';
         }
     }
 
