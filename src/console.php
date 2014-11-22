@@ -48,6 +48,7 @@ $console->register('db-setup')
             ';
             $app['db']->query($jobStatusSQL);
         });
+
 $console->register('db-destroy')
         ->setDescription('Destroy the SQLite Database Tables')
         ->setCode(function() use ($app) {
@@ -58,6 +59,7 @@ $console->register('db-destroy')
             $dropStatus = 'DROP TABLE job_status';
             $app['db']->query($dropStatus);
         });
+
 $console->register('db-truncate')
         ->setDescription('Truncate the SQLite Database Tables')
         ->setCode(function() use ($app) {
@@ -67,15 +69,34 @@ $console->register('db-truncate')
             $app['db']->query($truncateQueue);
             $truncateStatus = 'DELETE FROM job_status';
             $app['db']->query($truncateStatus);
-        }); 
+        });
+
 $console->register('get-shows')
         ->setDescription('Get all show data from the TiVo')
         ->setCode(function() use ($app) {
-            $showService = $app['show_service'];
-            $showService->rebuildLocalIndex();
+            $twitterStatus = false;
             if (isset($app['twitter_production']) && $app['twitter_production']) {
-                $showService->sendTweets();
-            }            
+                $twitterStatus = true;
+            }
+            $showService = $app['sync_service'];
+            $showService->rebuildLocalIndex();
+        });
+
+$console->register('display-shows')
+        ->setDescription('Display all TiVo shows locally indexed.')
+        ->setCode(function() use ($app){
+            $repository = $app['orm.em']->getRepository('TiVampyre\Entity\Show');
+            $showList   = $repository->getAllSortedEpisodes();
+            foreach ($showList as $show) {
+                echo $show->getId() . ' : ' . $show->getShowTitle();
+                if ($show->getEpisodeNumber()) {
+                    echo ' #' . $show->getEpisodeNumber();
+                }
+                if ($show->getEpisodeTitle()) {
+                    echo " - " . $show->getEpisodeTitle();
+                }
+                echo PHP_EOL;
+            }
         });
 
 return $console;
