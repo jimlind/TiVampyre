@@ -117,6 +117,14 @@ $app['tivo_decoder'] = function ($app) {
     );
 };
 
+// Video Transcoder
+$app['video_transcoder'] = function ($app) {
+    return new TiVampyre\Video\Transcode(
+        $app['process'],
+        $app['monolog']
+    );
+};
+
 // Manage the TiVo's show list syncing.
 $app['sync_service'] = function ($app) {
     return new TiVampyre\Sync(
