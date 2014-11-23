@@ -1,7 +1,10 @@
 <?php
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+
 use Symfony\Component\Console\Output\OutputInterface;
 
 $console = new Application('TiVampyre', '2.0');
@@ -96,6 +99,46 @@ $console->register('display-shows')
                     echo " - " . $show->getEpisodeTitle();
                 }
                 echo PHP_EOL;
+            }
+        });
+
+$console->register('download')
+        ->setDefinition(
+            array(
+                new InputArgument('Show Id', InputArgument::REQUIRED, 'The unique TiVo Id for the show.'),
+                new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip video transcoding.'),
+                new InputOption('keep', 'k', InputOption::VALUE_NONE, 'Keep the original MPEG file after transcoding.'),
+                new InputOption('cut', 'c', InputOption::VALUE_NONE, 'Cut commericials from file while transcoding.'),
+                new InputOption('dvd', 'd', InputOption::VALUE_NONE, 'Transcode to NTSC DVD file (NOT IMPLMENTED).'),
+            )
+        )
+        ->setDescription('Download and convert a show.')
+        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+            $showId     = $input->getArgument('Show Id');
+            $optionList = $input->getOptions();
+
+            $repository = $app['orm.em']->getRepository('TiVampyre\Entity\Show');
+            $showEntity = $repository->find($showId);
+            if (!$showEntity) {
+                $output->write('Show not found.', true);
+                return;
+            }
+
+            $rawFilename = $app['tivampyre_working_directory'] . $showEntity->getId();
+            $output->write('Downloading...', true);
+            $app['tivo_downloader']->storePreview(
+                $showEntity->getURL(),
+                $rawFilename . '.tivo'
+            );
+            $output->write('Decoding...', true);
+            $app['tivo_decoder']->decode(
+                $rawFilename . '.tivo',
+                $rawFilename . '.mpeg'
+            );
+
+            if ($optionList['skip']) {
+                $output->write('Downloaded to ' . $rawFilename . '.mpeg', true);
+                return;
             }
         });
 

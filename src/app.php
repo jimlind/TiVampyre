@@ -11,7 +11,6 @@ use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\Process\Process;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use JimLind\TiVo;
 use TiVampyre\Twitter as TiVoTwitter;
@@ -96,6 +95,24 @@ $app['tivo_now_playing'] = function ($app) {
         $app['tivo_ip'],
         $app['tivampyre_mak'],
         $app['guzzle'],
+        $app['monolog']
+    );
+};
+
+// TiVo Downloader
+$app['tivo_downloader'] = function ($app) {
+    return new TiVo\Download(
+        $app['tivampyre_mak'],
+        $app['guzzle'],
+        $app['monolog']
+    );
+};
+
+// TiVo Decoder
+$app['tivo_decoder'] = function ($app) {
+    return new TiVo\Decode(
+        $app['tivampyre_mak'],
+        $app['process'],
         $app['monolog']
     );
 };
