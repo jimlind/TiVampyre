@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 $console = new Application('TiVampyre', '2.0');
 
 $console->register('db-setup')
-        ->setDescription('Setup the SQLite Database Tables')
+        ->setDescription('Setup the SQLite database tables.')
         ->setCode(function() use ($app) {
             $showSQL = '
                 CREATE TABLE show (
@@ -53,7 +53,7 @@ $console->register('db-setup')
         });
 
 $console->register('db-destroy')
-        ->setDescription('Destroy the SQLite Database Tables')
+        ->setDescription('Destroy the SQLite database tables.')
         ->setCode(function() use ($app) {
             $dropShow = 'DROP TABLE show';
             $app['db']->query($dropShow);
@@ -64,7 +64,7 @@ $console->register('db-destroy')
         });
 
 $console->register('db-truncate')
-        ->setDescription('Truncate the SQLite Database Tables')
+        ->setDescription('Truncate the SQLite database tables')
         ->setCode(function() use ($app) {
             $truncateShow = 'DELETE FROM show';
             $app['db']->query($truncateShow);
@@ -75,7 +75,7 @@ $console->register('db-truncate')
         });
 
 $console->register('get-shows')
-        ->setDescription('Get all show data from the TiVo')
+        ->setDescription('Get all show data from the TiVo.')
         ->setCode(function() use ($app) {
             $twitterStatus = false;
             if (isset($app['twitter_production']) && $app['twitter_production']) {
@@ -85,7 +85,7 @@ $console->register('get-shows')
             $showService->rebuildLocalIndex();
         });
 
-$console->register('display-shows')
+$console->register('list-shows')
         ->setDescription('Display all TiVo shows locally indexed.')
         ->setCode(function() use ($app){
             $repository = $app['orm.em']->getRepository('TiVampyre\Entity\Show');
@@ -135,6 +135,7 @@ $console->register('download')
                 $rawFilename . '.tivo',
                 $rawFilename . '.mpeg'
             );
+            unlink($rawFilename . '.tivo');
 
             if ($optionList['skip']) {
                 $output->write('Downloaded to ' . $rawFilename . '.mpeg', true);

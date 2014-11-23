@@ -8,5 +8,5 @@
     "twitter_access_token": "12345678-twITteRAcceSStoKEn",
     "twitter_access_token_secret": "TWittTeRaCcesSTOkeNSecRET",
     "google_api_key": "GOoglEAPikeY-GOoglEAPikeY",
-    "tivo_ip": "1.2.3.4"
+    "tivo_ip": "1.2.3.4",
 }
