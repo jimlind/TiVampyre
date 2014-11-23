@@ -61,7 +61,7 @@ class Info
         return true;
     }
 
-    public function getResolution() {
+    protected function getResolution() {
         $matches = array();
         $pattern = '|\+ size: (\d+)x(\d+),|';
         preg_match_all($pattern, $this->getOutput(), $matches);
@@ -77,7 +77,7 @@ class Info
         return false;
     }
 
-    public function getAspectRatio() {
+    protected function getAspectRatio() {
         $matches = array();
         $pattern = '|, aspect ([\d.]+):([\d.]+),|';
         preg_match_all($pattern, $this->getOutput(), $matches);
@@ -95,21 +95,56 @@ class Info
     {
         $resolution  = $this->getResolution();
         $aspectRatio = $this->getAspectRatio();
-        $actualRatio = $resolution['width'] / $resolution['height'];
-        $range = 0.1;
-        if (($actualRatio < $aspectRatio - $range) || ($actualRatio > $aspectRatio + $range)) {
-            // Check adding height
-            $newHeight = $s['width'] / $aspectRatio;
-            $newHeightArea = $s['width'] * $newHeight;
-            // Check adding width
-            $newWidth = $s['height'] * $aspectRatio;
-            $newWidthArea = $s['height'] * $newWidth;
-            // Apply best fit
+
+        if (!$resolution || !$aspectRatio) {
+            return false;
+        }
+
+        $actualRatio  = $resolution['width'] / $resolution['height'];
+        $maxDelta     = 0.1;
+        $outsideLower = $actualRatio < $aspectRatio - $maxDelta;
+        $outsideUpper = $actualRatio > $aspectRatio + $maxDelta;
+
+        if ($outsideLower || $outsideUpper) {
+            // Check adding height.
+            $newHeight     = $resolution['width'] / $aspectRatio;
+            $newHeightArea = $resolution['width'] * $newHeight;
+            // Check adding width.
+            $newWidth     = $resolution['height'] * $aspectRatio;
+            $newWidthArea = $resolution['height'] * $newWidth;
+            // Apply best fit.
             if ($newHeightArea > $newWidthArea) {
-                $s['height'] = $newHeight;
+                $resolution['height'] = $newHeight;
             } else {
-                $s['width'] = $newWidth;
+                $resolution['width'] = $newWidth;
             }
         }
+
+        // iPhone, iPad, etc can't handle higher than 1080p
+        if ($resolution['height'] > 1080) {
+            $resolution['width'] = 1080/($resolution['height']/$resolution['width']);
+	    $resolution['height'] = 1080;
+        }
+
+        return $resolution;
+    }
+
+    public function getCropValues()
+    {
+        $matches = array();
+        $pattern = '|autocrop = (\d+)/(\d+)/(\d+)/(\d+)|';
+        preg_match_all($pattern, $this->getOutput(), $matches);
+
+        if (count($matches) === 5) {
+            // Data successfully found.
+            return array(
+                'top'    => intval($matches[1][0]),
+                'bottom' => intval($matches[2][0]),
+                'left'   => intval($matches[3][0]),
+                'right'  => intval($matches[4][0]),
+            );
+        }
+        // Nothing found.
+        return false;
     }
 }

@@ -37,27 +37,51 @@ class Transcode
             return false;
         }
 
-        $info = new Info($input, $this->process, $this->logger);
+        $videoInfo  = new Info($input, $this->process, $this->logger);
+        $resolution = $videoInfo->getIdealResolution($input);
+        $crop       = $videoInfo->getCropValues();
+        $quality    = $this->getVideoQuality($resolution['height'], $resolution['width']);
 
-        $resolution  = $info->getResolution($input);
-        $aspectRatio = $info->getAspectRatio($input);
-
-        var_dump($resolution, $aspectRatio);
-        die;
+        //var_dump($resolution, $quality, $crop);
+        //die;
+        $this->encode($input, $output, $resolution, $quality);
     }
 
     protected function getVideoQuality($height, $width)
     {
-        // computers don't care if this is left unsimplified
-        // it'll make it easier to edit later if neccesary.
-        $w1 = 704;  //width
-        $q1 = 23;   //quality
-        $w2 = 1920; //width
-        $q2 = 28;   //quality
+        $w1 = 704;  // Width
+        $q1 = 23;   // Quality
+        $w2 = 1920; // Width
+        $q2 = 28;   // Quality
 
-        // just using a linear equation
+        // Linear equation to find a reasonable quality setting.
         $qOut = (($q2 - $q1) / ($w2 - $w1) * ($width - $w1)) + $q1;
         return round($qOut);
+    }
+
+    protected function encode($input, $output, $resolution, $quality)
+    {
+	$command  = 'HandBrakeCLI -i ' . $input . ' -o ' . $output;
+
+	// Video Encoder
+	$command .= ' -e x264 -x b-adapt=2:rc-lookahead=50'; // Normal Encoding Preset
+	$command .= ' -q ' . $quality . ' -r 29.97';	     // Quality and Framerate
+
+	// Audio Encoder
+	$command .= ' -E faac -B 320 -6 stereo'; // Codec, Bitrate, and Channels
+	$command .= ' -D 1.0 ';	                 // Dynamic Volume Compression
+
+	// Resize and Crop
+	$command .= ' -w ' . $resolution['width'];
+        $command .= ' -l ' . $resolution['height'];
+        //$h .= " --crop {$crop['top']}:{$crop['bottom']}:{$crop['left']}:{$crop['right']} ";
+
+	// Filters
+	$command .= "--detelecine --decomb "; // Detelecine and Decomb
+
+        $this->process->setCommandLine($command);
+        $this->process->setTimeout(0); // Don't timeout.
+        $this->process->run();
     }
 
     protected function getOutputDimensions($target, $crop, $resize)
@@ -136,12 +160,6 @@ class Transcode
 	    $outSize['height'] = 1024/($outSize['width']/$outSize['height']);
 	    $outSize['width'] = 1024;
 	}
-
-        // iPhone, iPad, etc can't handle higher than 1080p
-        if ($outSize['height'] > 1080) {
-            $outSize['width'] = 1080/($outSize['height']/$outSize['width']);
-	    $outSize['height'] = 1080;
-        }
 
         // Try to match standard HD sizes
         $range = 24;
