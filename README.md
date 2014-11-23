@@ -2,13 +2,16 @@
 
 ###Installation
 
+TiVampyre utilizes my own [tivo-php](https://github.com/jimlind/tivo-php) library so you'll
+want to follow the link and make sure you've fulfilled the prerequisites.
+
 ####Server Configurations.
 
 I run Ubuntu 14.04 LTS so if you want something else you are on your own.
 
-HHVM is the fastest most compatible PHP runtime so install it following the 
+HHVM is the fastest most compatible PHP runtime so install it following the
 [directions](https://github.com/facebook/hhvm/wiki/Prebuilt-Packages-on-Ubuntu-14.04).
-In my dev environment I just use the version of HHVM from PuPHPet and I'm not too 
+In my dev environment I just use the version of HHVM from PuPHPet and I'm not too
 particular because they are close enough for my uses.
 
 ```sh
@@ -22,7 +25,7 @@ HandBrake is the easiest video transcoder, but the default package is broken. Lu
 the [snapshots](https://launchpad.net/~stebbins/+archive/ubuntu/handbrake-snapshots) work great.
 
 ```sh
-sudo add-apt-repository ppa:stebbins/handbrake-snapshots 
+sudo add-apt-repository ppa:stebbins/handbrake-snapshots
 sudo apt-get update
 sudo apt-get install handbrake-cli
 ```
@@ -33,7 +36,7 @@ The Avahi daemon is a good way to make it easy to locate the server on the netwo
 sudo apt-get install avahi-utils
 ```
 
-Nginx is the best way to run HHVM as a web server. 
+Nginx is the best way to run HHVM as a web server.
 ```sh
 sudo apt-get install nginx
 sudo /usr/share/hhvm/install_fastcgi.sh
@@ -62,7 +65,7 @@ hhvm /usr/local/bin/composer.phar install --no-dev --optimize-autoloader
 
 ###Development Environment
 
-I've committed the Vagrantfile and the puphpet folders that it uses that I use for 
+I've committed the Vagrantfile and the puphpet folders that it uses that I use for
 development. Using the version of VirtualBox and Vagrant documented below.
 
 ```
@@ -85,7 +88,7 @@ tail -f /var/log/hhvm/error.log
 
 ###Schedule Crontab
 ```
-02,32 * * * * hhvm /var/www/TiVampyre/console get-shows >/dev/null 2>&1    
+02,32 * * * * hhvm /var/www/TiVampyre/console get-shows >/dev/null 2>&1
 ```
 
 ###Unit Tests

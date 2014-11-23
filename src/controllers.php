@@ -46,10 +46,11 @@ $app->get('/image/{title}', function($title) use ($app) {
 });
 
 $app->error(function (\Exception $e, $code) use ($app) {
-	if (in_array($code, array(404, 405))) {
-		$page = '404.html.twig';
-	} else {
-		$page = '500.html.twig';
-	}
+    var_dump($e->getMessage());
+    if (in_array($code, array(404, 405))) {
+        $page = '404.html.twig';
+    } else {
+        $page = '500.html.twig';
+    }
     return new Response($app['twig']->render($page, array('code' => $code)), $code);
 });
