@@ -126,7 +126,42 @@ class Info
 	    $resolution['height'] = 1080;
         }
 
+        $this->adjustToStandards($resolution);
         return $resolution;
+    }
+
+    /**
+     * Tweak resolution to match standard HD resolutions.
+     *
+     * @param int[] $resolution
+     */
+    protected function adjustToStandards(&$resolution)
+    {
+        $adjustments = array(
+            '1080' => array(
+                'height' => 1080,
+                'width'  => 1920,
+                'limit'  => 24,
+            ),
+            '720' => array(
+                'height' => 720,
+                'width' => 1280,
+                'limit' => 12,
+            )
+        );
+
+        foreach ($adjustments as $key => $value) {
+            $heightUpper = $resolution['height'] >= ($value['height'] - $value['limit']);
+            $heightLower = $resolution['height'] <= ($value['height'] + $value['limit']);
+            $widthUpper  = $resolution['width'] >= ($value['width'] - $value['limit']);
+            $widthLower  = $resolution['width'] <= ($value['width'] + $value['limit']);
+
+            if ($heightUpper && $heightLower && $widthUpper && $widthLower) {
+                TiVoUtilities\Log::warn('Force ' . $key . ' Resolution', $this->logger);
+                $resolution['height'] = $value['height'];
+                $resolution['width']  = $value['width'];
+            }
+        }
     }
 
     public function getCropValues()
