@@ -118,6 +118,13 @@ $app['tivo_decoder'] = function ($app) {
 };
 
 // Video Transcoder
+$app['comskip'] = function ($app) {
+    return new TiVampyre\Video\Comskip(
+        $app['comskip_path'],
+        $app['process'],
+        $app['monolog']
+    );
+};
 $app['video_transcoder'] = function ($app) {
     return new TiVampyre\Video\Transcode(
         $app['process'],

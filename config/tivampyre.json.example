@@ -1,7 +1,7 @@
 {
     "tivampyre_mak": "1234567890",
-    "tivampyre_comskip_path": "/usr/local/bin/",
     "tivampyre_working_directory": "/home/root/tv/"
+    "comskip_path": "/opt/comskip/",
     "twitter_production": boolean,
     "twitter_consumer_key": "tWiTteRConsUMerKeY",
     "twitter_consumer_secret": "TwiTTeRConSuMeRSEcreT",

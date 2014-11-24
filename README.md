@@ -43,6 +43,19 @@ Install dependencies with Composer.
 hhvm /usr/local/bin/composer install --no-dev --optimize-autoloader
 ```
 
+Install Wine and ComSkip
+```sh
+sudo apt-get install unzip
+sudo apt-get install wine --no-install-recommends
+sudo apt-get autoremove
+sudo apt-get clean
+
+cd ~
+wget http://www.kaashoek.com/files/comskip81_069.zip
+unzip comskip81_069.zip -d comskip
+sudo mv comskip /opt/
+```
+
 ###Setup Notes
 
 Checkout this repository.
