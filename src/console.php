@@ -108,6 +108,7 @@ $console->register('download')
                 new InputArgument('Show Id', InputArgument::REQUIRED, 'The unique TiVo Id for the show.'),
                 new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip video transcoding.'),
                 new InputOption('keep', 'k', InputOption::VALUE_NONE, 'Keep the original MPEG file after transcoding.'),
+                new InputOption('auto', 'a', InputOption::VALUE_NONE, 'Autocrop black borders.'),
                 new InputOption('cut', 'c', InputOption::VALUE_NONE, 'Cut commericials from file while transcoding.'),
                 new InputOption('dvd', 'd', InputOption::VALUE_NONE, 'Transcode to NTSC DVD file (NOT IMPLMENTED).'),
             )
@@ -120,7 +121,7 @@ $console->register('download')
             $repository = $app['orm.em']->getRepository('TiVampyre\Entity\Show');
             $showEntity = $repository->find($showId);
             if (!$showEntity) {
-                $output->write('Show not found.', true);
+                $output->write('Show Not Found', true);
                 return;
             }
 
@@ -141,6 +142,31 @@ $console->register('download')
                 $output->write('Downloaded to ' . $rawFilename . '.mpeg', true);
                 return;
             }
+
+            $edlFile = false;
+            if ($optionList['cut']) {
+                $output->write('Looking for Commercials...', true);
+                $edlFile = $app['comskip']->generateEdl($rawFilename . '.mpeg');
+            }
+
+            $output->write('Transcoding...', true);
+            $app['video_transcoder']->transcode(
+                $rawFilename . '.mpeg',
+                $rawFilename . '.new.mp4',
+                $edlFile,
+                $optionList['auto']
+            );
+            unlink($rawFilename . '.mpeg');
+
+            $output->write('Cleaning MP4...', true);
+            $app['video_cleaner']->clean(
+                $rawFilename . '.new.mp4',
+                $rawFilename . '.mp4',
+                $edlFile
+            );
+            unlink($rawFilename . '.new.mp4');
+
+            $output->write('Downloaded to ' . $rawFilename . '.mp4', true);
         });
 
 return $console;

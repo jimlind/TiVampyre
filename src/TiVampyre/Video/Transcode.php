@@ -28,7 +28,7 @@ class Transcode
         $this->logger  = $logger;
     }
 
-    public function transcode($input, $output, $autocrop = false)
+    public function transcode($input, $output, $edlFile, $autocrop = false)
     {
         if (!Utilities::checkHandBrake($this->process)) {
             $warning = 'The HandBrake tool can not be trusted or found. ';

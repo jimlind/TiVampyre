@@ -32,6 +32,16 @@ sudo apt-get update
 sudo apt-get install handbrake-cli
 ```
 
+Mencoder is needed for commercial chopping.
+```sh
+sudo apt-get install mencoder
+```
+
+GPAC is needed for muxing and demuxing.
+```sh
+sudo apt-get install gpac
+```
+
 Install Composer for PHP dependencies.
 ```sh
 curl -sS https://getcomposer.org/installer | php
