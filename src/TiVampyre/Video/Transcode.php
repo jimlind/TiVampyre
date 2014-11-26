@@ -71,7 +71,7 @@ class Transcode
 	$command .= ' -q ' . $quality . ' -r 29.97';	     // Quality and Framerate
 
 	// Audio Encoder
-	$command .= ' -E faac -B 320 -6 stereo'; // Codec, Bitrate, and Channels
+	$command .= ' -E faac -B 128 -6 stereo'; // Codec, Bitrate, and Channels
 	$command .= ' -D 1.0 ';	                 // Dynamic Volume Compression
 
 	// Resize and Crop
