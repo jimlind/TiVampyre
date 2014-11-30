@@ -32,9 +32,12 @@ sudo apt-get update
 sudo apt-get install handbrake-cli
 ```
 
-Mencoder is needed for commercial chopping.
+Keep the Audio in check.
 ```sh
-sudo apt-get install mencoder
+sudo add-apt-repository ppa:stefanobalocco/ppa
+sudo apt-get update
+sudo apt-get install aacgain
+sudo add-apt-repository ppa:stefanobalocco/ppa --remove
 ```
 
 GPAC is needed for muxing and demuxing.
