@@ -143,28 +143,24 @@ $console->register('download')
                 return;
             }
 
-            $edlFile = false;
+            $chapterList = array();
             if ($optionList['cut']) {
                 $output->write('Looking for Commercials...', true);
-                $edlFile = $app['comskip']->generateEdl($rawFilename . '.mpeg');
+                $chapterList = $app['comskip']->getChapterList($rawFilename . '.mpeg');
             }
 
             $output->write('Transcoding...', true);
-            $app['video_transcoder']->transcode(
+            $fileList = $app['video_transcoder']->transcode(
                 $rawFilename . '.mpeg',
-                $rawFilename . '.new.mp4',
-                $edlFile,
+                $chapterList,
                 $optionList['auto']
             );
-            unlink($rawFilename . '.mpeg');
 
             $output->write('Cleaning MP4...', true);
             $app['video_cleaner']->clean(
-                $rawFilename . '.new.mp4',
-                $rawFilename . '.mp4',
-                $edlFile
+                $fileList,
+                $rawFilename . '.mp4'
             );
-            unlink($rawFilename . '.new.mp4');
 
             $output->write('Downloaded to ' . $rawFilename . '.mp4', true);
         });

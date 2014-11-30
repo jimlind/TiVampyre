@@ -28,7 +28,7 @@ class Transcode
         $this->logger  = $logger;
     }
 
-    public function transcode($input, $output, $edlFile, $autocrop = false)
+    public function transcode($input, $chapterList, $autocrop = false)
     {
         if (!Utilities::checkHandBrake($this->process)) {
             $warning = 'The HandBrake tool can not be trusted or found. ';
@@ -47,7 +47,22 @@ class Transcode
             $crop = false;
         }
 
-        $this->encode($input, $output, $resolution, $crop, $quality);
+        if (count($chapterList) === 0) {
+            $chapterList[] = array(
+                'start' => 0,
+                'end'   => 24 * 60 * 60,
+            );
+        }
+
+        $outputList = array();
+        foreach($chapterList as $index => $chapter) {
+            $outputList[] = $this->encode(
+                $input, $index,
+                $chapter['start'], $chapter['end'],
+                $resolution, $crop, $quality
+            );
+        }
+        return $outputList;
     }
 
     protected function getVideoQuality($height, $width)
@@ -62,8 +77,11 @@ class Transcode
         return round($qOut);
     }
 
-    protected function encode($input, $output, $resolution, $crop, $quality)
+    protected function encode($input, $index, $start, $end, $resolution, $crop, $quality)
     {
+        // Output Filename
+        $output = $input . $index . '.mp4';
+
 	$command  = 'HandBrakeCLI -i ' . $input . ' -o ' . $output;
 
 	// Video Encoder
@@ -72,11 +90,10 @@ class Transcode
 
 	// Audio Encoder
 	$command .= ' -E faac -B 128 -6 stereo'; // Codec, Bitrate, and Channels
-	$command .= ' -D 1.0 ';	                 // Dynamic Volume Compression
 
 	// Resize and Crop
-	$command .= ' -w ' . $resolution['width'];
-        $command .= ' -l ' . $resolution['height'];
+        $command .= ' -w ' . $resolution['width']/2;
+        $command .= ' -l ' . $resolution['height']/2;
         if ($crop) {
             $command .= ' --crop ' . implode(':', $crop);
         } else {
@@ -89,5 +106,7 @@ class Transcode
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // Don't timeout.
         $this->process->run();
+
+        return $output;
     }
 }

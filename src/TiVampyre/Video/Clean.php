@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 
 /**
- * Clean the MP4
+ * Clean the h264/aac MP4
  */
 class Clean
 {
@@ -20,66 +20,76 @@ class Clean
         $this->logger      = $logger;
     }
 
-    public function clean($inputFile, $outputFile, $edlFile = false)
+    public function clean($inputFileList, $outputFile)
     {
-        $tempFile = $inputFile . '.tmp';
-        $command  = 'mencoder ' . $inputFile . ' -o ' .  $tempFile;
-        if ($edlFile) {
-            $command .= ' -edl ' .  $edlFile;
-        }
-        $command .= ' -oac faac -faacopts mpeg=4:object=2:raw:br=128';
-        $command .= ' -af volnorm=1 -ovc copy -of lavf';
+        $this->merge($inputFileList, $outputFile);
 
-        $this->process->setCommandLine($command);
-        $this->process->setTimeout(0); // No timeout.
-        $this->process->run();
+        $videoTrack = $this->demux($outputFile, 1);
+        $audioTrack = $this->demux($outputFile, 2);
+        unlink($outputFile);
 
-        $this->mux($tempFile, $outputFile);
-        unlink($tempFile);
+        $this->adjustAudio($audioTrack);
+
+        $this->mux($videoTrack, $audioTrack, $outputFile);
     }
 
-    protected function mux($inputFile, $outputFile)
+    protected function merge($inputFileList, $outputFile)
     {
-        $command = 'MP4Box -raw 1 ' . $inputFile;
-        $this->process->setCommandLine($command);
-        $this->process->setTimeout(0); // No timeout.
-        $this->process->run();
-
-        $command = 'MP4Box -raw 2 ' . $inputFile;
-        $this->process->setCommandLine($command);
-        $this->process->setTimeout(0); // No timeout.
-        $this->process->run();
-
-        $fileRoot     = substr($mpegPath, 0, strrpos($mpegPath, '.'));
-        $fileList     = glob($fileRoot . '.*');
-        $extensionMap = array();
-        foreach($fileList as $file) {
-            $extension = substr($file, strrpos($file, '.'));
-            $extensionMap[$extension] = $file;
+        $command = 'MP4Box -new ' . $outputFile;
+        foreach ($inputFileList as $inputFile) {
+            $command .= ' -cat ' . $inputFile;
+            $this->remux($inputFile);
         }
 
-        $videoFile = $extensionMap['.h264'];
-        $audioFile = $extensionMap['.aac'];
-
-        $command = 'MP4Box -new ' . $outputFile . ' -add ' . $videoFile . ' -add ' . $audioFile;
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // No timeout.
         $this->process->run();
     }
 
-        $cleanT1 = $fileRoot . ".clean_track1.h264";
-	$cleanT2 = $fileRoot . ".clean_track2.aac";
-	$remux = $fileRoot . ".remux.mp4";
+    protected function demux($inputFile, $track)
+    {
+        $command = 'MP4Box -raw ' . $track . ' ' . $inputFile;
+        $this->process->setCommandLine($command);
+        $this->process->setTimeout(0); // No timeout.
+        $this->process->run();
 
-	$t1 = "MP4Box -raw 1 $clean";
-	log_message('debug', $t1);
-	shell_exec($t1);
+        $fileRoot = substr($inputFile, 0, strrpos($inputFile, '.'));
+        return $fileRoot . '_track' . $track;
+    }
 
-	$t2 = "MP4Box -raw 2 $clean";
-	log_message('debug', $t2);
-	shell_exec($t2);
+    protected function mux($videoTrack, $audioTrack, $outputFile)
+    {
+        $videoRename = $videoTrack . '.h264';
+        $audioRename = $audioTrack . '.mp3';
 
-	$r = "MP4Box -new $remux -add $cleanT1 -add $cleanT2";
-	log_message('debug', $r);
-	shell_exec($r);
+        rename($videoTrack, $videoRename);
+        rename($audioTrack, $audioRename);
+
+        $command = 'MP4Box -new ' . $outputFile . ' -add ' . $videoRename . ' -add ' . $audioRename;
+        $this->process->setCommandLine($command);
+        $this->process->setTimeout(0); // No timeout.
+        $this->process->run();
+
+        unlink($videoRename);
+        unlink($audioRename);
+    }
+
+    protected function remux($mp4File)
+    {
+        $videoTrack = $this->demux($mp4File, 1);
+        $audioTrack = $this->demux($mp4File, 2);
+        unlink($mp4File);
+        $this->mux($videoTrack, $audioTrack, $mp4File);
+    }
+
+    protected function adjustAudio($aacFile)
+    {
+        var_dump($aacFile);
+        return false;
+
+        $command = 'MP4Box -new ' . $outputFile . ' -add ' . $videoTrack . ' -add ' . $audioTrack;
+        $this->process->setCommandLine($command);
+        $this->process->setTimeout(0); // No timeout.
+        $this->process->run();
+    }
 }
