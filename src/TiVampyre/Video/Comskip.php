@@ -25,8 +25,15 @@ class Comskip
 
     public function getChapterList($mpegPath)
     {
-        $edlFile        = $this->generateEdl($mpegPath);
+        $edlFile = $this->generateEdl($mpegPath);
+        if ($edlFile === false) {
+            return false;
+        }
         $commercialList = $this->parseEdlFile($edlFile);
+
+        $fileRoot = substr($mpegPath, 0, strrpos($mpegPath, '.'));
+        $this->deleteEdlFiles($fileRoot);
+
         $chapterList    = $this->convertCommercials($commercialList);
         return $this->cleanChapterList($chapterList);
     }
@@ -41,22 +48,29 @@ class Comskip
         $this->process->setTimeout(0); // No timeout.
         $this->process->run();
 
-        $edlFile = false;
-        $rmList  = array('.log', '.txt');
+        $edlFile = substr($mpegPath, 0, strrpos($mpegPath, '.')) . '.edl';
+        if (file_exists($edlFile)) {
+            return $edlFile;
+        } else {
+            return false;
+        }
+    }
 
-        $fileRoot = substr($mpegPath, 0, strrpos($mpegPath, '.'));
+    protected function deleteEdlFiles($fileRoot)
+    {
+        $rmList  = array(
+            '.edl',
+            '.log',
+            '.txt',
+        );
+
         $fileList = glob($fileRoot . '.*');
         foreach($fileList as $file) {
             $extension = substr($file, strrpos($file, '.'));
             if (in_array($extension, $rmList)) {
                 unlink($file);
             }
-            if ($extension === '.edl') {
-                $edlFile = $file;
-            }
         }
-
-        return $edlFile;
     }
 
     protected function parseEdlFile($edlFile)
@@ -109,17 +123,16 @@ class Comskip
                 'start' => (float) 0,
                 'end'   => (float) $commercialList[0]['start'],
             );
+            array_unshift($chapterList, $firstChapter);
 
-            $max   = count($commercialList) - 1;
-            $start = $commercialList[$max]['end'];
-
+            $maxChapter  = count($commercialList) - 1;
+            $lastStart   = $commercialList[$maxChapter]['end'];
             $lastChapter =  array(
-                'start' => (float) $start,
-                'end'   => (float) $start + (24 * 60 * 60), // start + 24 hours
+                'start' => (float) $lastStart,
+                'end'   => (float) $lastStart + (24 * 60 * 60), // start + 24 hours
             );
+            array_push($chapterList, $lastChapter);
         }
-        array_unshift($chapterList, $firstChapter);
-        array_push($chapterList, $lastChapter);
 
         return $chapterList;
     }
@@ -131,6 +144,7 @@ class Comskip
                 unset($chapterList[$index]);
             }
         }
+        
         return $chapterList;
     }
 }
