@@ -144,7 +144,7 @@ class Comskip
                 unset($chapterList[$index]);
             }
         }
-        
+
         return $chapterList;
     }
 }
