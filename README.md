@@ -26,10 +26,11 @@ sudo /usr/share/hhvm/install_fastcgi.sh
 
 HandBrake is the easiest video transcoder, but the default package is broken. Luckily,
 the [snapshots](https://launchpad.net/~stebbins/+archive/ubuntu/handbrake-snapshots) work great.
+TODO: Check if the releases PPA works so it is more stable than snapshots.
 ```sh
 sudo add-apt-repository ppa:stebbins/handbrake-snapshots
 sudo apt-get update
-sudo apt-get install handbrake-cli
+sudo apt-get install handbrake-cli --no-install-recommends
 ```
 
 Keep the Audio in check.
@@ -42,7 +43,7 @@ sudo add-apt-repository ppa:stefanobalocco/ppa --remove
 
 GPAC is needed for muxing and demuxing.
 ```sh
-sudo apt-get install gpac
+sudo apt-get install gpac --no-install-recommends
 ```
 
 Install Composer for PHP dependencies.
@@ -58,7 +59,7 @@ hhvm /usr/local/bin/composer install --no-dev --optimize-autoloader
 
 Install Wine and ComSkip
 ```sh
-sudo apt-get install unzip
+sudo apt-get install unzip --no-install-recommends
 sudo apt-get install wine --no-install-recommends
 sudo apt-get autoremove
 sudo apt-get clean

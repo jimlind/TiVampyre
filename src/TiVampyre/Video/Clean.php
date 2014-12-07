@@ -28,9 +28,15 @@ class Clean
         $audioTrack = $this->demux($outputFile, 2);
         unlink($outputFile);
 
-        $this->adjustAudio($audioTrack);
+        $videoFile = $videoTrack . '.h264';
+        $audioFile = $audioTrack . '.aac';
 
-        $this->mux($videoTrack, $audioTrack, $outputFile);
+        rename($videoTrack, $videoFile);
+        rename($audioTrack, $audioFile);
+
+        $this->adjustAudio($audioFile);
+
+        $this->mux($videoFile, $audioFile, $outputFile);
     }
 
     protected function merge($inputFileList, $outputFile)
@@ -38,7 +44,6 @@ class Clean
         $command = 'MP4Box -new ' . $outputFile;
         foreach ($inputFileList as $inputFile) {
             $command .= ' -cat ' . $inputFile;
-            $this->remux($inputFile);
         }
 
         $this->process->setCommandLine($command);
@@ -57,37 +62,20 @@ class Clean
         return $fileRoot . '_track' . $track;
     }
 
-    protected function mux($videoTrack, $audioTrack, $outputFile)
+    protected function mux($videoFile, $audioFile, $outputFile)
     {
-        $videoRename = $videoTrack . '.h264';
-        $audioRename = $audioTrack . '.mp3';
-
-        rename($videoTrack, $videoRename);
-        rename($audioTrack, $audioRename);
-
-        $command = 'MP4Box -new ' . $outputFile . ' -add ' . $videoRename . ' -add ' . $audioRename;
+        $command = 'MP4Box -new ' . $outputFile . ' -add ' . $videoFile . ' -add ' . $audioFile;
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // No timeout.
         $this->process->run();
 
-        unlink($videoRename);
-        unlink($audioRename);
-    }
-
-    protected function remux($mp4File)
-    {
-        $videoTrack = $this->demux($mp4File, 1);
-        $audioTrack = $this->demux($mp4File, 2);
-        unlink($mp4File);
-        $this->mux($videoTrack, $audioTrack, $mp4File);
+        unlink($videoFile);
+        unlink($audioFile);
     }
 
     protected function adjustAudio($aacFile)
     {
-        var_dump($aacFile);
-        return false;
-
-        $command = 'MP4Box -new ' . $outputFile . ' -add ' . $videoTrack . ' -add ' . $audioTrack;
+        $command = 'aacgain -f -r -c ' . $aacFile;
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // No timeout.
         $this->process->run();

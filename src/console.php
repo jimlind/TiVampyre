@@ -126,11 +126,13 @@ $console->register('download')
             }
 
             $rawFilename = $app['tivampyre_working_directory'] . $showEntity->getId();
+
             $output->write('Downloading...', true);
             $app['tivo_downloader']->storePreview(
                 $showEntity->getURL(),
                 $rawFilename . '.tivo'
             );
+
             $output->write('Decoding...', true);
             $app['tivo_decoder']->decode(
                 $rawFilename . '.tivo',
@@ -159,10 +161,10 @@ $console->register('download')
             $output->write('Cleaning MP4...', true);
             $app['video_cleaner']->clean(
                 $fileList,
-                $rawFilename . '.mp4'
+                $rawFilename . '.m4v'
             );
 
-            $output->write('Downloaded to ' . $rawFilename . '.mp4', true);
+            $output->write('Downloaded to ' . $rawFilename . '.m4v', true);
         });
 
 return $console;
