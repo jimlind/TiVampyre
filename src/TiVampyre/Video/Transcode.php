@@ -34,7 +34,7 @@ class Transcode
             $warning = 'The HandBrake tool can not be trusted or found. ';
             TiVoUtilities\Log::warn($warning, $this->logger);
             // Exit early.
-            return false;
+            return array();
         }
 
         $videoInfo  = new Info($input, $this->process, $this->logger);
@@ -50,7 +50,7 @@ class Transcode
         if (count($chapterList) === 0) {
             $chapterList[] = array(
                 'start' => 0,
-                'end'   => 24 * 60 * 60,
+                'end'   => 24 * 60 * 60, // 24 hours
             );
         }
 
@@ -67,7 +67,7 @@ class Transcode
 
     protected function getVideoQuality($height, $width)
     {
-        $w1 = 704;  // Width
+        $w1 = 700;  // Width
         $q1 = 23;   // Quality
         $w2 = 1920; // Width
         $q2 = 28;   // Quality
@@ -80,28 +80,32 @@ class Transcode
     protected function encode($input, $index, $start, $end, $resolution, $crop, $quality)
     {
         // Output Filename
-        $output = $input . $index . '.mp4';
+        $output = $input . $index . '.m4v';
 
-	$command  = 'HandBrakeCLI -i ' . $input . ' -o ' . $output;
+        $command  = 'HandBrakeCLI -i ' . $input . ' -o ' . $output;
 
-	// Video Encoder
-	$command .= ' -e x264 -x b-adapt=2:rc-lookahead=50'; // Normal Encoding Preset
-	$command .= ' -q ' . $quality . ' -r 29.97';	     // Quality and Framerate
+        // Video Encoder
+        $command .= ' -e x264 ';
+        $command .= ' --x264-preset medium --h264-profile high --h264-level 3.1';
+        $command .= ' -q ' . $quality . ' -r 29.97 --cfr'; // Quality and Framerate
 
-	// Audio Encoder
-	$command .= ' -E faac -B 128 -6 stereo'; // Codec, Bitrate, and Channels
+        // Audio Encoder
+        $command .= ' -E faac -B 128 -6 stereo'; // Codec, Bitrate, and Channels
 
-	// Resize and Crop
-        $command .= ' -w ' . $resolution['width']/2;
-        $command .= ' -l ' . $resolution['height']/2;
+        // Resize and Crop
+        $command .= ' -w ' . $resolution['width'];
+        $command .= ' -l ' . $resolution['height'];
         if ($crop) {
             $command .= ' --crop ' . implode(':', $crop);
         } else {
             $command .= ' --crop 0:0:0:0';
         }
 
-	// Filters
-	$command .= " --detelecine --decomb "; // Detelecine and Decomb
+        // Filters
+        $command .= " --decomb "; // Decomb
+
+        $command .= ' --start-at duration: ' . $start;
+        $command .= ' --stop-at duration: ' . $end;
 
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // Don't timeout.
