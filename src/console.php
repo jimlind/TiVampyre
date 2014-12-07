@@ -157,6 +157,7 @@ $console->register('download')
                 $chapterList,
                 $optionList['auto']
             );
+            unlink($rawFilename . '.mpeg');
 
             $output->write('Cleaning MP4...', true);
             $app['video_cleaner']->clean(

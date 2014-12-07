@@ -49,6 +49,10 @@ class Clean
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // No timeout.
         $this->process->run();
+
+        foreach ($inputFileList as $inputFile) {
+            unlink($inputFile);
+        }
     }
 
     protected function demux($inputFile, $track)
