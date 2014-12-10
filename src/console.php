@@ -128,7 +128,7 @@ $console->register('download')
             $rawFilename = $app['tivampyre_working_directory'] . $showEntity->getId();
 
             $output->write('Downloading...', true);
-            $app['tivo_downloader']->storePreview(
+            $app['tivo_downloader']->store(
                 $showEntity->getURL(),
                 $rawFilename . '.tivo'
             );
@@ -157,7 +157,6 @@ $console->register('download')
                 $chapterList,
                 $optionList['auto']
             );
-            unlink($rawFilename . '.mpeg');
 
             $output->write('Cleaning MP4...', true);
             $app['video_cleaner']->clean(
@@ -166,6 +165,12 @@ $console->register('download')
             );
 
             $output->write('Downloaded to ' . $rawFilename . '.m4v', true);
+
+            if ($optionList['keep']) {
+                $output->write('Original MPEG written to ' . $rawFilename . '.mpeg', true);
+            } else {
+                unlink($rawFilename . '.mpeg')
+            }
         });
 
 return $console;
