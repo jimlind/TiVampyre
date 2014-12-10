@@ -169,7 +169,7 @@ $console->register('download')
             if ($optionList['keep']) {
                 $output->write('Original MPEG written to ' . $rawFilename . '.mpeg', true);
             } else {
-                unlink($rawFilename . '.mpeg')
+                unlink($rawFilename . '.mpeg');
             }
         });
 
