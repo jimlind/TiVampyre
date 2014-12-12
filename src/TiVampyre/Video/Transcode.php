@@ -105,7 +105,7 @@ class Transcode
         $command .= " --decomb "; // Decomb
 
         $command .= ' --start-at duration:' . $start;
-        $command .= ' --stop-at duration:' . $end;
+        $command .= ' --stop-at duration:' . ($end - $start);
 
         $this->process->setCommandLine($command);
         $this->process->setTimeout(0); // Don't timeout.
