@@ -106,7 +106,7 @@ $console->register('download')
         ->setDefinition(
             array(
                 new InputArgument('Show Id', InputArgument::REQUIRED, 'The unique TiVo Id for the show.'),
-                new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip video transcoding.'),
+                new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip video transcoding, keep MPEG file.'),
                 new InputOption('keep', 'k', InputOption::VALUE_NONE, 'Keep the original MPEG file after transcoding.'),
                 new InputOption('auto', 'a', InputOption::VALUE_NONE, 'Autocrop black borders.'),
                 new InputOption('cut', 'c', InputOption::VALUE_NONE, 'Cut commericials from file while transcoding.'),
