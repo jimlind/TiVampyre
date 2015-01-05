@@ -1,0 +1,7 @@
+source "https://supermarket.getchef.com"
+
+metadata
+cookbook 'apt',   '~> 2.6.0'
+cookbook 'hhvm',  '~> 0.6.0'
+
+cookbook 'tivo', :path => './cookbooks/tivo'
