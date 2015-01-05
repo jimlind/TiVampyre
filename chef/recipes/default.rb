@@ -7,6 +7,7 @@ include_recipe "tivo::tivodecode"
 
 include_recipe "tivo::aacgain"
 include_recipe "tivo::handbrake"
+include_recipe "tivo::comskip"
 
 # Disk space is limited
 execute "apt-get autoremove"
