@@ -75,7 +75,7 @@ class Show extends BaseShow
     public function getDescription()
     {
         $boring = 'Copyright Tribune Media Services, Inc.';
-        return str_replace($boring, '', $this->description);
+        return trim(str_replace($boring, '', $this->description));
     }
 
     public function getDate()

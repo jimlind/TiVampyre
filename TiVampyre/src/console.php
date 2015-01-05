@@ -164,6 +164,8 @@ $console->register('download')
                 $rawFilename . '.m4v'
             );
 
+            $app['video_labeler']->addMetadata($showEntity, $rawFilename . '.m4v');
+
             $output->write('Downloaded to ' . $rawFilename . '.m4v', true);
 
             if ($optionList['keep']) {

@@ -137,6 +137,13 @@ $app['video_cleaner'] = function ($app) {
         $app['monolog']
     );
 };
+// Video Labeler
+$app['video_labeler'] = function ($app) {
+    return new TiVampyre\Video\Label(
+        $app['process'],
+        $app['monolog']
+    );
+};
 
 // Manage the TiVo's show list syncing.
 $app['sync_service'] = function ($app) {
