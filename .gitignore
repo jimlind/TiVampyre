@@ -1,8 +1,8 @@
-/vendor/
+TiVampyre/vendor/
 
 .DS_Store
 /nbproject/
 
-db/tivampyre.db
-config/tivampyre.json
+TiVampyre/db/tivampyre.db
+TiVampyre/config/tivampyre.json
 .vagrant/
