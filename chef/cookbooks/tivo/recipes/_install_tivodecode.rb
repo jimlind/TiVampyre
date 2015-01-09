@@ -15,7 +15,7 @@ end
 
 bash "install_tivodecode" do
   user "root"
-  cwd "/usr/src/"
+  cwd "/usr/src"
   code <<-END
     tar -zxf tivodecode-0.3pre4.tar.gz
     (cd tivodecode-0.3pre4/ && ./configure && make && make install)
