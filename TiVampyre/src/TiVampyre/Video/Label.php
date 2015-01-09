@@ -13,6 +13,8 @@ class Label
 {
     protected $process = null;
 
+    protected $workingDirectory = null;
+
     protected $logger = null;
 
     /**
@@ -20,10 +22,11 @@ class Label
      */
     protected $output = null;
 
-    public function __construct(Process $process, LoggerInterface $logger)
+    public function __construct(Process $process, $directory, LoggerInterface $logger)
     {
-        $this->process  = $process;
-        $this->logger   = $logger;
+        $this->process          = $process;
+        $this->workingDirectory = $directory;
+        $this->logger           = $logger;
     }
 
     public function addMetadata(Show $show, $file)
@@ -42,7 +45,7 @@ class Label
         $command .= empty($episodeNumber) ? '' : ' --TVEpisodeNum "' . $episodeNumber . '"';
         $command .= empty($station) ? ''       : ' --TVNetwork "' . $station . '"';
 
-        if (empty($episodeNumber) || $episodeNumber == 0) {
+        if ($episodeTitle || $episodeNumber) {
             $command .= ' --stik "TV Show"';
         } else {
             $command .= ' --stik "Movie"';
@@ -53,12 +56,31 @@ class Label
         $this->process->setCommandLine($command);
         $this->process->setTimeout(60); // 1 minute
         $this->process->run();
-
-        $this->output = $this->process->getOutput();
     }
 
-    public function renameFile(Show $show, $file)
+    public function renameFile(Show $show, $originalFile)
     {
-        return 'pretty file name - subtitle.m4v';
+        $showTitle     = $show->getShowTitle();
+        $episodeTitle  = $show->getEpisodeTitle();
+        $episodeNumber = $show->getEpisodeNumber();
+
+        $rawFilename = $showTitle;
+        if ($episodeNumber !== 0) {
+            $rawFilename .= ' ' . $episodeNumber;
+        }
+        if ($episodeTitle !== '') {
+            $rawFilename .= ' ' . $episodeTitle;
+        }
+        $rawFilename .= '.m4v';
+        $cleanFilename = preg_replace(['/[^A-Za-z0-9 \.]/', '/\s\s+/'], ' ', $rawFilename);
+        $cleanFile     = $this->workingDirectory . $cleanFilename;
+
+        $command = 'mv "' . $originalFile . '" "' . $cleanFile . '"';
+
+        $this->process->setCommandLine($command);
+        $this->process->setTimeout(60); // 1 minute
+        $this->process->run();
+
+        return $cleanFile;
     }
 }

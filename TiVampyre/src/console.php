@@ -165,8 +165,9 @@ $console->register('download')
             );
 
             $app['video_labeler']->addMetadata($showEntity, $rawFilename . '.m4v');
+            $cleanFilename = $app['video_labeler']->renameFile($showEntity, $rawFilename . '.m4v');
 
-            $output->write('Downloaded to ' . $rawFilename . '.m4v', true);
+            $output->write('Downloaded to ' . $cleanFilename, true);
 
             if ($optionList['keep']) {
                 $output->write('Original MPEG written to ' . $rawFilename . '.mpeg', true);

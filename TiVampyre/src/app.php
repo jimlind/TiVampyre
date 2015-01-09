@@ -141,6 +141,7 @@ $app['video_cleaner'] = function ($app) {
 $app['video_labeler'] = function ($app) {
     return new TiVampyre\Video\Label(
         $app['process'],
+        $app['tivampyre_working_directory'],
         $app['monolog']
     );
 };
