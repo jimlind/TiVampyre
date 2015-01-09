@@ -81,6 +81,11 @@ TODO: Automate some part of this process.
 
 ###Development Environment
 
+Find your TiVo's IP
+```
+avahi-browse -r -t _tivo-videos._tcp
+```
+
 HHVM...
 In my dev environment I just use the version of HHVM from PuPHPet and I'm not too
 particular because they are close enough for my uses.
