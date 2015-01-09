@@ -72,6 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :chef_solo do |chef|
     chef.json = {
+      project_dir: '/vagrant/TiVampyre',
       mysql: {
         server_root_password: 'rootpass',
         server_debian_password: 'debpass',
