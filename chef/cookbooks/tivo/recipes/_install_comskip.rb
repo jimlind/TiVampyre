@@ -15,10 +15,10 @@ end
 
 remote_file "/opt/comskip81_069.zip" do
   source "http://www.kaashoek.com/files/comskip81_069.zip"
-  notifies :run, "bash[install_program]", :immediately
+  notifies :run, "bash[unzip_comskip]", :immediately
 end
 
-bash "install_program" do
+bash "unzip_comskip" do
   user "root"
   cwd "/opt/"
   code <<-END
