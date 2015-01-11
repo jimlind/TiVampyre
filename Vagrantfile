@@ -84,4 +84,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       'recipe[TrustyTiVo::default]'
     ]
   end
+  
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+  end
+
 end
