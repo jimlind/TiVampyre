@@ -4,5 +4,6 @@ metadata
 cookbook 'apt',  '~> 2.6.0'
 cookbook 'hhvm', '~> 0.6.0'
 
-cookbook 'php',  :path => './cookbooks/php'
-cookbook 'tivo', :path => './cookbooks/tivo'
+cookbook 'php',   :path => './cookbooks/php'
+cookbook 'queue', :path => './cookbooks/queue'
+cookbook 'tivo',  :path => './cookbooks/tivo'
