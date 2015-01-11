@@ -9,11 +9,12 @@
         "symfony/process": "~2.3",
         "symfony/twig-bridge": "~2.3",
         "monolog/monolog": "~1.10",
-        "doctrine/dbal": "2.5.*@dev",
+        "doctrine/dbal": "~2.5",
         "dflydev/doctrine-orm-service-provider": "~1.0",
         "igorw/config-service-provider": "~1.2",
         "dg/twitter-php": "~3.3",
         "psr/log": "~1.0",
+        "pda/pheanstalk": "~3.0",
         "jimlind/tivo-php": "~0.3"
     },
     "require-dev": {
