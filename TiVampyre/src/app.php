@@ -83,6 +83,8 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     return $twig;
 }));
 
+$app['queue'] = new Pheanstalk\Pheanstalk('127.0.0.1:11300');
+
 // If IP isn't set, look it up.
 if (!isset($app['tivo_ip'])) {
     $location = new TiVo\Location($app['process'], $app['monolog']);

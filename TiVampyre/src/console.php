@@ -176,4 +176,58 @@ $console->register('download')
             }
         });
 
+$console->register('queue')
+        ->setDefinition(
+            array(
+                new InputArgument('Show Id', InputArgument::REQUIRED, 'The unique TiVo Id for the show.'),
+                new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip video transcoding, keep MPEG file.'),
+                new InputOption('keep', 'k', InputOption::VALUE_NONE, 'Keep the original MPEG file after transcoding.'),
+                new InputOption('auto', 'a', InputOption::VALUE_NONE, 'Autocrop black borders.'),
+                new InputOption('cut', 'c', InputOption::VALUE_NONE, 'Cut commericials from file while transcoding.'),
+                new InputOption('dvd', 'd', InputOption::VALUE_NONE, 'Transcode to NTSC DVD file (NOT IMPLMENTED).'),
+            )
+        )
+        ->setDescription('Download and convert a show.')
+        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+            $optionList         = $input->getOptions();
+            $optionList['show'] = $input->getArgument('Show Id');
+
+
+            $app['queue']->useTube('download')
+                         ->put(json_encode($optionList));
+        });
+
+$console->register('download-worker')
+        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+            $pheanstalk = $app['queue'];
+            $pheanstalk->watch('download');
+            while($job = $pheanstalk->reserve()) {
+                $data       = json_decode($job->getData(), true);
+                $downloader = new TiVampyre\Downloader($app);
+                $downloader->process($data);
+
+                if ($data['skip']) {
+                    $app['monolog']->info('Downloaded. Skipping Encoding.');
+                } else {
+                    $app['queue']->useTube('download')
+                                 ->put(json_encode($data));
+                }
+
+                $pheanstalk->delete($job);
+            }
+        });
+
+$console->register('transcode-worker')
+        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+            $pheanstalk = $app['queue'];
+            $pheanstalk->watch('transcode');
+            while($job = $pheanstalk->reserve()) {
+                $data       = json_decode($job->getData(), true);
+                $transcoder = new TiVampyre\Transcoder($app);
+                $transcoder->process($data);
+
+                $pheanstalk->delete($job);
+            }
+        });
+
 return $console;
