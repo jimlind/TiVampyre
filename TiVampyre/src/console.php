@@ -209,7 +209,7 @@ $console->register('download-worker')
                 if ($data['skip']) {
                     $app['monolog']->info('Downloaded. Skipping Encoding.');
                 } else {
-                    $app['queue']->useTube('download')
+                    $app['queue']->useTube('transcode')
                                  ->put(json_encode($data));
                 }
 

@@ -7,7 +7,7 @@ use Silex\Application;
 /**
  * Transcode files
  */
-class Downloader
+class Transcoder
 {
     private $app    = null;
     private $logger = null;
@@ -38,17 +38,15 @@ class Downloader
             $rawFilename . '.m4v'
         );
 
-        /*
-        $app['video_labeler']->addMetadata($showEntity, $rawFilename . '.m4v');
-        $cleanFilename = $app['video_labeler']->renameFile($showEntity, $rawFilename . '.m4v');
+        $showId     = $data['show'];
+        $repository = $this->app['orm.em']->getRepository('TiVampyre\Entity\Show');
+        $showEntity = $repository->find($showId);
 
-        $output->write('Downloaded to ' . $cleanFilename, true);
+        $this->app['video_labeler']->addMetadata($showEntity, $rawFilename . '.m4v');
+        $this->app['video_labeler']->renameFile($showEntity, $rawFilename . '.m4v');
 
-        if ($optionList['keep']) {
-            $output->write('Original MPEG written to ' . $rawFilename . '.mpeg', true);
-        } else {
+        if (!$data['keep']) {
             unlink($rawFilename . '.mpeg');
         }
-         */
     }
 }
