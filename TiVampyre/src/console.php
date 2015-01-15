@@ -117,7 +117,7 @@ $console->register('queue-status')
             $tubeList = $pheanstalk->listTubes();
             foreach($tubeList as $tube) {
                 $tubeStats = $pheanstalk->statsTube($tube);
-                $output->write($tubeStats['current-jobs-ready'] . ' items in ' . $tube . ' tube.', true);
+                $output->write($tubeStats['current-jobs-ready'] . ' item(s) in ' . $tube . ' tube.', true);
             }
         });
 
