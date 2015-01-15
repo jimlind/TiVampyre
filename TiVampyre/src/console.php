@@ -28,13 +28,13 @@ $console->register('db-setup')
                     ts             TEXT
                 )';
             $app['db']->query($showSQL);
-            $tubeSQL = '
-                CREATE TABLE tube_log (
+            $jobSQL = '
+                CREATE TABLE job (
                     id      INTEGER PRIMARY KEY AUTOINCREMENT,
                     show_id INTEGER,
                     tube    TEXT
                 )';
-            $app['db']->query($tubeSQL);
+            $app['db']->query($jobSQL);
         });
 
 $console->register('db-destroy')
@@ -42,8 +42,8 @@ $console->register('db-destroy')
         ->setCode(function() use ($app) {
             $showSQL = 'DROP TABLE show';
             $app['db']->query($showSQL);
-            $tubeSQL = 'DROP TABLE tube_log';
-            $app['db']->query($tubeSQL);
+            $jobSQL = 'DROP TABLE job';
+            $app['db']->query($jobSQL);
         });
 
 $console->register('db-truncate')
@@ -51,8 +51,8 @@ $console->register('db-truncate')
         ->setCode(function() use ($app) {
             $showSQL = 'DELETE FROM show';
             $app['db']->query($showSQL);
-            $tubeSQL = 'DELETE FROM tube_log';
-            $app['db']->query($tubeSQL);
+            $jobSQL = 'DELETE FROM job';
+            $app['db']->query($jobSQL);
         });
 
 $console->register('get-shows')
