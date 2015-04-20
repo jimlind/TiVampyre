@@ -1,5 +1,5 @@
 log "message" do
-  message "Installing Handbrake v0.9.9"
+  message "Installing Handbrake v0.10.1"
   level :info
 end
 
@@ -14,7 +14,7 @@ end
 
 apt_package "handbrake-cli" do
   options "--no-install-recommends"
-  version "0.10.0ppa1~trusty1"
+  version "0.10.1ppa1~trusty1"
   action  :install
 end
 

@@ -93,8 +93,8 @@ class Transcode
         $command .= ' -E faac -B 128 -6 stereo'; // Codec, Bitrate, and Channels
 
         // Resize and Crop
-        $command .= ' -w ' . $resolution['width'];
-        $command .= ' -l ' . $resolution['height'];
+        $command .= ' -w ' . $resolution['width']/4;
+        $command .= ' -l ' . $resolution['height']/4;
         if ($crop) {
             $command .= ' --crop ' . implode(':', $crop);
         } else {
