@@ -5,7 +5,7 @@ namespace TiVampyre;
 use Doctrine\ORM\EntityManager;
 use JimLind\TiVo;
 use Psr\Log\LoggerInterface as Logger;
-use TiVampyre\Entity\Show as Entity;
+use TiVampyre\Factory\ShowListFactory as Factory;
 use TiVampyre\Twitter\TweetEvent as Tweet;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -64,12 +64,12 @@ class Sync
     public function rebuildLocalIndex()
     {
         $timestamp = new \DateTime('now');
-        $factory   = new TiVo\Factory\ShowFactory(new Entity());
+        $factory   = new Factory();
 
+        $firstRun   = ($this->repository->countAll() === 0);
         $showIdList = $this->repository->getAllIds();
-        $firstRun   = $this->repository->countAll() === 0;
         $xmlList    = $this->nowPlaying->download();
-        $showList   = $factory->createFromXmlList($xmlList);
+        $showList   = $factory->createShowListFromXmlList($xmlList);
 
         foreach ($showList as $show) {
             // If not a first run and not previously recorded
@@ -80,6 +80,7 @@ class Sync
             $show->setTimeStamp($timestamp);
             $this->entityManager->merge($show);
         }
+
         $this->entityManager->flush();
         $this->repository->deleteOutdated();
     }

@@ -1,6 +1,6 @@
-composer_file = '/usr/local/bin/composer.phar'
+composer_file = '/usr/local/bin/composer'
 
-apt_package "git" do  
+apt_package "git" do
   options "--no-install-recommends"
   action  :install
 end

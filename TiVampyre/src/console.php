@@ -56,15 +56,11 @@ $console->register('db-truncate')
         });
 
 $console->register('get-shows')
-        ->setDescription('Get all show data from the TiVo.')
-        ->setCode(function() use ($app) {
-            $twitterStatus = false;
-            if (isset($app['twitter_production']) && $app['twitter_production']) {
-                $twitterStatus = true;
-            }
-            $showService = $app['sync_service'];
-            $showService->rebuildLocalIndex();
-        });
+    ->setDescription('Get all show data from the TiVo.')
+    ->setCode(function() use ($app) {
+        $showService = $app['sync_service'];
+        $showService->rebuildLocalIndex();
+    });
 
 $console->register('list-shows')
         ->setDescription('Display all TiVo shows locally indexed.')
@@ -105,6 +101,7 @@ $console->register('queue')
         });
 
 $console->register('queue-status')
+        ->setDescription('Get Beanstalkd status and jobs in queues.')
         ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
             $pheanstalk = $app['queue'];
             $listening  = $pheanstalk->getConnection()->isServiceListening();
@@ -122,36 +119,37 @@ $console->register('queue-status')
         });
 
 $console->register('download-worker')
-        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
-            $pheanstalk = $app['queue'];
-            $pheanstalk->watch('download');
-            while($job = $pheanstalk->reserve()) {
-                $data       = json_decode($job->getData(), true);
-                $downloader = new TiVampyre\Downloader($app);
-                $downloader->process($data);
+    ->setDescription('Run the download worker. Run via a process manager.')
+    ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+        $pheanstalk = $app['queue'];
+        $pheanstalk->watch('download');
+        while($job = $pheanstalk->reserve()) {
+            $jobData    = json_decode($job->getData(), true);
+            $downloader = new TiVampyre\Downloader($app);
+            $downloader->process($jobData);
 
-                if ($data['skip']) {
-                    $app['monolog']->info('Downloaded. Skipping Encoding.');
-                } else {
-                    $app['queue']->useTube('transcode')
-                                 ->put(json_encode($data));
-                }
-
-                $pheanstalk->delete($job);
+            if ($data['skip']) {
+                $app['monolog']->info('Downloaded. Skipping Encoding.');
+            } else {
+                $app['queue']->useTube('transcode')->put($job->getData());
             }
-        });
+
+            $pheanstalk->delete($job);
+        }
+    });
 
 $console->register('transcode-worker')
-        ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
-            $pheanstalk = $app['queue'];
-            $pheanstalk->watch('transcode');
-            while($job = $pheanstalk->reserve()) {
-                $data       = json_decode($job->getData(), true);
-                $transcoder = new TiVampyre\Transcoder($app);
-                $transcoder->process($data);
+    ->setDescription('Run the transcode worker. Run via a process manager.')
+    ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+        $pheanstalk = $app['queue'];
+        $pheanstalk->watch('transcode');
+        while($job = $pheanstalk->reserve()) {
+            $data       = json_decode($job->getData(), true);
+            $transcoder = new TiVampyre\Transcoder($app);
+            $transcoder->process($jobData);
 
-                $pheanstalk->delete($job);
-            }
-        });
+            $pheanstalk->delete($job);
+        }
+    });
 
 return $console;

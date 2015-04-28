@@ -10,7 +10,7 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 use JimLind\TiVo;
 use TiVampyre\Twitter as TiVoTwitter;
@@ -55,9 +55,9 @@ $app->register(new TwigServiceProvider(), array(
     //'twig.options' => array('cache' => __DIR__.'/../cache/twig'),
 ));
 
-// Setup an instance of Symfony Process and Guzzle.
-$app['process'] = new Process('');
-$app['guzzle']  = new GuzzleClient();
+// Setup an instance of Symfony ProcessBuilder and Guzzle.
+$app['process_builder'] = new ProcessBuilder();
+$app['guzzle']          = new GuzzleClient();
 
 // Setup Monolog Logger.
 $logHandler = new StreamHandler(__DIR__.'/../logs/tivampyre.log');
@@ -114,7 +114,7 @@ $app['tivo_downloader'] = function ($app) {
 $app['tivo_decoder'] = function ($app) {
     return new TiVo\Decode(
         $app['tivampyre_mak'],
-        $app['process'],
+        $app['process_builder'],
         $app['monolog']
     );
 };
@@ -122,27 +122,27 @@ $app['tivo_decoder'] = function ($app) {
 // Video Transcoder
 $app['video_transcoder'] = function ($app) {
     return new TiVampyre\Video\Transcode(
-        $app['process'],
+        $app['process_builder'],
         $app['monolog']
     );
 };
 $app['comskip'] = function ($app) {
     return new TiVampyre\Video\Comskip(
         $app['comskip_path'],
-        $app['process'],
+        $app['process_builder'],
         $app['monolog']
     );
 };
 $app['video_cleaner'] = function ($app) {
     return new TiVampyre\Video\Clean(
-        $app['process'],
+        $app['process_builder'],
         $app['monolog']
     );
 };
 // Video Labeler
 $app['video_labeler'] = function ($app) {
     return new TiVampyre\Video\Label(
-        $app['process'],
+        $app['process_builder'],
         $app['tivampyre_working_directory'],
         $app['monolog']
     );
