@@ -1,4 +1,4 @@
-<?php
+<?hh
 
 namespace TiVampyre\Factory;
 
@@ -10,7 +10,7 @@ use TiVampyre\Entity\Show as Entity;
  */
 class ShowFactory extends OriginShowFactory
 {
-    protected function newShow()
+    protected function newShow(): void
     {
         return new Entity();
     }

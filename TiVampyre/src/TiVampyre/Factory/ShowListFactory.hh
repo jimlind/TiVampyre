@@ -1,4 +1,4 @@
-<?php
+<?hh
 
 namespace TiVampyre\Factory;
 
@@ -12,7 +12,7 @@ class ShowListFactory extends OriginShowListFactory
     /**
      * Constructs the ShowList Factory.
      */
-    public function __construct()
+    public function __construct(): void
     {
         parent::__construct();
 
