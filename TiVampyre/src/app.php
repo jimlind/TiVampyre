@@ -119,6 +119,31 @@ $app['tivo_decoder'] = function ($app) {
     );
 };
 
+// Show Entity Provider
+$app['show_provider'] = function ($app) {
+    return new TiVampyre\Service\ShowProvider(
+        $app['tivo_now_playing'],
+        new TiVampyre\Factory\ShowListFactory()
+    );
+};
+
+// Dispatch Twitter Event
+$app['tweet_dispatcher'] = function($app) {
+    return new TiVampyre\Twitter\TweetDispatcher(
+        $app['dispatcher'],
+        new TiVampyre\Twitter\TweetEvent()
+    );
+};
+
+// TiVo's Show List Synchronizer.
+$app['synchronizer'] = function ($app) {
+    return new TiVampyre\Synchronizer(
+        $app['show_provider'],
+        $app['orm.em'],
+        $app['tweet_dispatcher']
+    );
+};
+
 // Video Transcoder
 $app['video_transcoder'] = function ($app) {
     return new TiVampyre\Video\Transcode(
@@ -144,16 +169,6 @@ $app['video_labeler'] = function ($app) {
     return new TiVampyre\Video\Label(
         $app['process_builder'],
         $app['tivampyre_working_directory'],
-        $app['monolog']
-    );
-};
-
-// Manage the TiVo's show list syncing.
-$app['sync_service'] = function ($app) {
-    return new TiVampyre\Sync(
-        $app['orm.em'],
-        $app['tivo_now_playing'],
-        $app['dispatcher'],
         $app['monolog']
     );
 };

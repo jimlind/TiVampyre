@@ -10,19 +10,6 @@ use Doctrine\ORM\EntityRepository;
 class Show extends EntityRepository
 {
     /**
-     * Returns a count of all shows in database
-     *
-     * @return integer
-     */
-    public function countAll()
-    {
-        $dql   = 'SELECT count(s) FROM TiVampyre\Entity\Show s';
-        $query = $this->getEntityManager()->createQuery($dql);
-
-        return $query->getSingleScalarResult();
-    }
-
-    /**
      * Returns a list of all episodes roughly sorted.
      *
      * @return TiVampyre\Entity\Show[]

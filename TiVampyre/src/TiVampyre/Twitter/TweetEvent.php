@@ -16,13 +16,14 @@ class TweetEvent extends Event
     protected $show;
 
     /**
-     * Constructor
+     * Set the Show object for the Tweet event.
      *
      * @param TiVampyre\Entity\Show $show
      */
-    public function __construct(Show $show) {
+    public function setShow(Show $show) {
         $this->show = $show;
     }
+
 
     /**
      * Get the Show object from the Tweet event.

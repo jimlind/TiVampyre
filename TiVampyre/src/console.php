@@ -58,7 +58,7 @@ $console->register('db-truncate')
 $console->register('get-shows')
     ->setDescription('Get all show data from the TiVo.')
     ->setCode(function() use ($app) {
-        $showService = $app['sync_service'];
+        $showService = $app['synchronizer'];
         $showService->rebuildLocalIndex();
     });
 

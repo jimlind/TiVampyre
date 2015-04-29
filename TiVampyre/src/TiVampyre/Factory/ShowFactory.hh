@@ -10,6 +10,9 @@ use TiVampyre\Entity\Show as Entity;
  */
 class ShowFactory extends OriginShowFactory
 {
+    /**
+     * Overrides original constructor.
+     */
     protected function newShow(): void
     {
         return new Entity();
