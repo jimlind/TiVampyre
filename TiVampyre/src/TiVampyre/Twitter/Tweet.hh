@@ -4,27 +4,25 @@ namespace TiVampyre\Twitter;
 
 use Monolog\Logger;
 use TiVampyre\Twitter\TweetEvent;
+use \Twitter;
 
 class Tweet
 {
-    protected $twitter;
-    protected $logger;
-
     /**
-     * @var boolean
+     * @param Twitter $twitter    Twitter service
+     * @param Logger  $logger     Logging service
+     * @param boolean $production Production or development mode
      */
-    protected $production;
-
-    public function __construct(\Twitter $twitter, Logger $logger, $production) {
-        $this->twitter    = $twitter;
-        $this->logger     = $logger;
-        $this->production = $production;
-    }
+    public function __construct(
+        private Twitter $twitter,
+        private Logger $logger,
+        private boolean $production
+    ) { }
 
     /**
      * Capture an event to tweet a show.
      *
-     * @param TiVampyre\Twitter\TweetEvent $event
+     * @param TweetEvent $event The event to tweet about
      */
     public function captureShowEvent(TweetEvent $event)
     {
@@ -40,7 +38,7 @@ class Tweet
     /**
      * Capture an event to tweet a preview.
      *
-     * @param TiVampyre\Twitter\TweetEvent $event
+     * @param TweetEvent $event The event to tweet about
      */
     public function capturePreviewEvent(TweetEvent $event)
     {
@@ -55,7 +53,7 @@ class Tweet
     /**
      * Tweet a message.
      *
-     * @param string $tweetString
+     * @param string $tweetString Tweet to send
      */
     protected function sendTweet($tweetString)
     {
@@ -70,11 +68,11 @@ class Tweet
     /**
      * Compose a wonderful Tweet about the show.
      *
-     * @param TiVampyre\Entity\Show $show
+     * @param Show $show Show entity to create Tweet about
      *
      * @return string
      */
-    protected function composeShowTweet($show)
+    protected function composeShowTweet($show) : string
     {
         $tweet        = 'I started recording ' . $show->getShowTitle() . ' ';
         $episodeTitle = $show->getEpisodeTitle();

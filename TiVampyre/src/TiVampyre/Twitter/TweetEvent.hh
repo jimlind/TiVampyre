@@ -11,14 +11,14 @@ class TweetEvent extends Event
     public static $PREVIEW_TWEET_EVENT = 'Preview Tweet Event';
 
     /**
-     * @var TiVampyre\Entity\Show
+     * @var Show
      */
     protected $show;
 
     /**
-     * Set the Show object for the Tweet event.
+     * Set the Show entity for the Tweet event.
      *
-     * @param TiVampyre\Entity\Show $show
+     * @param Show $show A show entity
      */
     public function setShow(Show $show) {
         $this->show = $show;
@@ -26,9 +26,9 @@ class TweetEvent extends Event
 
 
     /**
-     * Get the Show object from the Tweet event.
+     * Get the Show entity from the Tweet event.
      *
-     * @return TiVampyre\Entity\Show
+     * @return Show
      */
     public function getShow() {
         return $this->show;
