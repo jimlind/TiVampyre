@@ -8,18 +8,22 @@ use TiVampyre\Twitter\TweetEvent;
 
 class TweetDispatcher
 {
-	/**
-	 * @param EventDispatcher $eventDispatcher Symfony's Event Dispatcher
-	 */
-	public function __construct(
-		EventDispatcher $eventDispatcher,
-		TweetEvent $tweetEvent
-	) { }
+    /**
+     * @param EventDispatcher $eventDispatcher Symfony's Event Dispatcher
+     * @param TweetEvent      $tweetEvent      Tweet Event Class
+     */
+    public function __construct(
+        private EventDispatcher $eventDispatcher,
+        private TweetEvent $tweetEvent
+    ) { }
 
-	public function tweetShowRecording(Show $show) {
-		$event = clone $this->tweetEvent;
+    public function tweetShowRecording(Show $show) {
+        $event = clone $this->tweetEvent;
+        $event->setShow($show);
 
-		$event->setShow($show);
-		$this->dispatcher->dispatch($event::$SHOW_TWEET_EVENT, $event);
-	}
+        $this->eventDispatcher->dispatch(
+            $event::$SHOW_TWEET_EVENT,
+            $event
+        );
+    }
 }

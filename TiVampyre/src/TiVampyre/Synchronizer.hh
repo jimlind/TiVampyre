@@ -38,10 +38,10 @@ class Synchronizer
             if ($shouldTweet) {
                 $this->tweetDispatcher->tweetShowRecording($show);
             }
-            //$this->entityManager->merge($show);
+            $this->entityManager->merge($show);
         }
 
-        //$this->entityManager->flush();
+        $this->entityManager->flush();
         $repository->deleteOutdated();
     }
 
