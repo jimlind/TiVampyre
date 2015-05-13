@@ -4,6 +4,7 @@ namespace Application;
 
 use JimLind\TiVo\Decode;
 use JimLind\TiVo\Download;
+use JimLind\TiVo\Location;
 use JimLind\TiVo\NowPlaying;
 use Silex\Application;
 
@@ -13,7 +14,7 @@ class TiVoConfig
 	{
 		// If IP isn't set, look it up.
 		if (!isset($application['tivo_ip'])) {
-		    $location = new TiVo\Location(
+		    $location = new Location(
 				$application['process'],
 				$application['monolog']
 			);
@@ -32,7 +33,7 @@ class TiVoConfig
 
 		// TiVo Downloader
 		$application['tivo_downloader'] = function ($app) {
-		    return new TiVo\Download(
+		    return new Download(
 		        $app['tivampyre_mak'],
 		        $app['guzzle'],
 		        $app['monolog']
@@ -41,7 +42,7 @@ class TiVoConfig
 
 		// TiVo Decoder
 		$application['tivo_decoder'] = function ($app) {
-		    return new TiVo\Decode(
+		    return new Decode(
 		        $app['tivampyre_mak'],
 		        $app['process_builder'],
 		        $app['monolog']
