@@ -1,6 +1,5 @@
 <?php
 
-use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use GuzzleHttp\Client as GuzzleClient;
 use Igorw\Silex\ConfigServiceProvider;
 use Monolog\Logger;
@@ -12,8 +11,6 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\Process\ProcessBuilder;
 
-use JimLind\TiVo;
-use TiVampyre\Twitter as TiVoTwitter;
 
 // Set TimeZone
 date_default_timezone_set('America/Chicago');
@@ -64,19 +61,6 @@ $logHandler = new StreamHandler(__DIR__.'/../logs/tivampyre.log');
 $app['monolog'] = new Logger('tivampyre');
 $app['monolog']->pushHandler($logHandler);
 
-// Setup the Twitter services.
-$app['twitter'] = new Twitter(
-    $app['twitter_consumer_key'],
-    $app['twitter_consumer_secret'],
-    $app['twitter_access_token'],
-    $app['twitter_access_token_secret']
-);
-$app['tweet'] = new TiVampyre\Twitter\Tweet(
-    $app['twitter'],
-    $app['monolog'],
-    $app['twitter_production']
-);
-
 // Setup Twig (this might be optional)
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     // add custom twig globals, filters, tags, ...
@@ -85,53 +69,11 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 
 $app['queue'] = new Pheanstalk\Pheanstalk('127.0.0.1:11300');
 
-// If IP isn't set, look it up.
-if (!isset($app['tivo_ip'])) {
-    $location = new TiVo\Location($app['process'], $app['monolog']);
-    $app['tivo_ip'] = $location->find();
-}
-
-// Manage the TiVo's connection to Now Playing.
-$app['tivo_now_playing'] = function ($app) {
-    return new TiVo\NowPlaying(
-        $app['tivo_ip'],
-        $app['tivampyre_mak'],
-        $app['guzzle'],
-        $app['monolog']
-    );
-};
-
-// TiVo Downloader
-$app['tivo_downloader'] = function ($app) {
-    return new TiVo\Download(
-        $app['tivampyre_mak'],
-        $app['guzzle'],
-        $app['monolog']
-    );
-};
-
-// TiVo Decoder
-$app['tivo_decoder'] = function ($app) {
-    return new TiVo\Decode(
-        $app['tivampyre_mak'],
-        $app['process_builder'],
-        $app['monolog']
-    );
-};
-
 // Show Entity Provider
 $app['show_provider'] = function ($app) {
     return new TiVampyre\Service\ShowProvider(
         $app['tivo_now_playing'],
         new TiVampyre\Factory\ShowListFactory()
-    );
-};
-
-// Dispatch Twitter Event
-$app['tweet_dispatcher'] = function($app) {
-    return new TiVampyre\Twitter\TweetDispatcher(
-        $app['dispatcher'],
-        new TiVampyre\Twitter\TweetEvent()
     );
 };
 
@@ -144,42 +86,7 @@ $app['synchronizer'] = function ($app) {
     );
 };
 
-// Video Transcoder
-$app['video_transcoder'] = function ($app) {
-    return new TiVampyre\Video\Transcode(
-        $app['process_builder'],
-        $app['monolog']
-    );
-};
-$app['comskip'] = function ($app) {
-    return new TiVampyre\Video\Comskip(
-        $app['comskip_path'],
-        $app['process_builder'],
-        $app['monolog']
-    );
-};
-$app['video_cleaner'] = function ($app) {
-    return new TiVampyre\Video\Clean(
-        $app['process_builder'],
-        $app['monolog']
-    );
-};
-// Video Labeler
-$app['video_labeler'] = function ($app) {
-    return new TiVampyre\Video\Label(
-        $app['process_builder'],
-        $app['tivampyre_working_directory'],
-        $app['monolog']
-    );
-};
 
-// Setup event listeners.
-$app['dispatcher']->addListener(TiVoTwitter\TweetEvent::$SHOW_TWEET_EVENT, function($event) use ($app) {
-    $app['tweet']->captureShowEvent($event);
-});
-$app['dispatcher']->addListener(TiVoTwitter\TweetEvent::$PREVIEW_TWEET_EVENT, function($event) use ($app) {
-    $app['tweet']->capturePreviewEvent($event);
-});
 
 /*
 $app['job_queue'] = function ($app) {
