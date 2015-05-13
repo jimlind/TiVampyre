@@ -5,12 +5,10 @@ use Igorw\Silex\ConfigServiceProvider;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Silex\Application;
-use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\Process\ProcessBuilder;
-
 
 // Set TimeZone
 date_default_timezone_set('America/Chicago');
@@ -24,25 +22,8 @@ if (file_exists($configFile) == false) {
 $app = new Application();
 $app->register(new ConfigServiceProvider($configFile));
 
-// Start registering database services
-$app->register(new DoctrineServiceProvider(), array(
-    'db.options' => array(
-        'driver' => 'pdo_sqlite',
-        'path'   => __DIR__ . '/../db/tivampyre.db',
-    ),
-));
-$app->register(new DoctrineOrmServiceProvider, array(
-    'orm.proxies_dir' => __DIR__ . '/../cache/doctrine/proxies',
-    'orm.em.options'  => array(
-        'mappings' => array(
-            array(
-                'type'      => 'annotation',
-                'namespace' => 'TiVampyre\Entity',
-                'path'      => __DIR__ . '/TiVampyre/Entity',
-            ),
-        ),
-    ),
-));
+// Register Database Services
+\Application\DoctrineConfig::setup($app, __DIR__);
 
 // Register the base pieces needed for Silex.
 $app->register(new UrlGeneratorServiceProvider());
@@ -67,6 +48,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     return $twig;
 }));
 
+// Beanstalk Queue
 $app['queue'] = new Pheanstalk\Pheanstalk('127.0.0.1:11300');
 
 // Show Entity Provider
@@ -85,6 +67,10 @@ $app['synchronizer'] = function ($app) {
         $app['tweet_dispatcher']
     );
 };
+
+\Application\TiVoConfig::setup($app);
+\Application\TwitterConfig::setup($app);
+\Application\VideoConfig::setup($app);
 
 
 
