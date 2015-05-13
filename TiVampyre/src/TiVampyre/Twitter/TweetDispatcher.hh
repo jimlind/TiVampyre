@@ -17,6 +17,11 @@ class TweetDispatcher
         private TweetEvent $tweetEvent
     ) { }
 
+    /**
+     * Tweet about a show recording.
+     *
+     * @param Show $show A Show Entity
+     */
     public function tweetShowRecording(Show $show) {
         $event = clone $this->tweetEvent;
         $event->setShow($show);

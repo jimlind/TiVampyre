@@ -4,7 +4,7 @@ namespace TiVampyre\Twitter;
 
 use Monolog\Logger;
 use TiVampyre\Twitter\TweetEvent;
-use \Twitter;
+use Twitter;
 
 class Tweet
 {
@@ -22,7 +22,7 @@ class Tweet
     /**
      * Capture an event to tweet a show.
      *
-     * @param TweetEvent $event The event to tweet about
+     * @param TweetEvent $event The Event to Tweet About
      */
     public function captureShowEvent(TweetEvent $event)
     {
@@ -38,22 +38,22 @@ class Tweet
     /**
      * Capture an event to tweet a preview.
      *
-     * @param TweetEvent $event The event to tweet about
+     * @param TweetEvent $event The Event to Tweet About
      */
     public function capturePreviewEvent(TweetEvent $event)
     {
         $preview = $event->getPreview();
         if ($this->production) {
-            $this->sendTweet('preview');
+            $this->sendTweet('tweet a preview image');
         } else {
-            echo 'preview';
+            echo 'don't tweet a preview image';
         }
     }
 
     /**
      * Tweet a message.
      *
-     * @param string $tweetString Tweet to send
+     * @param string $tweetString Twitter Message
      */
     protected function sendTweet($tweetString)
     {
@@ -66,9 +66,9 @@ class Tweet
     }
 
     /**
-     * Compose a wonderful Tweet about the show.
+     * Compose a Tweet about starting to record a show.
      *
-     * @param Show $show Show entity to create Tweet about
+     * @param Show $show A Show Entity
      *
      * @return string
      */

@@ -24,7 +24,6 @@ class TweetEvent extends Event
         $this->show = $show;
     }
 
-
     /**
      * Get the Show entity from the Tweet event.
      *
