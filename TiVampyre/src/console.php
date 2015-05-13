@@ -144,7 +144,7 @@ $console->register('transcode-worker')
         $pheanstalk = $app['queue'];
         $pheanstalk->watch('transcode');
         while($job = $pheanstalk->reserve()) {
-            $data       = json_decode($job->getData(), true);
+            $jobData    = json_decode($job->getData(), true);
             $transcoder = new TiVampyre\Transcoder($app);
             $transcoder->process($jobData);
 
