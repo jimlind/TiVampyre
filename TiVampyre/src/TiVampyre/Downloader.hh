@@ -1,4 +1,4 @@
-<?php
+<?hh
 
 namespace TiVampyre;
 
@@ -9,10 +9,10 @@ use Silex\Application;
  */
 class Downloader
 {
-    private $app    = null;
     private $logger = null;
 
-    public function __construct(Application $app)
+    public function __construct(
+        private Application $app)
     {
         $this->app    = $app;
         $this->logger = $app['monolog'];

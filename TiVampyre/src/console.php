@@ -128,7 +128,7 @@ $console->register('download-worker')
             $downloader = new TiVampyre\Downloader($app);
             $downloader->process($jobData);
 
-            if ($data['skip']) {
+            if ($jobData['skip']) {
                 $app['monolog']->info('Downloaded. Skipping Encoding.');
             } else {
                 $app['queue']->useTube('transcode')->put($job->getData());
