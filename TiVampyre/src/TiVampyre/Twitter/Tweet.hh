@@ -46,7 +46,7 @@ class Tweet
         if ($this->production) {
             $this->sendTweet('tweet a preview image');
         } else {
-            echo 'don't tweet a preview image';
+            echo 'don\'t tweet a preview image';
         }
     }
 

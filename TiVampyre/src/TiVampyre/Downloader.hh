@@ -14,7 +14,6 @@ class Downloader
     public function __construct(
         private Application $app)
     {
-        $this->app    = $app;
         $this->logger = $app['monolog'];
     }
 
