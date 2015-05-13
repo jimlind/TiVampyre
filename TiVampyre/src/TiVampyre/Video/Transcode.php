@@ -1,10 +1,9 @@
-<?php
+<?hh
 
 namespace TiVampyre\Video;
 
-use JimLind\TiVo\Utilities as TiVoUtilities;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 use TiVampyre\Video\Info;
 
 /**
@@ -12,31 +11,13 @@ use TiVampyre\Video\Info;
  */
 class Transcode
 {
-    /**
-     * @var Symfony\Component\Process\Process
-     */
-    protected $process = null;
-
-    /**
-     * @var Psr\Log\LoggerInterface
-     */
-    protected $logger = null;
-
-    public function __construct(Process $process, LoggerInterface $logger = null)
-    {
-        $this->process = $process;
-        $this->logger  = $logger;
-    }
+    public function __construct(
+        private ProcessBuilder $processBuilder,
+        private LoggerInterface $logger
+    ) { }
 
     public function transcode($input, $chapterList, $autocrop = false)
     {
-        if (!Utilities::checkHandBrake($this->process)) {
-            $warning = 'The HandBrake tool can not be trusted or found. ';
-            TiVoUtilities\Log::warn($warning, $this->logger);
-            // Exit early.
-            return array();
-        }
-
         $videoInfo  = new Info($input, $this->process, $this->logger);
         $resolution = $videoInfo->getIdealResolution($input);
         $quality    = $this->getVideoQuality($resolution['height'], $resolution['width']);

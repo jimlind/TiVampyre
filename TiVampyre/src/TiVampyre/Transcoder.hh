@@ -9,12 +9,11 @@ use Silex\Application;
  */
 class Transcoder
 {
-    private $app    = null;
     private $logger = null;
 
-    public function __construct(Application $app)
-    {
-        $this->app    = $app;
+    public function __construct(
+        private Application $app
+    ) {
         $this->logger = $app['monolog'];
     }
 
