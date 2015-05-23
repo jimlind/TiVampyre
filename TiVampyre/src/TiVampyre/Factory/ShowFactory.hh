@@ -3,7 +3,7 @@
 namespace TiVampyre\Factory;
 
 use JimLind\TiVo\Factory\ShowFactory as OriginShowFactory;
-use TiVampyre\Entity\Show as Entity;
+use TiVampyre\Entity\ShowEntity;
 
 /**
  * Default show factory to build a show model.
@@ -15,6 +15,6 @@ class ShowFactory extends OriginShowFactory
      */
     protected function newShow(): void
     {
-        return new Entity();
+        return new ShowEntity();
     }
 }

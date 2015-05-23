@@ -3,7 +3,7 @@
 namespace TiVampyre\Twitter;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use TiVampyre\Entity\Show;
+use TiVampyre\Entity\ShowEntity;
 use TiVampyre\Twitter\TweetEvent;
 
 class TweetDispatcher
@@ -20,11 +20,11 @@ class TweetDispatcher
     /**
      * Tweet about a show recording.
      *
-     * @param Show $show A Show Entity
+     * @param ShowEntity $showEntity A Show Entity
      */
-    public function tweetShowRecording(Show $show) {
+    public function tweetShowRecording(ShowEntity $showEntity) {
         $event = clone $this->tweetEvent;
-        $event->setShow($show);
+        $event->setShow($showEntity);
 
         $this->eventDispatcher->dispatch(
             $event::$SHOW_TWEET_EVENT,
