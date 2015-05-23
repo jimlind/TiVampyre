@@ -2,13 +2,13 @@
 
 namespace TiVampyre\Entity;
 
-use JimLind\TiVo\Model\Show as BaseShow;
+use JimLind\TiVo\Model\Show as ShowModel;
 
 /**
- * @Entity(repositoryClass="TiVampyre\Repository\Show"))
+ * @Entity(repositoryClass="TiVampyre\Repository\ShowRepository"))
  * @Table(name="show")
  */
-class Show extends BaseShow
+class ShowEntity extends ShowModel
 {
     /**
      * @Id
