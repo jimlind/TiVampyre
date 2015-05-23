@@ -62,8 +62,8 @@ $app['show_provider'] = function ($app) {
 // TiVo's Show List Synchronizer.
 $app['synchronizer'] = function ($app) {
     return new TiVampyre\Synchronizer(
-        $app['show_provider'],
         $app['orm.em'],
+        $app['show_provider'],
         $app['tweet_dispatcher']
     );
 };

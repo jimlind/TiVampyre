@@ -56,16 +56,24 @@ $console->register('db-truncate')
         });
 
 $console->register('get-shows')
+    ->setDefinition(
+        array(
+            new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip announcing new shows.'),
+        )
+    )
     ->setDescription('Get all show data from the TiVo.')
-    ->setCode(function() use ($app) {
+    ->setCode(function(InputInterface $input) use ($app) {
+        $optionList  = $input->getOptions();
+        $skipTwitter = $optionList['skip'];
+
         $showService = $app['synchronizer'];
-        $showService->rebuildLocalIndex();
+        $showService->rebuildLocalIndex($skipTwitter);
     });
 
 $console->register('list-shows')
         ->setDescription('Display all TiVo shows locally indexed.')
         ->setCode(function() use ($app){
-            $repository = $app['orm.em']->getRepository('TiVampyre\Entity\Show');
+            $repository = $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity');
             $showList   = $repository->getAllSortedEpisodes();
             foreach ($showList as $show) {
                 echo $show->getId() . ' : ' . $show->getShowTitle();
