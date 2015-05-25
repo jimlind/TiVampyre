@@ -3,12 +3,12 @@
 namespace TiVampyre;
 
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use TiVampyre\Entity\ShowEntity;
 use TiVampyre\Repository\ShowRepository;
 use TiVampyre\Service\ShowProvider;
 use TiVampyre\Twitter\TweetDispatcher;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 /**
  * Synchronize local show data with remote TiVo.
