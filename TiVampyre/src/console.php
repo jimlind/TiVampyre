@@ -66,8 +66,8 @@ $console->register('get-shows')
         $optionList  = $input->getOptions();
         $skipTwitter = $optionList['skip'];
 
-        $showService = $app['synchronizer'];
-        $showService->rebuildLocalIndex($skipTwitter);
+        $synchronizer = $app['synchronizer'];
+        $synchronizer->rebuildLocalIndex($skipTwitter);
     });
 
 $console->register('list-shows')
@@ -103,7 +103,6 @@ $console->register('queue')
             $optionList         = $input->getOptions();
             $optionList['show'] = $input->getArgument('Show Id');
 
-
             $app['queue']->useTube('download')
                          ->put(json_encode($optionList));
         });
@@ -132,9 +131,11 @@ $console->register('download-worker')
         $pheanstalk = $app['queue'];
         $pheanstalk->watch('download');
         while($job = $pheanstalk->reserve()) {
-            $jobData    = json_decode($job->getData(), true);
-            $downloader = new TiVampyre\Downloader($app);
-            $downloader->process($jobData);
+            $jobData  = json_decode($job->getData(), true);
+            $showId   = intval($jobData['show']);
+
+            $downloader = $app['downloader'];
+            $downloader->process($showId);
 
             if ($jobData['skip']) {
                 $app['monolog']->info('Downloaded. Skipping Encoding.');

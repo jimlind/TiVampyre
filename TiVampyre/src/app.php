@@ -68,6 +68,17 @@ $app['synchronizer'] = function ($app) {
     );
 };
 
+// TiVo's Show Downloader.
+$app['downloader'] = function ($app) {
+    return new TiVampyre\Downloader(
+        $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity'),
+        $app['tivo_downloader'],
+        $app['tivo_decoder'],
+        $app['tivampyre_working_directory']
+    );
+};
+
+
 \Application\TiVoConfig::setup($app);
 \Application\TwitterConfig::setup($app);
 \Application\VideoConfig::setup($app);
