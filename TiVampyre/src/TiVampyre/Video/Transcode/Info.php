@@ -1,10 +1,10 @@
 <?php
 
-namespace TiVampyre\Video;
+namespace TiVampyre\Video\Transcode;
 
 use JimLind\TiVo\Utilities as TiVoUtilities;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Discern information about an MPEG file
@@ -25,10 +25,13 @@ class Info
      */
     protected $output = null;
 
-    public function __construct($filePath, Process $process, LoggerInterface $logger)
-    {
+    public function __construct(
+        $filePath,
+        ProcessBuilder $processBuilder,
+        LoggerInterface $logger
+    ) {
         $this->filePath = $filePath;
-        $this->process  = $process;
+        $this->process  = $processBuilder;
         $this->logger   = $logger;
     }
 

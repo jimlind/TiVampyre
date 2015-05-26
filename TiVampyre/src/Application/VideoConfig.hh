@@ -2,24 +2,27 @@
 
 namespace Application;
 
-use TiVampyre\Video\Transcode;
 use Silex\Application;
+use TiVampyre\Video\Cleaner;
+use TiVampyre\Video\ComskipRunner;
+use TiVampyre\Video\Labeler;
+use TiVampyre\Video\FileTranscoder;
 
 class VideoConfig
 {
 	static function setup(Application $application)
 	{
 		// Video Transcoder
-		$application['video_transcoder'] = function ($app) {
-		    return new TiVampyre\Video\Transcode(
+		$application['file_transcoder'] = function ($app) {
+		    return new FileTranscoder(
 		        $app['process_builder'],
 		        $app['monolog']
 		    );
 		};
 
 		// Video ComSkip
-		$application['comskip'] = function ($app) {
-		    return new TiVampyre\Video\Comskip(
+		$application['comskip_runner'] = function ($app) {
+		    return new ComskipRunner(
 		        $app['comskip_path'],
 		        $app['process_builder'],
 		        $app['monolog']
@@ -28,7 +31,7 @@ class VideoConfig
 
 		// Video Cleaner
 		$application['video_cleaner'] = function ($app) {
-		    return new TiVampyre\Video\Clean(
+		    return new Cleaner(
 		        $app['process_builder'],
 		        $app['monolog']
 		    );
@@ -36,7 +39,7 @@ class VideoConfig
 
 		// Video Labeler
 		$application['video_labeler'] = function ($app) {
-		    return new TiVampyre\Video\Label(
+		    return new Labeler(
 		        $app['process_builder'],
 		        $app['tivampyre_working_directory'],
 		        $app['monolog']

@@ -3,20 +3,22 @@
 namespace TiVampyre\Video;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Clean the h264/aac MP4
  */
-class Clean
+class Cleaner
 {
     protected $process = null;
 
     protected $logger = null;
 
-    public function __construct(Process $process, LoggerInterface $logger)
-    {
-        $this->process     = $process;
+    public function __construct(
+        ProcessBuilder $processBuilder,
+        LoggerInterface $logger
+    ) {
+        $this->process     = $processBuilder;
         $this->logger      = $logger;
     }
 

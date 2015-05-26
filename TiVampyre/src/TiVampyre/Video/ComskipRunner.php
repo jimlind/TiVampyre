@@ -3,12 +3,12 @@
 namespace TiVampyre\Video;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Interface with the Comskip Windows executable.
  */
-class Comskip
+class ComskipRunner
 {
     protected $comskipPath = null;
 
@@ -16,11 +16,14 @@ class Comskip
 
     protected $logger = null;
 
-    public function __construct($comskipPath, Process $process, LoggerInterface $logger)
-    {
-        $this->comskipPath = $comskipPath;
-        $this->process     = $process;
-        $this->logger      = $logger;
+    public function __construct(
+        $comskipPath,
+        ProcessBuilder $processBuilder,
+        LoggerInterface $logger
+    ) {
+        $this->comskipPath    = $comskipPath;
+        $this->processBuilder = $processBuilder;
+        $this->logger         = $logger;
     }
 
     public function getChapterList($mpegPath)

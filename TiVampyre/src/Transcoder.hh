@@ -2,13 +2,7 @@
 
 namespace TiVampyre;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use TiVampyre\Repository\ShowRepository;
-use TiVampyre\Video\Cleaner;
-use TiVampyre\Video\ComskipRunner;
-use TiVampyre\Video\Labeler;
-use TiVampyre\Video\FileTranscoder;
 
 /**
  * Transcode files
@@ -22,28 +16,19 @@ class Transcoder
 
     public function __construct(
         private ShowRepository $showRepository,
-        private ComskipRunner $comskipRunner,
-        private FileTranscoder $fileTranscoder,
-        private Cleaner $cleaner,
-        private Labeler $labeler,
+        private VideoComskip $videoComskip,
+        private Transcoder $videoTranscoder,
+        private Cleaner $videoCleaner,
         private string $workingDirectory)
     {
         // Default to the NullLogger
         $this->setLogger(new NullLogger());
     }
 
-    /**
-     * Set the Logger
-     *
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
-
     public function process($data)
     {
+        var_dump($data);
+        die;
         $rawFilename = $this->workingDirectory . $data['show'];
 
         $chapterList = array();
@@ -51,7 +36,7 @@ class Transcoder
             $chapterList = $this->app['comskip']->getChapterList($rawFilename . '.mpeg');
         }
 
-        $fileList = $this->fileTranscoder->transcode(
+        $fileList = $this->app['video_transcoder']->transcode(
             $rawFilename . '.mpeg',
             $chapterList,
             $data['auto']
@@ -71,6 +56,5 @@ class Transcoder
         if (!$data['keep']) {
             unlink($rawFilename . '.mpeg');
         }
-        die;
     }
 }

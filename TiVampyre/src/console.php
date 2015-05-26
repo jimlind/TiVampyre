@@ -131,11 +131,9 @@ $console->register('download-worker')
         $pheanstalk = $app['queue'];
         $pheanstalk->watch('download');
         while($job = $pheanstalk->reserve()) {
-            $jobData  = json_decode($job->getData(), true);
-            $showId   = intval($jobData['show']);
-
-            $downloader = $app['downloader'];
-            $downloader->process($showId);
+            $jobData = json_decode($job->getData(), true);
+            $showId  = intval($jobData['show']);
+            $app['downloader']->process($showId);
 
             if ($jobData['skip']) {
                 $app['monolog']->info('Downloaded. Skipping Encoding.');
@@ -153,9 +151,8 @@ $console->register('transcode-worker')
         $pheanstalk = $app['queue'];
         $pheanstalk->watch('transcode');
         while($job = $pheanstalk->reserve()) {
-            $jobData    = json_decode($job->getData(), true);
-            $transcoder = new TiVampyre\Transcoder($app);
-            $transcoder->process($jobData);
+            $jobData = json_decode($job->getData(), true);
+            $app['transcoder']->process($jobData);
 
             $pheanstalk->delete($job);
         }

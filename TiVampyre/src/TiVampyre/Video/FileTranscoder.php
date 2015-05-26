@@ -4,12 +4,12 @@ namespace TiVampyre\Video;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\ProcessBuilder;
-use TiVampyre\Video\Info;
+use TiVampyre\Video\Transcode\Info;
 
 /**
  * Transcode an MPEG file
  */
-class Transcode
+class FileTranscoder
 {
     public function __construct(
         private ProcessBuilder $processBuilder,
@@ -18,7 +18,7 @@ class Transcode
 
     public function transcode($input, $chapterList, $autocrop = false)
     {
-        $videoInfo  = new Info($input, $this->process, $this->logger);
+        $videoInfo  = new Info($input, $this->processBuilder, $this->logger);
         $resolution = $videoInfo->getIdealResolution($input);
         $quality    = $this->getVideoQuality($resolution['height'], $resolution['width']);
 

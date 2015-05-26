@@ -3,13 +3,13 @@
 namespace TiVampyre\Video;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 use TiVampyre\Entity\Show;
 
 /**
  * Label Video Files
  */
-class Label
+class Labeler
 {
     protected $process = null;
 
@@ -22,9 +22,9 @@ class Label
      */
     protected $output = null;
 
-    public function __construct(Process $process, $directory, LoggerInterface $logger)
+    public function __construct(ProcessBuilder $processBuilder, $directory, LoggerInterface $logger)
     {
-        $this->process          = $process;
+        $this->process          = $processBuilder;
         $this->workingDirectory = $directory;
         $this->logger           = $logger;
     }
