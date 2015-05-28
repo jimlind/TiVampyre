@@ -3,95 +3,120 @@
 namespace TiVampyre\Video;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Process\ProcessBuilder;
-use TiVampyre\Video\Transcode\Info;
+use TiVampyre\Video\FileTranscoder\AutocropFinder;
+use TiVampyre\Video\FileTranscoder\ResolutionCalculator;
 
 /**
  * Transcode an MPEG file
  */
 class FileTranscoder
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger = null;
+
     public function __construct(
-        private ProcessBuilder $processBuilder,
-        private LoggerInterface $logger
-    ) { }
+        protected ProcessBuilder $processBuilder,
+        protected ResolutionCalculator $resolutionCalculator,
+        protected AutocropFinder $autocropFinder,
+    ) {
+        // Default to the NullLogger
+        $this->setLogger(new NullLogger());
+    }
 
-    public function transcode($input, $chapterList, $autocrop = false)
+    /**
+     * Set the Logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger): void
     {
-        $videoInfo  = new Info($input, $this->processBuilder, $this->logger);
-        $resolution = $videoInfo->getIdealResolution($input);
-        $quality    = $this->getVideoQuality($resolution['height'], $resolution['width']);
+        $this->logger = $logger;
+        $this->resolutionCalculator->setLogger($logger);
+        $this->autocropFinder->setLogger($logger);
+    }
 
+    public function transcode($filePath, $chapterList, $autocrop = false)
+    {
+        $idealResolution = $this->resolutionCalculator->calculateIdealResolution($filePath);
+        $idealQuality    = $this->getVideoQuality($idealResolution);
+
+        $autoCropValues = ['top' => 0, 'bottom' => 0, 'left' => 0, 'right' => 0];
         if ($autocrop) {
-            $crop = $videoInfo->getCropValues();
-        } else {
-            $crop = false;
+            $autoCropValues = $this->autocropFinder->findAutocrop($filePath);
         }
 
-        if (count($chapterList) === 0) {
-            $chapterList[] = array(
-                'start' => 0,
-                'end'   => 24 * 60 * 60, // 24 hours
-            );
-        }
-
-        $outputList = array();
+        $outputList = [];
         foreach($chapterList as $index => $chapter) {
             $outputList[] = $this->encode(
-                $input, $index,
-                $chapter['start'], $chapter['end'],
-                $resolution, $crop, $quality
+                $filePath,
+                $index,
+                $chapter,
+                $idealResolution,
+                $autoCropValues,
+                $idealQuality
             );
         }
         return $outputList;
     }
 
-    protected function getVideoQuality($height, $width)
+    protected function getVideoQuality($resolution)
     {
         $w1 = 700;  // Width
-        $q1 = 23;   // Quality
+        $q1 = 22;   // Quality
         $w2 = 1920; // Width
-        $q2 = 28;   // Quality
+        $q2 = 25;   // Quality
 
         // Linear equation to find a reasonable quality setting.
-        $qOut = (($q2 - $q1) / ($w2 - $w1) * ($width - $w1)) + $q1;
-        return round($qOut);
+        $width   = $resolution['width'];
+        $quality = (($q2 - $q1) / ($w2 - $w1) * ($width - $w1)) + $q1;
+        return round($quality);
     }
 
-    protected function encode($input, $index, $start, $end, $resolution, $crop, $quality)
+    protected function encode($input, $index, $chapter, $resolution, $crop, $quality)
     {
         // Output Filename
-        $output = $input . $index . '.m4v';
+        $outputFile = $input . $index . '.m4v';
 
-        $command  = 'HandBrakeCLI -i ' . $input . ' -o ' . $output;
+        $io = [
+            '--input=' . $input,
+            '--out=' . $outputFile,
+        ];
 
-        // Video Encoder
-        $command .= ' -e x264 ';
-        $command .= ' --x264-preset medium --h264-profile high --h264-level 3.1';
-        $command .= ' -q ' . $quality . ' -r 29.97 --cfr'; // Quality and Framerate
+        $audio = [
+            '--aencoder=faac'.
+            '--ab=128',
+            '--mixdown=stereo',
+        ];
 
-        // Audio Encoder
-        $command .= ' -E faac -B 128 -6 stereo'; // Codec, Bitrate, and Channels
+        $video = [
+            '--encoder=x264',
+            '--x264-preset=medium',
+            '--h264-profile=high',
+            '--h264-level=3.1',
+            '--quality=' . $quality,
+            '--rate=29.97',
+            '--cfr',
+        ];
 
-        // Resize and Crop
-        $command .= ' -w ' . $resolution['width']/4;
-        $command .= ' -l ' . $resolution['height']/4;
-        if ($crop) {
-            $command .= ' --crop ' . implode(':', $crop);
-        } else {
-            $command .= ' --crop 0:0:0:0';
-        }
+        $filter = [
+            '--height=' . $resolution['height']/4,
+            '--width=' . $resolution['width']/4,
+            '--crop=' . implode(':', $crop),
+            '--decomb',
+            '--start-at=duration=' . $chapter['start'],
+            '--stop-at=duration=' . ($chapter['end'] - $chapter['start']),
+        ];
 
-        // Filters
-        $command .= " --decomb "; // Decomb
+        $arguments = array_merge($io, $audio, $video, $filter);
+        $this->processBuilder->setPrefix('HandBrakeCLI');
+        $this->processBuilder->setArguments($arguments);
+        $this->processBuilder->setTimeout(0);
+        $this->processBuilder->getProcess()->run();
 
-        $command .= ' --start-at duration:' . $start;
-        $command .= ' --stop-at duration:' . ($end - $start);
-
-        $this->process->setCommandLine($command);
-        $this->process->setTimeout(0); // Don't timeout.
-        $this->process->run();
-
-        return $output;
+        return $outputFile;
     }
 }
