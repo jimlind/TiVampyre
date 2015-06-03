@@ -5,8 +5,8 @@ namespace TiVampyre;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use TiVampyre\Repository\ShowRepository;
+use TiVampyre\Video\ChapterGenerator;
 use TiVampyre\Video\Cleaner;
-use TiVampyre\Video\ComskipRunner;
 use TiVampyre\Video\Labeler;
 use TiVampyre\Video\FileTranscoder;
 
@@ -22,12 +22,12 @@ class Transcoder
 
     public function __construct(
         private ShowRepository $showRepository,
-        private ComskipRunner $comskipRunner,
+        private ChapterGenerator $chapterGenerator,
         private FileTranscoder $fileTranscoder,
         private Cleaner $cleaner,
         private Labeler $labeler,
-        private string $workingDirectory)
-    {
+        private string $workingDirectory
+    ) {
         // Default to the NullLogger
         $this->setLogger(new NullLogger());
     }
@@ -42,35 +42,37 @@ class Transcoder
         $this->logger = $logger;
     }
 
-    public function process($data)
+    public function transcode($data)
     {
-        $rawFilename = $this->workingDirectory . $data['show'];
+        $rawFilename  = $this->workingDirectory . $data['show'];
+        $mpegFilename = $rawFilename . '.mpeg';
+        $m4vFilename  = $rawFilename . '.m4v';
 
-        $chapterList = array();
-        if ($data['cut']) {
-            $chapterList = $this->app['comskip']->getChapterList($rawFilename . '.mpeg');
+        $showId         = intval($data['show']);
+        $autoCrop       = $data['auto'];
+        $cutCommercials = $data['cut'];
+        $keepMpegFile   = $data['keep'];
+
+        // 24 hour single chapter piece
+        $chapterList[] = ['start' => 0, 'end' => 24 * 60 * 60];
+        if ($cutCommercials) {
+            $chapterList = $this->chapterGenerator->generate($mpegFilename);
         }
 
         $fileList = $this->fileTranscoder->transcode(
-            $rawFilename . '.mpeg',
+            $mpegFilename,
             $chapterList,
-            $data['auto']
+            $autoCrop
         );
 
-        $this->app['video_cleaner']->clean(
-            $fileList,
-            $rawFilename . '.m4v'
-        );
+        $this->cleaner->clean($fileList, $m4vFilename);
 
-        $showId     = intval($data['show']);
         $showEntity = $this->showRepository->find($showId);
-
-        $this->app['video_labeler']->addMetadata($showEntity, $rawFilename . '.m4v');
-        $this->app['video_labeler']->renameFile($showEntity, $rawFilename . '.m4v');
+        //$this->labeler->addMetadata($showEntity, $m4vFilename);
+        //$this->labeler->renameFile($showEntity, $m4vFilename);
 
         if (!$data['keep']) {
-            unlink($rawFilename . '.mpeg');
+            unlink($mpegFilename);
         }
-        die;
     }
 }
