@@ -82,7 +82,7 @@ $app['downloader'] = function ($app) {
 $app['transcoder'] = function ($app) {
     return new TiVampyre\Transcoder(
         $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity'),
-        $app['comskip_runner'],
+        $app['chapter_generator'],
         $app['file_transcoder'],
         $app['video_cleaner'],
         $app['video_labeler'],

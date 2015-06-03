@@ -3,8 +3,10 @@
 namespace Application;
 
 use Silex\Application;
+use TiVampyre\Video\ChapterGenerator;
+use TiVampyre\Video\ChapterGenerator\CommercialParser;
+use TiVampyre\Video\ChapterGenerator\EdlParser;
 use TiVampyre\Video\Cleaner;
-use TiVampyre\Video\ComskipRunner;
 use TiVampyre\Video\Labeler;
 use TiVampyre\Video\FileTranscoder;
 use TiVampyre\Video\FileTranscoder\AspectRatioFinder;
@@ -56,12 +58,13 @@ class VideoConfig
 		    );
 		};
 
-		// Video ComSkip
-		$application['comskip_runner'] = function ($app) {
-		    return new ComskipRunner(
-		        $app['comskip_path'],
+		// Video Chapter Generator
+		$application['chapter_generator'] = function ($app) {
+		    return new ChapterGenerator(
 		        $app['process_builder'],
-		        $app['monolog']
+				new EdlParser(),
+				new CommercialParser(),
+				$app['comskip_path']
 		    );
 		};
 
