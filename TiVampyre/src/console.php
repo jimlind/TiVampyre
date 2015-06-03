@@ -152,7 +152,7 @@ $console->register('transcode-worker')
         $pheanstalk->watch('transcode');
         while($job = $pheanstalk->reserve()) {
             $jobData = json_decode($job->getData(), true);
-            $app['transcoder']->process($jobData);
+            $app['transcoder']->transcode($jobData);
 
             $pheanstalk->delete($job);
         }
