@@ -103,8 +103,8 @@ class FileTranscoder
         ];
 
         $filter = [
-            '--height=' . $resolution['height']/4,
-            '--width=' . $resolution['width']/4,
+            '--height=' . $resolution['height'],
+            '--width=' . $resolution['width'],
             '--crop=' . implode(':', $crop),
             '--decomb',
             '--start-at=duration=' . $chapter['start'],
