@@ -46,13 +46,9 @@ class Downloader
             return;
         }
 
-        $rawFilename = $this->workingDirectory . $showEntity->getId();
-
-        // TODO: Download full, not preview.
-        $this->tivoDownloader->storePreview(
-            $showEntity->getURL(),
-            $rawFilename . '.tivo'
-        );
+        $rawFilename  = $this->workingDirectory . $showEntity->getId();
+        $tivoFileName = $rawFilename . '.tivo';
+        $this->tivoDownloader->store($showEntity->getURL(), $tivoFilename);
 
         $this->decode($rawFilename);
     }
