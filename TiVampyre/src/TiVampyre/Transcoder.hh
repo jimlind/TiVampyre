@@ -68,8 +68,7 @@ class Transcoder
         $this->cleaner->clean($fileList, $m4vFilename);
 
         $showEntity = $this->showRepository->find($showId);
-        //$this->labeler->addMetadata($showEntity, $m4vFilename);
-        //$this->labeler->renameFile($showEntity, $m4vFilename);
+        $this->labeler->label($showEntity, $m4vFilename);
 
         if (!$data['keep']) {
             unlink($mpegFilename);
