@@ -1,6 +1,12 @@
 {
     "name": "tivampyer-config",
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/jimlind/twitter-php"
+        }
+    ],
     "require": {
         "silex/silex": "~1.2",
         "symfony/class-loader": "~2.3",
