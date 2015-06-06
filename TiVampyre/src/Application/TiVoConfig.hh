@@ -15,8 +15,7 @@ class TiVoConfig
 		// If IP isn't set, look it up.
 		if (!isset($application['tivo_ip'])) {
 		    $location = new Location(
-				$application['process'],
-				$application['monolog']
+				$application['process_builder']
 			);
 		    $application['tivo_ip'] = $location->find();
 		}
@@ -26,8 +25,7 @@ class TiVoConfig
 		    return new NowPlaying(
 		        $app['tivo_ip'],
 		        $app['tivampyre_mak'],
-		        $app['guzzle'],
-		        $app['monolog']
+		        $app['guzzle']
 		    );
 		};
 
@@ -35,8 +33,7 @@ class TiVoConfig
 		$application['tivo_downloader'] = function ($app) {
 		    return new Download(
 		        $app['tivampyre_mak'],
-		        $app['guzzle'],
-		        $app['monolog']
+		        $app['guzzle']
 		    );
 		};
 
@@ -44,8 +41,7 @@ class TiVoConfig
 		$application['tivo_decoder'] = function ($app) {
 		    return new Decode(
 		        $app['tivampyre_mak'],
-		        $app['process_builder'],
-		        $app['monolog']
+		        $app['process_builder']
 		    );
 		};
 	}
