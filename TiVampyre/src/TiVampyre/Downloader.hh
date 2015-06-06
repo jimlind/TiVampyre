@@ -47,7 +47,7 @@ class Downloader
         }
 
         $rawFilename  = $this->workingDirectory . $showEntity->getId();
-        $tivoFileName = $rawFilename . '.tivo';
+        $tivoFilename = $rawFilename . '.tivo';
         $this->tivoDownloader->store($showEntity->getURL(), $tivoFilename);
 
         $this->decode($rawFilename);
