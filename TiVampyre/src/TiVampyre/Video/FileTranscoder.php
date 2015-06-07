@@ -87,7 +87,7 @@ class FileTranscoder
         ];
 
         $audio = [
-            '--aencoder=faac'.
+            '--aencoder=faac',
             '--ab=128',
             '--mixdown=stereo',
         ];
@@ -107,8 +107,8 @@ class FileTranscoder
             '--width=' . $resolution['width'],
             '--crop=' . implode(':', $crop),
             '--decomb',
-            '--start-at=duration=' . $chapter['start'],
-            '--stop-at=duration=' . ($chapter['end'] - $chapter['start']),
+            '--start-at=duration:' . $chapter['start'],
+            '--stop-at=duration:' . ($chapter['end'] - $chapter['start']),
         ];
 
         $arguments = array_merge($io, $audio, $video, $filter);
