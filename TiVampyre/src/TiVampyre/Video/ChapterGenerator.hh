@@ -64,6 +64,7 @@ class ChapterGenerator
 
         $this->processBuilder->setPrefix('wine');
         $this->processBuilder->setArguments($arguments);
+        $this->processBuilder->setTimeout(0);
         $this->processBuilder->getProcess()->run();
     }
 
