@@ -66,9 +66,9 @@ class FileTranscoder
     protected function getVideoQuality($resolution)
     {
         $w1 = 700;  // Width
-        $q1 = 22;   // Quality
+        $q1 = 25;   // Quality
         $w2 = 1920; // Width
-        $q2 = 25;   // Quality
+        $q2 = 30;   // Quality
 
         // Linear equation to find a reasonable quality setting.
         $width   = $resolution['width'];
