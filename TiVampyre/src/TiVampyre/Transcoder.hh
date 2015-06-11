@@ -53,6 +53,11 @@ class Transcoder
         $cutCommercials = $data['cut'];
         $keepMpegFile   = $data['keep'];
 
+        if (file_exists($mpegFilename) === false) {
+            // TODO: Log something here.
+            return false;
+        }
+
         // 24 hour single chapter piece
         $chapterList[] = ['start' => 0, 'end' => 24 * 60 * 60];
         if ($cutCommercials) {
