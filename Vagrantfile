@@ -26,7 +26,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
 
     chef.run_list = [
-      'recipe[TrustyTiVo::default]'
+      'recipe[TrustyTiVo::default]',
+      'recipe[vagrant::default]',
     ]
   end
 
