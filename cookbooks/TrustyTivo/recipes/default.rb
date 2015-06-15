@@ -4,6 +4,7 @@ include_recipe "php::hhvm"
 include_recipe "php::composer"
 
 include_recipe "queue::beanstalkd"
+include_recipe "queue::monit"
 
 include_recipe "tivo::avahi-utils"
 include_recipe "tivo::gpac"
