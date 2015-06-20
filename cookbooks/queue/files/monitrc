@@ -1,0 +1,20 @@
+set daemon 120
+set logfile /var/log/monit.log
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+
+set eventqueue
+	basedir /var/lib/monit/events
+	slots 100
+
+set httpd port 2812 and
+    use address localhost
+    allow localhost
+    
+check process tivo-download with pidfile /var/run/tivo-download-worker.pid
+    start = "/opt/tivo/wrap-download.sh start"
+    stop = "/opt/tivo/wrap-download.sh stop"
+    
+check process tivo-transcode with pidfile /var/run/tivo-transcode-worker.pid
+    start = "/opt/tivo/wrap-transcode.sh start"
+    stop = "/opt/tivo/wrap-transcode.sh stop"
