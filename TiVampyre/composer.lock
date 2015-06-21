@@ -973,12 +973,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jimlind/tivo-php.git",
-                "reference": "70026a5f8a072e0ec6828ab2e458d0822addf443"
+                "reference": "bd54bdc1b31fe77d61df08e6551e1b4d0eea2e70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jimlind/tivo-php/zipball/70026a5f8a072e0ec6828ab2e458d0822addf443",
-                "reference": "70026a5f8a072e0ec6828ab2e458d0822addf443",
+                "url": "https://api.github.com/repos/jimlind/tivo-php/zipball/bd54bdc1b31fe77d61df08e6551e1b4d0eea2e70",
+                "reference": "bd54bdc1b31fe77d61df08e6551e1b4d0eea2e70",
                 "shasum": ""
             },
             "require": {
@@ -1014,7 +1014,7 @@
                 "Guzzle",
                 "tivo"
             ],
-            "time": "2015-04-27 04:25:54"
+            "time": "2015-06-20 23:53:45"
         },
         {
             "name": "monolog/monolog",
