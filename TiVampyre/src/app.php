@@ -1,5 +1,6 @@
 <?php
 
+use Configurator;
 use GuzzleHttp\Client as GuzzleClient;
 use Igorw\Silex\ConfigServiceProvider;
 use Monolog\Logger;
@@ -23,7 +24,7 @@ $app = new Application();
 $app->register(new ConfigServiceProvider($configFile));
 
 // Register Database Services
-\Application\DoctrineConfig::setup($app, __DIR__);
+Configurator\DoctrineConfigurator::setup($app, __DIR__);
 
 // Register the base pieces needed for Silex.
 $app->register(new UrlGeneratorServiceProvider());
@@ -90,9 +91,9 @@ $app['transcoder'] = function ($app) {
     );
 };
 
-\Application\TiVoConfig::setup($app);
-\Application\TwitterConfig::setup($app);
-\Application\VideoConfig::setup($app);
+Configurator\TiVoConfigurator::setup($app);
+Configurator\TwitterConfigurator::setup($app);
+Configurator\VideoConfigurator::setup($app);
 
 
 

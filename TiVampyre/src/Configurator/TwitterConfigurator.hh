@@ -1,6 +1,6 @@
 <?hh
 
-namespace Application;
+namespace Configurator;
 
 use TiVampyre\Twitter\Tweet;
 use TiVampyre\Twitter\TweetDispatcher;
@@ -8,7 +8,7 @@ use TiVampyre\Twitter\TweetEvent;
 use Twitter;
 use Silex\Application;
 
-class TwitterConfig
+class TwitterConfigurator
 {
 	static function setup(Application $application)
 	{

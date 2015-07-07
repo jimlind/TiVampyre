@@ -1,6 +1,6 @@
 <?hh
 
-namespace Application;
+namespace Configurator;
 
 use JimLind\TiVo\Decode;
 use JimLind\TiVo\Download;
@@ -8,7 +8,7 @@ use JimLind\TiVo\Location;
 use JimLind\TiVo\NowPlaying;
 use Silex\Application;
 
-class TiVoConfig
+class TiVoConfigurator
 {
 	static function setup(Application $application)
 	{

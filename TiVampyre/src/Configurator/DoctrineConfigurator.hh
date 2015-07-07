@@ -1,12 +1,12 @@
 <?hh
 
-namespace Application;
+namespace Configurator;
 
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 
-class DoctrineConfig
+class DoctrineConfigurator
 {
 	static function setup(Application $application, string $directory)
 	{

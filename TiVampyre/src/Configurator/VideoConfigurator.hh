@@ -1,6 +1,6 @@
 <?hh
 
-namespace Application;
+namespace Configurator;
 
 use Silex\Application;
 use TiVampyre\Video\ChapterGenerator;
@@ -15,7 +15,7 @@ use TiVampyre\Video\FileTranscoder\ResolutionCalculator;
 use TiVampyre\Video\FileTranscoder\ResolutionFinder;
 
 
-class VideoConfig
+class VideoConfigurator
 {
 	static function setup(Application $application)
 	{
