@@ -3,7 +3,7 @@
 namespace TiVampyre\Service;
 
 use DateTime;
-use JimLind\TiVo\NowPlaying;
+use JimLind\TiVo\XmlDownloader;
 use TiVampyre\Factory\ShowListFactory;
 
 /**
@@ -14,10 +14,10 @@ class ShowProvider
     /**
      * Constructor for ShowProvider
      *
-     * @param NowPlaying      $nowPlaying    Access to Now Playing list
+     * @param XmlDownloader      $xmlDownloader    Access to Now Playing list
      */
     public function __construct(
-        private NowPlaying $nowPlaying,
+        private XmlDownloader $xmlDownloader,
         private ShowListFactory $factory
     ) { }
 
@@ -36,7 +36,7 @@ class ShowProvider
 
     protected function getShowList()
     {
-        $xmlList  = $this->nowPlaying->download();
+        $xmlList  = $this->xmlDownloader->download();
         $showList = $this->factory->createShowListFromXmlList($xmlList);
 
         return $showList;

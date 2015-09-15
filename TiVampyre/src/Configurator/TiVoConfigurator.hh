@@ -2,44 +2,44 @@
 
 namespace Configurator;
 
-use JimLind\TiVo\Decode;
-use JimLind\TiVo\Download;
-use JimLind\TiVo\Location;
-use JimLind\TiVo\NowPlaying;
+use JimLind\TiVo\TiVoFinder;
+use JimLind\TiVo\VideoDecoder;
+use JimLind\TiVo\VideoDownloader;
+use JimLind\TiVo\XmlDownloader;
 use Silex\Application;
 
 class TiVoConfigurator
 {
 	static function setup(Application $application)
 	{
-		// If IP isn't set, look it up.
+		// TiVo IP Finder
 		if (!isset($application['tivo_ip'])) {
-		    $location = new Location(
-				$application['process_builder']
-			);
-		    $application['tivo_ip'] = $location->find();
+		    $finder = new TiVoFinder(
+                        $application['process_builder']
+                    );
+		    $application['tivo_ip'] = $finder->find();
 		}
 
-		// Manage the TiVo's connection to Now Playing.
+		// TiVo XML Downloader
 		$application['tivo_now_playing'] = function ($app) {
-		    return new NowPlaying(
+		    return new XmlDownloader(
 		        $app['tivo_ip'],
 		        $app['tivampyre_mak'],
 		        $app['guzzle']
 		    );
 		};
 
-		// TiVo Downloader
+		// TiVo Video Downloader
 		$application['tivo_downloader'] = function ($app) {
-		    return new Download(
+		    return new VideoDownloader(
 		        $app['tivampyre_mak'],
 		        $app['guzzle']
 		    );
 		};
 
-		// TiVo Decoder
+		// TiVo Video Decoder
 		$application['tivo_decoder'] = function ($app) {
-		    return new Decode(
+		    return new VideoDecoder(
 		        $app['tivampyre_mak'],
 		        $app['process_builder']
 		    );
