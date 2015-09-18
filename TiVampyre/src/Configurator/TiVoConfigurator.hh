@@ -13,7 +13,7 @@ class TiVoConfigurator
 	static function setup(Application $application)
 	{
 		// TiVo IP Finder
-		if (!isset($application['tivo_ip'])) {
+		if (false === $application->offsetExists('tivo_ip')) {
 		    $finder = new TiVoFinder(
                         $application['process_builder']
                     );
