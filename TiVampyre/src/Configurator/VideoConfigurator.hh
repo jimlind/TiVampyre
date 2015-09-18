@@ -20,36 +20,40 @@ class VideoConfigurator
 	static function setup(Application $application)
 	{
 		// Video Transcoder Resolution Finder
-		$application['file_transcoder_resolution_finder'] = function ($app) {
+                $resolutionFinder = function ($app) {
 			return new ResolutionFinder(
 				$app['process_builder']
 			);
 		};
+                $application->offsetSet('file_transcoder_resolution_finder', $resolutionFinder);
 
 		// Video Transcoder Aspect Ratio Finder
-		$application['file_transcoder_aspect_ratio_finder'] = function ($app) {
+                $aspectRatioFinder = function ($app) {
 			return new AspectRatioFinder(
 				$app['process_builder']
 			);
 		};
+                $application->offsetSet('file_transcoder_aspect_ratio_finder', $aspectRatioFinder);
 
 		// Video Transcoder Resolution Calculator
-		$application['file_transcoder_resolution_calculator'] = function ($app) {
+                $resolutionCalculator = function ($app) {
 			return new ResolutionCalculator(
 				$app['file_transcoder_resolution_finder'],
 				$app['file_transcoder_aspect_ratio_finder']
 			);
 		};
+                $application->offsetSet('file_transcoder_resolution_calculator', $resolutionCalculator);
 
 		// Video Transcoder Autocrop Finder
-		$application['file_transcoder_autocrop_finder'] = function ($app) {
+                $autocropFinder = function ($app) {
 			return new AutocropFinder(
 				$app['process_builder']
 			);
 		};
+                $application->offsetSet('file_transcoder_autocrop_finder', $autocropFinder);
 
 		// Video Transcoder
-		$application['file_transcoder'] = function ($app) {
+                $transcoder = function ($app) {
 		    return new FileTranscoder(
 				$app['process_builder'],
 				$app['file_transcoder_resolution_calculator'],
@@ -57,9 +61,10 @@ class VideoConfigurator
 		        $app['monolog']
 		    );
 		};
+                $application->offsetSet('file_transcoder', $transcoder);
 
 		// Video Chapter Generator
-		$application['chapter_generator'] = function ($app) {
+                $chapterGenerator = function ($app) {
 		    return new ChapterGenerator(
 		        $app['process_builder'],
 				new EdlParser(),
@@ -67,22 +72,25 @@ class VideoConfigurator
 				$app['comskip_path']
 		    );
 		};
+                $application->offsetSet('chapter_generator', $chapterGenerator);
 
 		// Video Cleaner
-		$application['video_cleaner'] = function ($app) {
+                $cleaner = function ($app) {
 		    return new Cleaner(
 		        $app['process_builder'],
 		        $app['monolog']
 		    );
 		};
+                $application->offsetSet('video_cleaner', $cleaner);
 
 		// Video Labeler
-		$application['video_labeler'] = function ($app) {
+                $labeler = function ($app) {
 		    return new Labeler(
 		        $app['process_builder'],
 		        $app['tivampyre_working_directory'],
 		        $app['monolog']
 		    );
 		};
+                $application->offsetSet('video_labeler', $labeler);
 	}
 }
