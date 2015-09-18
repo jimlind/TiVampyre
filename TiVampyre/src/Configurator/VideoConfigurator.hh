@@ -55,10 +55,9 @@ class VideoConfigurator
 		// Video Transcoder
                 $transcoder = function ($app) {
 		    return new FileTranscoder(
-				$app['process_builder'],
-				$app['file_transcoder_resolution_calculator'],
-		        $app['file_transcoder_autocrop_finder'],
-		        $app['monolog']
+                        $app['process_builder'],
+                        $app['file_transcoder_resolution_calculator'],
+		        $app['file_transcoder_autocrop_finder']
 		    );
 		};
                 $application->offsetSet('file_transcoder', $transcoder);
