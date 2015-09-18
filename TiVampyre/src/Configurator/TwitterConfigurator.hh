@@ -13,33 +13,39 @@ class TwitterConfigurator
 	static function setup(Application $application)
 	{
 		// Setup the Twitter services.
-		$application['twitter'] = new Twitter(
-		    $application['twitter_consumer_key'],
-		    $application['twitter_consumer_secret'],
-		    $application['twitter_access_token'],
-		    $application['twitter_access_token_secret']
+		$twitter = new Twitter(
+		    $application->offsetGet('twitter_consumer_key'),
+		    $application->offsetGet('twitter_consumer_secret'),
+		    $application->offsetGet('twitter_access_token'),
+		    $application->offsetGet('twitter_access_token_secret')
 		);
+                $application->offsetSet('twitter', $twitter);
 
-		$application['tweet'] = new Tweet(
-		    $application['twitter'],
-		    $application['monolog'],
-		    $application['twitter_production']
+		$tweet = new Tweet(
+		    $application->offsetGet('twitter'),
+		    $application->offsetGet('monolog'),
+		    $application->offsetGet('twitter_production')
 		);
+                $application->offsetSet('tweet', $tweet);
 
 		// Dispatch Twitter Event
-		$application['tweet_dispatcher'] = function($app) {
+		$tweetDispatcher = function($app) {
 		    return new TweetDispatcher(
 		        $app['dispatcher'],
 		        new TweetEvent()
 		    );
 		};
+                $application->offsetSet('tweet_dispatcher', $tweetDispatcher);
 
 		// Setup Twitter Event Listeners
-		$application['dispatcher']->addListener(TweetEvent::$SHOW_TWEET_EVENT, function($event) use ($application) {
-		    $application['tweet']->captureShowEvent($event);
+                $dispatcher = $application->offsetGet('dispatcher');
+		$dispatcher->addListener(TweetEvent::$SHOW_TWEET_EVENT, function($event) use ($application) {
+		    $tweet = $application->offsetGet('tweet');
+                    $tweet->captureShowEvent($event);
 		});
-		$application['dispatcher']->addListener(TweetEvent::$PREVIEW_TWEET_EVENT, function($event) use ($application) {
-		    $application['tweet']->capturePreviewEvent($event);
+		$dispatcher->addListener(TweetEvent::$PREVIEW_TWEET_EVENT, function($event) use ($application) {
+		    $tweet = $application->offsetGet('tweet');
+                    $tweet->capturePreviewEvent($event);
 		});
 	}
 }
