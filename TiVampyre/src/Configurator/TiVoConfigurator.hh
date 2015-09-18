@@ -21,28 +21,31 @@ class TiVoConfigurator
 		}
 
 		// TiVo XML Downloader
-		$application['tivo_now_playing'] = function ($app) {
+		$tivoXmlDonloader = function ($app) {
 		    return new XmlDownloader(
 		        $app['tivo_ip'],
 		        $app['tivampyre_mak'],
 		        $app['guzzle']
 		    );
 		};
+                $application->offsetSet('tivo_now_playing', $tivoXmlDonloader);
 
 		// TiVo Video Downloader
-		$application['tivo_downloader'] = function ($app) {
+		$tivoVideoDownloader = function ($app) {
 		    return new VideoDownloader(
 		        $app['tivampyre_mak'],
 		        $app['guzzle']
 		    );
 		};
+                $application->offsetSet('tivo_downloader', $tivoVideoDownloader);
 
 		// TiVo Video Decoder
-		$application['tivo_decoder'] = function ($app) {
+		$tivoVideoDecoder = function ($app) {
 		    return new VideoDecoder(
 		        $app['tivampyre_mak'],
 		        $app['process_builder']
 		    );
 		};
+                $application->offsetSet('tivo_decoder', $tivoVideoDecoder);
 	}
 }
