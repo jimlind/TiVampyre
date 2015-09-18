@@ -19,7 +19,7 @@ class DoctrineConfigurator
 		));
 
 		// Register Doctrine ORM Service
-		$application->register(new DoctrineOrmServiceProvider, array(
+		$application->register(new DoctrineOrmServiceProvider(), array(
 		    'orm.proxies_dir' => $directory . '/../cache/doctrine/proxies',
 		    'orm.em.options'  => array(
 		        'mappings' => array(
