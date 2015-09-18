@@ -14,10 +14,10 @@ class TiVoConfigurator
 	{
 		// TiVo IP Finder
 		if (false === $application->offsetExists('tivo_ip')) {
-		    $finder = new TiVoFinder(
-                        $application['process_builder']
-                    );
-		    $application['tivo_ip'] = $finder->find();
+                    $processBuilder = $application->offsetGet('process_builder');
+		    $finder         = new TiVoFinder($processBuilder);
+
+		    $application->offsetSet('tivo_ip', $finder->find());
 		}
 
 		// TiVo XML Downloader
