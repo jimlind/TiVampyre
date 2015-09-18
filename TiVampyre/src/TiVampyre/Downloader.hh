@@ -2,8 +2,8 @@
 
 namespace TiVampyre;
 
-use JimLind\TiVo\Decode as TiVoDecoder;
-use JimLind\TiVo\Download as TiVoDownloader;
+use JimLind\TiVo\VideoDecoder as VideoDecoder;
+use JimLind\TiVo\VideoDownloader as VideoDownloader;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use TiVampyre\Repository\ShowRepository;
@@ -20,8 +20,8 @@ class Downloader
 
     public function __construct(
         private ShowRepository $showRepository,
-        private TiVoDownloader $tivoDownloader,
-        private TiVoDecoder $tivoDecoder,
+        private VideoDownloader $videoDownloader,
+        private VideoDecoder $videoDecoder,
         private string $workingDirectory)
     {
         // Default to the NullLogger
@@ -48,14 +48,14 @@ class Downloader
 
         $rawFilename  = $this->workingDirectory . $showEntity->getId();
         $tivoFilename = $rawFilename . '.tivo';
-        $this->tivoDownloader->store($showEntity->getURL(), $tivoFilename);
+        $this->videoDownloader->downloadPreview($showEntity->getURL(), $tivoFilename);
 
         $this->decode($rawFilename);
     }
 
     private function decode(string $rawFilename): void
     {
-        $this->tivoDecoder->decode(
+        $this->videoDecoder->decode(
             $rawFilename . '.tivo',
             $rawFilename . '.mpeg'
         );
