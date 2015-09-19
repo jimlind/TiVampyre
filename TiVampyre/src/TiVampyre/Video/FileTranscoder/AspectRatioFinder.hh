@@ -54,10 +54,10 @@ class AspectRatioFinder
 
         if (count($matches) === 3) {
             // Data successfully found.
-            return $matches[1][0] / $matches[2][0];
+            return (float) $matches[1][0] / $matches[2][0];
         }
         // Nothing found.
-        return 1.0;
+        return (float) 1;
     }
     /**
      * Build a Process with standard output at a 60 second timeout

@@ -11,12 +11,12 @@ class Tweet
     /**
      * @param Twitter $twitter    Twitter service
      * @param Logger  $logger     Logging service
-     * @param boolean $production Production or development mode
+     * @param bool    $production Production or development mode
      */
     public function __construct(
         private Twitter $twitter,
         private Logger $logger,
-        private boolean $production
+        private bool $production
     ) { }
 
     /**

@@ -38,7 +38,7 @@ class Downloader
         $this->logger = $logger;
     }
 
-    public function process(integer $showId): void
+    public function process(int $showId): void
     {
         $showEntity = $this->showRepository->find($showId);
         if (!$showEntity) {

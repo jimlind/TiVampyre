@@ -57,7 +57,7 @@ class Synchronizer
     /**
      * Load data from the TiVo and save to the database
      */
-    public function rebuildLocalIndex(boolean $skipAnnounce = false): void
+    public function rebuildLocalIndex(bool $skipAnnounce = false): void
     {
         $showList = $this->showProvider->getShowEntities();
         foreach ($showList as $show) {
@@ -73,7 +73,7 @@ class Synchronizer
     /**
      * Announce the show recording
      */
-    protected function announceShowRecording(ShowEntity $show, boolean $skipAnnounce): void
+    protected function announceShowRecording(ShowEntity $show, bool $skipAnnounce): void
     {
         if ($skipAnnounce) return; // Exit early
 

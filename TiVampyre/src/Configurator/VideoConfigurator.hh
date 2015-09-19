@@ -14,7 +14,6 @@ use TiVampyre\Video\FileTranscoder\AutocropFinder;
 use TiVampyre\Video\FileTranscoder\ResolutionCalculator;
 use TiVampyre\Video\FileTranscoder\ResolutionFinder;
 
-
 class VideoConfigurator
 {
 	static function setup(Application $application)
@@ -76,8 +75,7 @@ class VideoConfigurator
 		// Video Cleaner
                 $cleaner = function ($app) {
 		    return new Cleaner(
-		        $app['process_builder'],
-		        $app['monolog']
+		        $app['process_builder']
 		    );
 		};
                 $application->offsetSet('video_cleaner', $cleaner);
@@ -85,9 +83,7 @@ class VideoConfigurator
 		// Video Labeler
                 $labeler = function ($app) {
 		    return new Labeler(
-		        $app['process_builder'],
-		        $app['tivampyre_working_directory'],
-		        $app['monolog']
+		        $app['process_builder']
 		    );
 		};
                 $application->offsetSet('video_labeler', $labeler);

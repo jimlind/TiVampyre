@@ -59,7 +59,7 @@ class Transcoder
         }
 
         // 24 hour single chapter piece
-        $chapterList[] = ['start' => 0, 'end' => 24 * 60 * 60];
+        $chapterList = [['start' => 0, 'end' => 24 * 60 * 60]];
         if ($cutCommercials) {
             $chapterList = $this->chapterGenerator->generate($mpegFilename);
         }

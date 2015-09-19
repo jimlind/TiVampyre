@@ -13,7 +13,7 @@ class ShowFactory extends OriginShowFactory
     /**
      * Overrides original constructor.
      */
-    protected function newShow(): void
+    protected function newShow(): ShowEntity
     {
         return new ShowEntity();
     }
