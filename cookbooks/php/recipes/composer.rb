@@ -14,7 +14,7 @@ end
 bash "install_composer_vendor" do
   cwd "#{node['project_dir']}"
   code <<-END
-    composer.phar install
+    composer install
   END
   action :nothing
 end
