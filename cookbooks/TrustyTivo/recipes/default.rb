@@ -14,6 +14,7 @@ include_recipe "tivo::aacgain"
 include_recipe "tivo::handbrake"
 include_recipe "tivo::comskip"
 include_recipe "tivo::atomicparsley"
+include_recipe "tivo::libav-tools"
 
 # Disk space is limited
 execute "apt-get autoremove"
