@@ -3,6 +3,7 @@
 namespace TiVampyre;
 
 use Doctrine\ORM\EntityManager;
+use Pheanstalk\Pheanstalk;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use TiVampyre\Entity\ShowEntity;
@@ -31,11 +32,13 @@ class Synchronizer
      * @param EntityManager   $entityManager   Doctrine Entity Manager
      * @param ShowProvider    $showProvider    Provides Show Entities
      * @param TweetDispatcher $tweetDispatcher Dispatch Tweets
+     * @param Pheanstalk      $pheanstalk      Job Queue
      */
     public function __construct(
         private EntityManager $entityManager,
         private ShowProvider $showProvider,
-        private TweetDispatcher $tweetDispatcher
+        private TweetDispatcher $tweetDispatcher,
+        private Pheanstalk $pheanstalk
     ) {
         $this->showRepository = $entityManager
             ->getRepository('TiVampyre\Entity\ShowEntity');
@@ -61,8 +64,8 @@ class Synchronizer
     {
         $showList = $this->showProvider->getShowEntities();
         foreach ($showList as $show) {
-            $this->announceShowRecording($show, $skipAnnounce);
             $this->entityManager->merge($show);
+            $this->announceShowRecording($show, $skipAnnounce);
         }
         $this->entityManager->flush();
         $this->entityManager->clear();
@@ -79,7 +82,11 @@ class Synchronizer
 
         $showNotFound = ($this->showRepository->find($show->getId()) === null);
         if ($showNotFound) {
+            $this->entityManager->flush(); // Flush so other systems have access
             $this->tweetDispatcher->tweetShowRecording($show);
+
+            $jobData = json_encode(['show' => $show->getId()]);
+            $this->pheanstalk->useTube('preview')->put($jobData);
         }
     }
 

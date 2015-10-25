@@ -65,7 +65,8 @@ $app['synchronizer'] = function ($app) {
     return new TiVampyre\Synchronizer(
         $app['orm.em'],
         $app['show_provider'],
-        $app['tweet_dispatcher']
+        $app['tweet_dispatcher'],
+        $app['queue']
     );
 };
 
@@ -87,6 +88,18 @@ $app['transcoder'] = function ($app) {
         $app['file_transcoder'],
         $app['video_cleaner'],
         $app['video_labeler'],
+        $app['tivampyre_working_directory']
+    );
+};
+
+// Video Previewer.
+$app['previewer'] = function ($app) {
+    return new TiVampyre\Previewer(
+        $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity'),
+        $app['tivo_downloader'],
+        $app['tivo_decoder'],
+        $app['file_previewer'],
+        $app['tweet_dispatcher'],
         $app['tivampyre_working_directory']
     );
 };

@@ -8,6 +8,7 @@ use TiVampyre\Video\ChapterGenerator\CommercialParser;
 use TiVampyre\Video\ChapterGenerator\EdlParser;
 use TiVampyre\Video\Cleaner;
 use TiVampyre\Video\Labeler;
+use TiVampyre\Video\FilePreviewer;
 use TiVampyre\Video\FileTranscoder;
 use TiVampyre\Video\FileTranscoder\AspectRatioFinder;
 use TiVampyre\Video\FileTranscoder\AutocropFinder;
@@ -87,5 +88,13 @@ class VideoConfigurator
 		    );
 		};
                 $application->offsetSet('video_labeler', $labeler);
-	}
+
+        // Video Previewer
+        $previewer = function ($app) {
+            return new FilePreviewer(
+                $app['process_builder']
+            );
+        };
+        $application->offsetSet('file_previewer', $previewer);
+    }
 }
