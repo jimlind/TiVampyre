@@ -31,4 +31,20 @@ class TweetDispatcher
             $event
         );
     }
+
+    /**
+     * Tweet about a show recording.
+     *
+     * @param ShowEntity $showEntity A Show Entity
+     */
+    public function tweetShowPreview(ShowEntity $showEntity, $previewPath) {
+        $event = clone $this->tweetEvent;
+        $event->setShow($showEntity);
+        $event->setPreview($previewPath);
+
+        $this->eventDispatcher->dispatch(
+            $event::$PREVIEW_TWEET_EVENT,
+            $event
+        );
+    }
 }

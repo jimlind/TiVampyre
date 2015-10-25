@@ -15,6 +15,8 @@ class TweetEvent extends Event
      */
     protected $showEntity;
 
+    protected $previewPath;
+
     /**
      * Set the Show entity for the Tweet event.
      *
@@ -24,6 +26,10 @@ class TweetEvent extends Event
         $this->showEntity = $showEntity;
     }
 
+    public function setPreview($previewPath) {
+        $this->previewPath = $previewPath;
+    }
+
     /**
      * Get the Show entity from the Tweet event.
      *
@@ -31,5 +37,9 @@ class TweetEvent extends Event
      */
     public function getShow() {
         return $this->showEntity;
+    }
+
+    public function getPreview() {
+        return $this->previewPath;
     }
 }

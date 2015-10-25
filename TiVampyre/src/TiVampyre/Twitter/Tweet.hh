@@ -38,17 +38,18 @@ class Tweet
     /**
      * Capture an event to tweet a preview.
      *
-     * TODO: Actually do something here
-     *
      * @param TweetEvent $event The Event to Tweet About
      */
     public function capturePreviewEvent(TweetEvent $event)
     {
-        $preview = $event->getPreview();
+        $tweetString = $this->composerPreviewTweet($event->getShow());
+
         if ($this->production) {
-            $this->sendTweet('tweet a preview image');
+            $this->sendTweet($tweetString, $event->getPreview());
         } else {
-            echo 'don\'t tweet a preview image';
+            echo $tweetString;
+            echo $preview;
+            echo PHP_EOL;
         }
     }
 
@@ -57,10 +58,10 @@ class Tweet
      *
      * @param string $tweetString Twitter Message
      */
-    protected function sendTweet($tweetString)
+    protected function sendTweet($tweetString, $tweetMedia = null)
     {
         try {
-            $this->twitter->send($tweetString);
+            $this->twitter->send($tweetString, $tweetMedia);
         } catch (\Exception $e) {
             $this->logger->addWarning($e->getMessage());
             $this->logger->addWarning($tweetString);
@@ -87,5 +88,13 @@ class Tweet
         }
 
         return $tweet . '.';
+    }
+
+    protected function composerPreviewTweet($show) : string
+    {
+        $tweet  = 'Here is a preview from ' . $show->getShowTitle();
+        $tweet .= ' I just started recording.';
+
+        return $tweet;
     }
 }
