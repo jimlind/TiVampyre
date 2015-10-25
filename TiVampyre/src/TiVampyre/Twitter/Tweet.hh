@@ -42,15 +42,18 @@ class Tweet
      */
     public function capturePreviewEvent(TweetEvent $event)
     {
-        $tweetString = $this->composerPreviewTweet($event->getShow());
+        $tweetString  = $this->composerPreviewTweet($event->getShow());
+        $previewImage = $event->getPreview()
 
         if ($this->production) {
-            $this->sendTweet($tweetString, $event->getPreview());
+            $this->sendTweet($tweetString, $previewImage);
         } else {
             echo $tweetString;
-            echo $preview;
+            echo $previewImage;
             echo PHP_EOL;
         }
+
+        unlink($previewImage);
     }
 
     /**
