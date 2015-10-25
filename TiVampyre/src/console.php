@@ -158,4 +158,19 @@ $console->register('transcode-worker')
         }
     });
 
+$console->register('preview-worker')
+    ->setDescription('Run the preview worker. Run via a process manager.')
+    ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
+        $pheanstalk = $app['queue'];
+        $pheanstalk->watch('preview');
+        while($job = $pheanstalk->reserve()) {
+            $jobData = json_decode($job->getData(), true);
+            $showId  = (int) ($jobData['show']);
+            $app['previewer']->preview($showId);
+
+            $pheanstalk->delete($job);
+        }
+    });
+
+
 return $console;
