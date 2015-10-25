@@ -43,7 +43,7 @@ class Tweet
     public function capturePreviewEvent(TweetEvent $event)
     {
         $tweetString  = $this->composerPreviewTweet($event->getShow());
-        $previewImage = $event->getPreview()
+        $previewImage = $event->getPreview();
 
         if ($this->production) {
             $this->sendTweet($tweetString, $previewImage);
