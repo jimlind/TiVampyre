@@ -38,7 +38,7 @@ class Downloader
         $this->logger = $logger;
     }
 
-    public function process(int $showId): void
+    public function process(int $showId, bool $preview): void
     {
         $showEntity = $this->showRepository->find($showId);
         if (!$showEntity) {
@@ -48,8 +48,12 @@ class Downloader
 
         $rawFilename  = $this->workingDirectory . $showEntity->getId();
         $tivoFilename = $rawFilename . '.tivo';
-        $this->videoDownloader->download($showEntity->getURL(), $tivoFilename);
-
+        if ($preview) {
+            $this->videoDownloader->download($showEntity->getURL(), $tivoFilename);
+        } else {
+            $this->videoDownloader->downloadPreview($showEntity->getURL(), $tivoFilename);
+        }
+        
         $this->decode($rawFilename);
     }
 

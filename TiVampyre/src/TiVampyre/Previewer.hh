@@ -42,24 +42,17 @@ class Previewer
         $this->logger = $logger;
     }
 
-    public function preview(int $showId): void
+    public function preview($data): void
     {
+        $showId     = (int) $data['show'];
         $showEntity = $this->showRepository->find($showId);
-        if (!$showEntity) {
+        if (null === $showEntity) {
             $this->logger->warning('Show Not Found');
             return;
         }
 
-        $rawFilename  = $this->workingDirectory . $showEntity->getId();
-        $tivoFilename = $rawFilename . '.preview.tivo';
-        $mpegFilename = $rawFilename . '.preview.mpeg';
-
-        // This actually needs to tap into the _download_ queue to avoid an
-        // attempt at multiple downloads. This means the _preview_ queue should
-        // be deleted.
-
-        $this->videoDownloader->downloadPreview($showEntity->getURL(), $tivoFilename);
-        $this->videoDecoder->decode($tivoFilename, $mpegFilename);
+        $rawFilename  = $this->workingDirectory . $showId;
+        $mpegFilename = $rawFilename . '.mpeg';
 
         $previewFilename = $this->filePreviewer->preview($mpegFilename);
         $this->tweetDispatcher->tweetShowPreview($showEntity, $previewFilename);

@@ -85,8 +85,11 @@ class Synchronizer
             $this->entityManager->flush(); // Flush so other systems have access
             $this->tweetDispatcher->tweetShowRecording($show);
 
-            $jobData = json_encode(['show' => $show->getId()]);
-            $this->pheanstalk->useTube('preview')->put($jobData);
+            $optionList = [
+                'show' => $input->getArgument('Show Id'),
+                'preview' => true;
+            ];
+            $app['queue']->useTube('download')->put(json_encode($optionList));
         }
     }
 

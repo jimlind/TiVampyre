@@ -100,8 +100,9 @@ $console->register('queue')
         )
         ->setDescription('Download and convert a show.')
         ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
-            $optionList         = $input->getOptions();
-            $optionList['show'] = $input->getArgument('Show Id');
+            $optionList            = $input->getOptions();
+            $optionList['show']    = $input->getArgument('Show Id');
+            $optionList['preview'] = false;
 
             $app['queue']->useTube('download')
                          ->put(json_encode($optionList));
@@ -132,8 +133,9 @@ $console->register('download-worker')
         $pheanstalk->watch('download');
         while($job = $pheanstalk->reserve()) {
             $jobData = json_decode($job->getData(), true);
-            $showId  = intval($jobData['show']);
-            $app['downloader']->process($showId);
+            $showId  = (int) $jobData['show'];
+            $preview = (bool) $jobData['preview'];
+            $app['downloader']->process($showId, $preview);
 
             if ($jobData['skip']) {
                 $app['monolog']->info('Downloaded. Skipping Encoding.');
@@ -157,20 +159,5 @@ $console->register('transcode-worker')
             $pheanstalk->delete($job);
         }
     });
-
-$console->register('preview-worker')
-    ->setDescription('Run the preview worker. Run via a process manager.')
-    ->setCode(function(InputInterface $input, OutputInterface $output) use ($app){
-        $pheanstalk = $app['queue'];
-        $pheanstalk->watch('preview');
-        while($job = $pheanstalk->reserve()) {
-            $jobData = json_decode($job->getData(), true);
-            $showId  = (int) ($jobData['show']);
-            $app['previewer']->preview($showId);
-
-            $pheanstalk->delete($job);
-        }
-    });
-
 
 return $console;
