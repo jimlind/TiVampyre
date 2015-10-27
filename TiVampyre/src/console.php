@@ -137,7 +137,7 @@ $console->register('download-worker')
             $preview = (bool) $jobData['preview'];
             $app['downloader']->process($showId, $preview);
 
-            if ($jobData['skip']) {
+            if (isset($jobData['skip']) && $jobData['skip']) {
                 $app['monolog']->info('Downloaded. Skipping Encoding.');
             } else {
                 $app['queue']->useTube('transcode')->put($job->getData());
@@ -154,7 +154,13 @@ $console->register('transcode-worker')
         $pheanstalk->watch('transcode');
         while($job = $pheanstalk->reserve()) {
             $jobData = json_decode($job->getData(), true);
-            $app['transcoder']->transcode($jobData);
+            $preview = (bool) $jobData['preview'];
+
+            if ($preview) {
+                $app['previewer']->preview($jobData);
+            } else {
+                $app['transcoder']->transcode($jobData);
+            }
 
             $pheanstalk->delete($job);
         }

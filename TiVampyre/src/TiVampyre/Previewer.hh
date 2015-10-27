@@ -57,7 +57,6 @@ class Previewer
         $previewFilename = $this->filePreviewer->preview($mpegFilename);
         $this->tweetDispatcher->tweetShowPreview($showEntity, $previewFilename);
 
-        unlink($tivoFilename);
         unlink($mpegFilename);
     }
 }

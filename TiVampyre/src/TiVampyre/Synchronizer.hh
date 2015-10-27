@@ -86,10 +86,10 @@ class Synchronizer
             $this->tweetDispatcher->tweetShowRecording($show);
 
             $optionList = [
-                'show' => $input->getArgument('Show Id'),
-                'preview' => true;
+                'show' => $show->getId(),
+                'preview' => true,
             ];
-            $app['queue']->useTube('download')->put(json_encode($optionList));
+            $this->pheanstalk->useTube('download')->put(json_encode($optionList));
         }
     }
 

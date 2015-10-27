@@ -49,11 +49,11 @@ class Downloader
         $rawFilename  = $this->workingDirectory . $showEntity->getId();
         $tivoFilename = $rawFilename . '.tivo';
         if ($preview) {
-            $this->videoDownloader->download($showEntity->getURL(), $tivoFilename);
-        } else {
             $this->videoDownloader->downloadPreview($showEntity->getURL(), $tivoFilename);
+        } else {
+            $this->videoDownloader->download($showEntity->getURL(), $tivoFilename);
         }
-        
+
         $this->decode($rawFilename);
     }
 
