@@ -80,7 +80,8 @@ class ShowEntity extends ShowModel
 
     public function getDate()
     {
-        return new \DateTime($this->date);
+        $timeZone = new \DateTimeZone('America/Los_Angeles');
+        return new \DateTime($this->date, $timeZone);
     }
 
     public function setDate($date)

@@ -95,12 +95,12 @@ $app['transcoder'] = function ($app) {
 // Video Previewer.
 $app['previewer'] = function ($app) {
     return new TiVampyre\Previewer(
-        $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity'),
-        $app['tivo_downloader'],
-        $app['tivo_decoder'],
-        $app['file_previewer'],
-        $app['tweet_dispatcher'],
-        $app['tivampyre_working_directory']
+        $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity')
+        //$app['tivo_downloader'],
+        //$app['tivo_decoder'],
+        //$app['file_previewer'],
+        //$app['tweet_dispatcher'],
+        //$app['tivampyre_working_directory']
     );
 };
 
