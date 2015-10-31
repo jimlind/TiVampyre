@@ -85,11 +85,11 @@ class Synchronizer
             $this->entityManager->flush(); // Flush so other systems have access
             $this->tweetDispatcher->tweetShowRecording($show);
 
-//            $optionList = [
-//                'show' => $show->getId(),
-//                'preview' => true,
-//            ];
-//            $this->pheanstalk->useTube('download')->put(json_encode($optionList));
+            $optionList = [
+                'show' => $show->getId(),
+                'preview' => true,
+            ];
+            $this->pheanstalk->useTube('download')->put(json_encode($optionList));
         }
     }
 

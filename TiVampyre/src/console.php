@@ -27,21 +27,14 @@ $console->register('db-setup')
                     url            TEXT,
                     ts             TEXT
                 )';
-            //$app['db']->query($showSQL);
+            $app['db']->query($showSQL);
             $jobSQL = '
                 CREATE TABLE job (
                     id      INTEGER PRIMARY KEY AUTOINCREMENT,
                     show_id INTEGER,
                     tube    TEXT
                 )';
-            //$app['db']->query($jobSQL);
-            $previewSQL = '
-                CREATE TABLE preview (
-                    id       INTEGER PRIMARY KEY AUTOINCREMENT,
-                    show_id  INTEGER,
-                    ts       TEXT
-                )';
-            $app['db']->query($previewSQL);
+            $app['db']->query($jobSQL);
         });
 
 $console->register('db-destroy')
@@ -51,8 +44,6 @@ $console->register('db-destroy')
             $app['db']->query($showSQL);
             $jobSQL = 'DROP TABLE job';
             $app['db']->query($jobSQL);
-            $previewSQL = 'DROP TABLE preview';
-            $app['db']->query($previewSQL);
         });
 
 $console->register('db-truncate')
@@ -62,8 +53,6 @@ $console->register('db-truncate')
             $app['db']->query($showSQL);
             $jobSQL = 'DELETE FROM job';
             $app['db']->query($jobSQL);
-            $previewSQL = 'DELETE FROM preview';
-            $app['db']->query($previewSQL);
         });
 
 $console->register('get-shows')
@@ -79,13 +68,6 @@ $console->register('get-shows')
 
         $synchronizer = $app['synchronizer'];
         $synchronizer->rebuildLocalIndex($skipTwitter);
-    });
-
-$console->register('get-previews')
-    ->setDescription('Get previews from completed shows on the TiVo.')
-    ->setCode(function(InputInterface $input) use ($app) {
-        $previewer = $app['previewer'];
-        $previewer->getPreviews();
     });
 
 $console->register('list-shows')
