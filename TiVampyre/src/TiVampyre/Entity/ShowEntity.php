@@ -88,7 +88,7 @@ class ShowEntity extends ShowModel
         if (!$date instanceof \DateTime) {
             $date = new \DateTime();
         }
-        $this->date = $date->format('Y-m-d H:i:s');
+        $this->date = $date->format('c');
     }
 
     public function getTimeStamp()
