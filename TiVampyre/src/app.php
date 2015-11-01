@@ -96,10 +96,10 @@ $app['transcoder'] = function ($app) {
 $app['previewer'] = function ($app) {
     return new TiVampyre\Previewer(
         $app['orm.em']->getRepository('TiVampyre\Entity\ShowEntity'),
-        $app['tivo_downloader'],
-        $app['tivo_decoder'],
-        $app['file_previewer'],
+        $app['orm.em'],
+        $app['queue'],
         $app['tweet_dispatcher'],
+        $app['file_previewer'],
         $app['tivampyre_working_directory']
     );
 };

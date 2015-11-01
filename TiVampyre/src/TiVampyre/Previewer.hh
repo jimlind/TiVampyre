@@ -2,8 +2,8 @@
 
 namespace TiVampyre;
 
-use JimLind\TiVo\VideoDecoder as VideoDecoder;
-use JimLind\TiVo\VideoDownloader as VideoDownloader;
+use Doctrine\ORM\EntityManager;
+use Pheanstalk\Pheanstalk;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use TiVampyre\Repository\ShowRepository;
@@ -22,10 +22,10 @@ class Previewer
 
     public function __construct(
         private ShowRepository $showRepository,
-        private VideoDownloader $videoDownloader,
-        private VideoDecoder $videoDecoder,
-        private FilePreviewer $filePreviewer,
+        private EntityManager $entityManager,
+        private Pheanstalk $pheanstalk,
         private TweetDispatcher $tweetDispatcher,
+        private FilePreviewer $filePreviewer,
         private string $workingDirectory)
     {
         // Default to the NullLogger
@@ -41,6 +41,32 @@ class Previewer
     {
         $this->logger = $logger;
     }
+
+    public function getPreviews($skipTwitter): void
+    {
+        $showList = $this->showRepository->findAvailableForPreview();
+        foreach ($showList as $show) {
+            $durationInMinutes = $show->getDuration() / 60000 ;
+            if (5 < $durationInMinutes) {
+                $optionList = [
+                    'show' => $show->getId(),
+                    'preview' => true,
+                ];
+
+                if (false === $skipTwitter) {
+                    $this->pheanstalk
+                        ->useTube('download')
+                        ->put(json_encode($optionList));
+                }
+
+                $show->setPreview(new \DateTime());
+                $this->entityManager->persist($show);
+            }
+        }
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+    }
+
 
     public function preview($data): void
     {
@@ -59,4 +85,5 @@ class Previewer
 
         unlink($mpegFilename);
     }
+
 }
