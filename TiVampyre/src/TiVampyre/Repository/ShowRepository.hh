@@ -27,6 +27,23 @@ class ShowRepository extends EntityRepository
     }
 
     /**
+     * Returns a list of all shows entities that are available for preview
+     *
+     * @return TiVampyre\Entity\ShowEntity[]
+     */
+    public function findAvailableForPreview(): array
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->where('s.preview is null');
+        $queryBuilder->andWhere('s.duration > :duration');
+        $queryBuilder->setParameter('duration', 300000); // 5 minutes
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * Returns a list of all outdated shows entities.
      *
      * @return TiVampyre\Entity\ShowEntity[]
