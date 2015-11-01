@@ -64,8 +64,9 @@ class Synchronizer
     {
         $showList = $this->showProvider->getShowEntities();
         foreach ($showList as $show) {
-            $this->entityManager->merge($show);
+            // Announce function checks if it exists. Merge after attempting announce.
             $this->announceShowRecording($show, $skipAnnounce);
+            $this->entityManager->merge($show);
         }
         $this->entityManager->flush();
         $this->entityManager->clear();
@@ -84,12 +85,6 @@ class Synchronizer
         if ($showNotFound) {
             $this->entityManager->flush(); // Flush so other systems have access
             $this->tweetDispatcher->tweetShowRecording($show);
-
-//            $optionList = [
-//                'show' => $show->getId(),
-//                'preview' => true,
-//            ];
-//            $this->pheanstalk->useTube('download')->put(json_encode($optionList));
         }
     }
 
