@@ -25,16 +25,10 @@ $console->register('db-setup')
                     station        TEXT,
                     hd             TEXT,
                     url            TEXT,
-                    ts             TEXT
+                    ts             TEXT,
+                    preview        TEXT
                 )';
             $app['db']->query($showSQL);
-            $jobSQL = '
-                CREATE TABLE job (
-                    id      INTEGER PRIMARY KEY AUTOINCREMENT,
-                    show_id INTEGER,
-                    tube    TEXT
-                )';
-            $app['db']->query($jobSQL);
         });
 
 $console->register('db-destroy')
@@ -42,8 +36,6 @@ $console->register('db-destroy')
         ->setCode(function() use ($app) {
             $showSQL = 'DROP TABLE show';
             $app['db']->query($showSQL);
-            $jobSQL = 'DROP TABLE job';
-            $app['db']->query($jobSQL);
         });
 
 $console->register('db-truncate')
@@ -51,8 +43,6 @@ $console->register('db-truncate')
         ->setCode(function() use ($app) {
             $showSQL = 'DELETE FROM show';
             $app['db']->query($showSQL);
-            $jobSQL = 'DELETE FROM job';
-            $app['db']->query($jobSQL);
         });
 
 $console->register('get-shows')
@@ -69,6 +59,22 @@ $console->register('get-shows')
         $synchronizer = $app['synchronizer'];
         $synchronizer->rebuildLocalIndex($skipTwitter);
     });
+
+$console->register('get-previews')
+    ->setDefinition(
+        array(
+            new InputOption('skip', 's', InputOption::VALUE_NONE, 'Skip displaying preview.'),
+        )
+    )
+    ->setDescription('Get previews from completed shows on the TiVo.')
+    ->setCode(function(InputInterface $input) use ($app) {
+        $optionList  = $input->getOptions();
+        $skipTwitter = $optionList['skip'];
+
+        $previewer = $app['previewer'];
+        $previewer->getPreviews($skipTwitter);
+    });
+
 
 $console->register('list-shows')
         ->setDescription('Display all TiVo shows locally indexed.')

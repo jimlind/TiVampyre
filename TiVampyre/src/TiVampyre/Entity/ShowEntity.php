@@ -71,6 +71,10 @@ class ShowEntity extends ShowModel
      */
     protected $ts;
 
+    /**
+     * @Column(type="string", name="preview")
+     */
+    protected $preview;
 
     public function getDescription()
     {
@@ -102,6 +106,16 @@ class ShowEntity extends ShowModel
             $ts = new \DateTime();
         }
         $this->ts = $ts->format('Y-m-d H:i:s');
+    }
+
+    public function getPreview()
+    {
+        return new \DateTime($this->preview);
+    }
+
+    public function setPreview(\DateTime $preview)
+    {
+        $this->preview = $preview->format('c');
     }
 
     /**
