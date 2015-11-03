@@ -105,7 +105,7 @@ class ShowEntity extends ShowModel
         if (!$ts instanceof \DateTime) {
             $ts = new \DateTime();
         }
-        $this->ts = $ts->format('Y-m-d H:i:s');
+        $this->ts = $ts->format('c');
     }
 
     public function getPreview()
