@@ -27,7 +27,7 @@ class ShowRepository extends EntityRepository
     }
 
     /**
-     * Returns a list of all shows entities that are available for preview
+     * Returns a list of all shows entities without a preview
      *
      * @return TiVampyre\Entity\ShowEntity[]
      */
@@ -35,8 +35,6 @@ class ShowRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('s');
         $queryBuilder->where('s.preview is null');
-        $queryBuilder->andWhere('s.duration > :duration');
-        $queryBuilder->setParameter('duration', 300000); // 5 minutes
 
         $query = $queryBuilder->getQuery();
 
