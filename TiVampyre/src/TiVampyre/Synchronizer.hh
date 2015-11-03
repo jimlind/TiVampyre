@@ -64,9 +64,7 @@ class Synchronizer
     {
         $showList = $this->showProvider->getShowEntities();
         foreach ($showList as $show) {
-            // Announce function checks if it exists. Merge after attempting announce.
             $this->announceShowRecording($show, $skipAnnounce);
-            $this->entityManager->merge($show);
         }
         $this->entityManager->flush();
         $this->entityManager->clear();
@@ -79,11 +77,18 @@ class Synchronizer
      */
     protected function announceShowRecording(ShowEntity $show, bool $skipAnnounce): void
     {
-        if ($skipAnnounce) return; // Exit early
+        $foundShow = $this->showRepository->find($show->getId());
+        if ($foundShow instanceof ShowEntity) {
+            $foundShow->setDuration($show->getDuration());
+            $foundShow->setTimeStamp($show->getTimeStamp());
+            $this->entityManager->persist($foundShow);
 
-        $showNotFound = ($this->showRepository->find($show->getId()) === null);
-        if ($showNotFound) {
-            $this->entityManager->flush(); // Flush so other systems have access
+            return;
+        }
+
+        $this->entityManager->merge($show);
+
+        if (false === $skipAnnounce) {
             $this->tweetDispatcher->tweetShowRecording($show);
         }
     }
