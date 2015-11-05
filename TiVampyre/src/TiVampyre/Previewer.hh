@@ -46,10 +46,10 @@ class Previewer
     {
         $showList = $this->showRepository->findAvailableForPreview();
         foreach ($showList as $show) {
-            $duration  = $show->getDuration() / 1000; //duration in seconds
-            $date      = $show->getDate()->getTimestamp();
-            $timestamp = $show->getTimeStamp()->getTimestamp();
-            if ($timestamp >= $duration + $date) {
+            $duration = $show->getDuration() / 1000; //duration in seconds
+            $date     = $show->getDate()->getTimestamp();
+            $now      = (new \DateTime())->getTimestamp();
+            if ($now >= ($duration + $date + 300)) {
                 $optionList = [
                     'show' => $show->getId(),
                     'preview' => true,
